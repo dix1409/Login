@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   ImageBackground,
   StyleSheet,
@@ -7,23 +7,22 @@ import {
   Text,
   TouchableOpacity,
   Pressable,
-} from "react-native";
-import { useFonts } from "expo-font";
+} from "react-native"
+import { useFonts } from "expo-font"
 export default function ThirdScreen({ route, navigation }) {
-  const [color, setcolor] = useState("#fff");
-  const [mode, setMode] = useState("");
-  const [participate, setparticipate] = useState("");
-  const [skill, setskill] = useState("");
+  const [mode, setMode] = useState("")
+  const [participate, setparticipate] = useState("")
+  const [skill, setskill] = useState("")
 
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
-  });
+  })
 
-  const eventTitle = route.params.eventTitle;
-  const Name = route.params.Name;
-  const Date = route.params.date;
-  const Location = route.params.Location;
-  console.log(eventTitle, Name, Date, Location);
+  const eventTitle = route.params.eventTitle
+  const Name = route.params.Name
+  const Date = route.params.date
+  const Location = route.params.Location
+  console.log(eventTitle, Name, Date, Location)
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -40,7 +39,7 @@ export default function ThirdScreen({ route, navigation }) {
               styles.btn,
             ]}
             onPress={() => {
-              setskill("Beginner");
+              setskill("Beginner")
             }}
           >
             <Text style={{ fontFamily: "OpanSans" }}>Beginner</Text>
@@ -53,8 +52,7 @@ export default function ThirdScreen({ route, navigation }) {
               styles.btn,
             ]}
             onPress={() => {
-              setskill("Intermidate");
-              setcolor("green");
+              setskill("Intermidate")
             }}
           >
             <Text style={{ fontFamily: "OpanSans" }}>Intermediate</Text>
@@ -67,8 +65,7 @@ export default function ThirdScreen({ route, navigation }) {
               styles.btn,
             ]}
             onPress={() => {
-              setcolor("green");
-              setskill("Expert");
+              setskill("Expert")
             }}
           >
             <Text style={{ fontFamily: "OpanSans" }}>Expert</Text>
@@ -85,8 +82,7 @@ export default function ThirdScreen({ route, navigation }) {
                 styles.btn,
               ]}
               onPress={() => {
-                setparticipate("Everyone");
-                setcolor("green");
+                setparticipate("Everyone")
               }}
             >
               <Text style={{ fontFamily: "OpanSans" }}>Everyone</Text>
@@ -99,8 +95,7 @@ export default function ThirdScreen({ route, navigation }) {
                 styles.btn,
               ]}
               onPress={() => {
-                setparticipate("Male");
-                setcolor("green");
+                setparticipate("Male")
               }}
             >
               <Text style={{ fontFamily: "OpanSans" }}>Male</Text>
@@ -113,8 +108,7 @@ export default function ThirdScreen({ route, navigation }) {
                 styles.btn,
               ]}
               onPress={() => {
-                setparticipate("Female");
-                setcolor("green");
+                setparticipate("Female")
               }}
             >
               <Text>Female</Text>
@@ -133,8 +127,7 @@ export default function ThirdScreen({ route, navigation }) {
                 styles.btn,
               ]}
               onPress={() => {
-                setMode("Paid");
-                setcolor("green");
+                setMode("Paid")
               }}
             >
               <Text style={{ fontFamily: "OpanSans" }}>Paid</Text>
@@ -148,8 +141,7 @@ export default function ThirdScreen({ route, navigation }) {
                 styles.btn,
               ]}
               onPress={() => {
-                setMode("Free");
-                setcolor("green");
+                setMode("Free")
               }}
             >
               <Text style={{ fontFamily: "OpanSans" }}>Free</Text>
@@ -186,14 +178,14 @@ export default function ThirdScreen({ route, navigation }) {
               mode: mode,
               skill: skill,
               participate: participate,
-            });
+            })
           }}
         >
           <Text style={{ color: "white", fontFamily: "OpanSans" }}>Next</Text>
         </TouchableOpacity>
       </View>
     </View>
-  );
+  )
 }
 const styles = StyleSheet.create({
   container: {
@@ -228,4 +220,4 @@ const styles = StyleSheet.create({
     width: "33%",
     textAlign: "center",
   },
-});
+})

@@ -11,7 +11,7 @@ import RegisterScreen from "./screen/RegisterScreen"
 // import * as firebase from "firebase";
 import OnboardingScreen from "./screen/slides"
 import { initializeApp } from "firebase/app"
-
+import { navigationRef } from "./Nav/RootNavigation"
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import "firebase/compat/firestore"
@@ -30,28 +30,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 const db = getDatabase()
 const AppStack = createStackNavigator()
-const AppNavigation = () => (
-  <AppStack.Navigator
-    screenOptions={{
-      headerShown: false,
-    }}
-  >
-    <AppStack.Screen name="Home" component={HomeScreen} />
-  </AppStack.Navigator>
-)
-
+import * as RootNavigation from "./Nav/RootNavigation"
 const AuthStack = createStackNavigator()
-const AuthNavigation = () => (
-  <AuthStack.Navigator
-    screenOptions={{
-      headerShown: false,
-    }}
-  >
-    <AuthStack.Screen name="onBording" component={OnboardingScreen} />
-    <AuthStack.Screen name="Login" component={LoginScreen} />
-    <AuthStack.Screen name="Register" component={RegisterScreen} />
-  </AuthStack.Navigator>
-)
 
 const App = () => {
   console.disableYellowBox = true
@@ -83,17 +63,36 @@ const App = () => {
   // }
   // const Logged = IsLoggedIn();
   // console.log(Logged);
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      setIsLoggedIn(true)
-    } else {
-      setIsLoggedIn(false)
-    }
+
+  useEffect(() => {
+    console.log("Rerendering 😱")
   })
 
+  useEffect(() => {
+    const unsub = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        RootNavigation.navigate("Home")
+        setIsLoggedIn(true)
+      } else {
+        RootNavigation.navigate("Login")
+        setIsLoggedIn(false)
+      }
+    })
+    return unsub
+  }, [])
+
   return (
-    <NavigationContainer>
-      {isLoggedIn ? <AppNavigation /> : <AuthNavigation />}
+    <NavigationContainer ref={navigationRef}>
+      <AppStack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <AppStack.Screen name="onBording" component={OnboardingScreen} />
+        <AppStack.Screen name="Login" component={LoginScreen} />
+        <AppStack.Screen name="Register" component={RegisterScreen} />
+        <AppStack.Screen name="Home" component={HomeScreen} />
+      </AppStack.Navigator>
     </NavigationContainer>
   )
 }

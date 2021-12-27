@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState } from "react"
 import {
   StyleSheet,
   Text,
@@ -6,24 +6,34 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
-} from "react-native";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
+} from "react-native"
+import firebase from "firebase/compat/app"
+import "firebase/compat/auth"
+import "firebase/compat/firestore"
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = () => {
+    setIsLoading(true)
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .catch((err) => setError(err.message));
-  };
+      .then((user) => {
+        setIsLoading(false)
+      })
+      .catch((err) => setError(err.message))
+  }
 
   //   LayoutAnimation.easeInEaseOut();
+
+  if (isLoading) {
+    return <Text>Loading....</Text>
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -83,10 +93,10 @@ const LoginScreen = ({ navigation }) => {
         </Text>
       </TouchableOpacity>
     </View>
-  );
-};
+  )
+}
 
-export default LoginScreen;
+export default LoginScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -140,4 +150,4 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "500",
   },
-});
+})
