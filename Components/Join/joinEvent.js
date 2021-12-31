@@ -12,7 +12,7 @@ import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import "firebase/compat/firestore"
 import { getDatabase, ref, onValue, set } from "firebase/database"
-import { QuerySnapshot } from "firebase/firestore"
+import { doc, QuerySnapshot } from "firebase/firestore"
 // Required for side-effects
 require("firebase/firestore")
 const firebaseConfig = {
@@ -28,6 +28,7 @@ const app = firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore(app)
 export default function joinEvent({ navigation, route }) {
   const [userdata, setuserdata] = useState([])
+  const [join, setjoin] = useState(false)
   const event = route.params.item
   const auth = firebase.auth().currentUser.email
   useEffect(() => {
@@ -54,26 +55,37 @@ export default function joinEvent({ navigation, route }) {
       .doc(event.id)
       .collection("participate")
       .add({
-        userinfo: userinfo,
+        username: userinfo.username,
+        userEmail: userinfo.userEmail,
+        userPassword: userinfo.userPassword,
       })
       .then(() => {
         Alert.alert("data added")
       })
     db.collection("user").doc(auth).collection("joinEvent").add({
-      event: event,
+      name: event.name,
+      Location: event.Location,
+      mode: event.mode,
+      eventTitle: event.eventTitle,
+      skill: event.skill,
+      participate: event.participate,
+      Comment: event.Comment,
     })
   }
-  let isJoin = false
-  db.collection("user")
-    .doc(auth)
-    .collection("joinEvent")
-    .where("id", "==", event.id)
-    .onSnapshot((querySnapshot) => {
-      if (querySnapshot.size === 1) {
-        isJoin = true
-        console.log(isJoin)
-      }
-    })
+  const checkJoin = () => {
+    db.collection("user")
+      .doc(auth)
+      .collection("joinEvent")
+      .where("Location", "==", "SURAT")
+      .onSnapshot((querySnapshot) => {
+        console.log(querySnapshot.size)
+        if (querySnapshot.size === 1) {
+          setjoin(true)
+          console.log(join)
+        }
+      })
+  }
+  checkJoin()
 
   return (
     <View style={styles.container}>
@@ -86,13 +98,13 @@ export default function joinEvent({ navigation, route }) {
           marginVertical: 10,
         }}
       >
-        <TouchableOpacity onPress={joinEvent} disabled={isJoin}>
+        <TouchableOpacity onPress={joinEvent} disabled={join}>
           <Text>Join</Text>
         </TouchableOpacity>
-        {isJoin && (
+        {join && (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("third")
+              navigation.navigate("third", { id: event.id })
             }}
           >
             <Text>View Participtons</Text>
