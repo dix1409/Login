@@ -26,7 +26,7 @@ const firebaseConfig = {
 }
 const app = firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore(app)
-const auth = firebase.auth().currentUser.email
+//const auth = firebase.auth().currentUser.email
 //LogBox.ignoreLogs("Setting a timer for a long period of time")
 export default function Chats({ navigation, route }) {
   const event_id = route.params.user

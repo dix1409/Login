@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   View,
   Text,
@@ -7,22 +7,23 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+} from "react-native"
+import { Ionicons } from "@expo/vector-icons"
 // import Fire from '../Fire';
 // import UserPermissions from '../utilities/UserPermissions';
 //import * as ImagePicker from 'expo-image-picker';
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
+import firebase from "firebase/compat/app"
+import "firebase/compat/auth"
+import "firebase/compat/firestore"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const RegisterScreen = ({ navigation }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   //const [avatar, setAvatar] = useState();
 
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null)
 
   const handleSignUp = () => {
     firebase
@@ -33,8 +34,8 @@ const RegisterScreen = ({ navigation }) => {
           displayName: name,
         })
       )
-      .catch((err) => setError(err.message));
-  };
+      .catch((err) => setError(err.message))
+  }
 
   return (
     <View style={styles.container}>
@@ -107,10 +108,10 @@ const RegisterScreen = ({ navigation }) => {
         </Text>
       </TouchableOpacity>
     </View>
-  );
-};
+  )
+}
 
-export default RegisterScreen;
+export default RegisterScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -202,4 +203,4 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
   },
-});
+})

@@ -32,12 +32,7 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore(app)
 const Inforef = db.collection("data")
-const slide = [
-  { id: 1, title: "⚾ Cricket" },
-  { id: 2, title: "🏸 badminton" },
-  { id: 3, title: "⚽ Football" },
-  { id: 4, title: "🥊 Boxing" },
-]
+
 export default function First({ navigation }) {
   const [data, setdata] = useState([])
 
@@ -57,9 +52,9 @@ export default function First({ navigation }) {
     Inforef.onSnapshot((querySnapShot) => {
       let DataTemp = []
       querySnapShot.forEach((doc) => {
-        DataTemp.push(doc.data())
+        DataTemp.push({ ...doc.data(), id: doc.id })
       })
-      setdata(DataTemp)
+      setdata([...DataTemp])
     })
   }, [])
   console.log(data)
@@ -99,7 +94,7 @@ export default function First({ navigation }) {
       >
         <Text style={styles.title}>👋heyy {TimeCheck()}</Text>
       </View>
-      <View style={{ height: "40%" }}>
+      <View>
         <ImageBackground
           style={{ width: "100%", height: 200 }}
           source={require("../../Rectangle.png")}
@@ -112,82 +107,29 @@ export default function First({ navigation }) {
                 margin: 5,
               }}
             >
-              <Text style={{ fontSize: 32, color: "#f7f7f7" }}>Create </Text>
+              <Text style={{ fontSize: 32, color: "#f7f7f7" }}>Explore </Text>
               <Text
                 style={{ fontSize: 32, color: "#f7f7f7", marginBottom: 15 }}
               >
                 New Event
               </Text>
-              <TouchableOpacity
-                style={{
-                  width: "80%",
-                  backgroundColor: "#fff",
-                  borderRadius: 12,
-                  height: 44,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "row",
-
-                  // marginVertical: 15,
-                }}
-                onPress={() => navigation.navigate("Second")}
-              >
-                <MaterialCommunityIcons
-                  name="plus"
-                  size={20}
-                  color={"#9A9A9A"}
-                />
-                <Text
-                  style={{
-                    marginLeft: 1,
-                    color: "#9A9A9A",
-                    textAlign: "center",
-                  }}
-                >
-                  Create Event
-                </Text>
-              </TouchableOpacity>
             </View>
             <View style={{ justifyContent: "flex-end", width: "50%" }}>
               <Image
-                source={require("../../pale-playing-football.png")}
+                source={require("../../image-removebg-preview.png")}
                 style={{ width: "100%", height: "100%" }}
               />
             </View>
           </View>
         </ImageBackground>
       </View>
-      <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {slide.map((item) => {
-            return (
-              <TouchableOpacity
-                key={item.id}
-                style={{
-                  width: 105,
-                  height: 30,
-                  backgroundColor: "#ffff",
-                  marginLeft: 5,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 20,
-                  borderRadius: 5,
-                }}
-              >
-                <View>
-                  <Text>{item.title}</Text>
-                </View>
-              </TouchableOpacity>
-            )
-          })}
-        </ScrollView>
-      </View>
+
       <View
         style={{
           flex: 1,
         }}
       >
-        <Text style={{ fontSize: 18, marginHorizontal: 5 }}>
+        <Text style={{ fontSize: 18, marginVertical: 10 }}>
           Recommand Event
         </Text>
         {/* <View
@@ -195,13 +137,27 @@ export default function First({ navigation }) {
         >
           <Text style={{ fontSize: 20 }}>There Is No Event Available</Text>
         </View> */}
-        <ScrollView horizontal>
+        <ScrollView horizontal style={{ marginVertical: 10 }}>
           {data.map((item) => {
             return (
-              <View key={item.eventTitle}>
-                <Text>{item.eventTitle}</Text>
-                <Text>{item.name}</Text>
-              </View>
+              <TouchableOpacity
+                style={{
+                  marginHorizontal: 10,
+                  backgroundColor: "#fff",
+                  width: 100,
+                  height: 100,
+                  borderRadius: 10,
+                }}
+                key={item.eventTitle}
+                onPress={() => {
+                  navigation.navigate("second", { item: item })
+                }}
+              >
+                <View>
+                  <Text>{item.eventTitle}</Text>
+                  <Text>{item.name}</Text>
+                </View>
+              </TouchableOpacity>
             )
           })}
         </ScrollView>

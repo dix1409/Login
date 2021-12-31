@@ -99,7 +99,7 @@ export default function First({ navigation }) {
       >
         <Text style={styles.title}>👋heyy {TimeCheck()}</Text>
       </View>
-      <View style={{ height: "40%" }}>
+      <View>
         <ImageBackground
           style={{ width: "100%", height: 200 }}
           source={require("../../Rectangle.png")}
