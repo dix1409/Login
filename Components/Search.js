@@ -116,7 +116,7 @@ export default function First({ navigation }) {
             </View>
             <View style={{ justifyContent: "flex-end", width: "50%" }}>
               <Image
-                source={require("../")}
+                source={require("..")}
                 style={{ width: "100%", height: "100%" }}
               />
             </View>
