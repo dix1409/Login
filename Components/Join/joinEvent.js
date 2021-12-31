@@ -63,6 +63,18 @@ export default function joinEvent({ navigation, route }) {
       event: event,
     })
   }
+  let isJoin = false
+  db.collection("user")
+    .doc(auth)
+    .collection("joinEvent")
+    .where("id", "==", event.id)
+    .onSnapshot((querySnapshot) => {
+      if (querySnapshot.size === 1) {
+        isJoin = true
+        console.log(isJoin)
+      }
+    })
+
   return (
     <View style={styles.container}>
       <Text>hello</Text>
@@ -74,9 +86,18 @@ export default function joinEvent({ navigation, route }) {
           marginVertical: 10,
         }}
       >
-        <TouchableOpacity onPress={joinEvent}>
+        <TouchableOpacity onPress={joinEvent} disabled={isJoin}>
           <Text>Join</Text>
         </TouchableOpacity>
+        {isJoin && (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("third")
+            }}
+          >
+            <Text>View Participtons</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   )

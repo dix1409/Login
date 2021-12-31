@@ -4,7 +4,7 @@ import { ImageBackground, StyleSheet, View, Image, Text } from "react-native"
 export default function Participate(props) {
   return (
     <View style={styles.container}>
-      <Text></Text>
+      <Text>hello</Text>
     </View>
   )
 }
