@@ -1,13 +1,19 @@
-import React from "react";
-import { ImageBackground, StyleSheet, View, Image, Text } from "react-native";
-
-export default function Chat(props) {
+import { NavigationContainer } from "@react-navigation/native"
+import { createStackNavigator } from "@react-navigation/stack"
+import chat from "./Chat/Chatting"
+import chats from "./Chat/Chats"
+const Stack = createStackNavigator()
+export default function join() {
   return (
-    <View style={styles.container}>
-      <Text>Chat</Text>
-    </View>
-  );
+    <NavigationContainer independent={true}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="chat" component={chats} />
+        <Stack.Screen name="Giffty" component={chat} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
-const styles = StyleSheet.create({
-  container: {},
-});

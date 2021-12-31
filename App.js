@@ -1,7 +1,7 @@
 import "react-native-gesture-handler"
 //import { createAppContainer, createSwitchNavigator } from "react-navigation";
 //import { createStackNavigator } from "react-navigation-stack";
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import LodingScreen from "./screen/LodingScreen"
@@ -34,7 +34,7 @@ import * as RootNavigation from "./Nav/RootNavigation"
 const AuthStack = createStackNavigator()
 
 const App = () => {
-  console.disableYellowBox = true
+  //console.disableYellowBox = true
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   // async function IsLoggedIn() {
   //   try {
