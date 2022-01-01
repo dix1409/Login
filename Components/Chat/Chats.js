@@ -26,12 +26,16 @@ const firebaseConfig = {
 }
 const app = firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore(app)
-//const auth = firebase.auth().currentUser.email
+
 //LogBox.ignoreLogs("Setting a timer for a long period of time")
 export default function Chats({ navigation, route }) {
+  const auth = firebase.auth().currentUser.email
   const event_id = route.params.user
   console.log(event_id)
-  const Timestamp = firebase.firestore.Timestamp
+  let today = new Date().toISOString
+
+  const Timestamp = firebase.firestore.Timestamp.now()
+  console.log(Timestamp)
   const massage = []
   useEffect(() => {
     db.collection("event")
@@ -52,21 +56,17 @@ export default function Chats({ navigation, route }) {
   }, [])
 
   const saveChat = (msg) => {
-    let today = new Date()
-    let curHr = today.toUTCString()
-    db.collection("event")
-      .doc(event_id)
-      .collection("message")
-      .doc()
-      .set({
-        content: "hi",
-        CreattedAt: Timestamp.prototype.nanoseconds,
-        sentBy: auth,
-        isDelete: false,
-      })
-      .then(() => {
-        Alert.alert("data added")
-      })
+    db.collection("event").doc(event_id).collection("message").doc()
+
+    // .set({
+    //   content: "hi",
+    //   CreattedAt: "1",
+    //   sentBy: auth,
+    //   isDelete: false,
+    // })
+    // .then(() => {
+    //   Alert.alert("data added")
+    // })
   }
   return (
     <View style={styles.container}>
