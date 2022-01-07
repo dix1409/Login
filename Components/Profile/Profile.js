@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState, useEffect } from "react"
 import {
   View,
   Text,
@@ -7,6 +7,8 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
+  Dimensions,
+  Platform,
 } from "react-native"
 import BottomSheet from "./BottomSheet"
 import { useTheme } from "react-native-paper"
@@ -22,10 +24,12 @@ import { db } from "../Event/Firestore"
 import firebase from "firebase/compat/app"
 import * as ImagePicker from "expo-image-picker"
 const profileRef = db.collection("profile")
-const EditProfileScreen = () => {
+const { height, width } = Dimensions.get("window")
+const EditProfileScreen = ({ navigation }) => {
   const [status, requestPermission] = ImagePicker.useCameraPermissions()
   const auth = firebase.auth().currentUser.email
   const [image, setImage] = React.useState(null)
+
   const { colors } = useTheme()
 
   React.useEffect(() => {
@@ -65,43 +69,6 @@ const EditProfileScreen = () => {
       setImage(result.uri)
     }
   }
-
-  // const renderInner = () => (
-  //   <ScrollView style={styles.panel}>
-  //     <View style={{ alignItems: "center" }}>
-  //       <Text style={styles.panelTitle}>Upload Photo</Text>
-  //       <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
-  //     </View>
-  //     <TouchableOpacity
-  //       style={styles.panelButton}
-  //       onPress={takePhotoFromCamera}
-  //     >
-  //       <Text style={styles.panelButtonTitle}>Take Photo</Text>
-  //     </TouchableOpacity>
-  //     <TouchableOpacity
-  //       style={styles.panelButton}
-  //       onPress={choosePhotoFromLibrary}
-  //     >
-  //       <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-  //     </TouchableOpacity>
-  //     <TouchableOpacity
-  //       style={styles.panelButton}
-  //       onPress={() => bs.current.snapTo(1)}
-  //     >
-  //       <Text style={styles.panelButtonTitle}>Cancel</Text>
-  //     </TouchableOpacity>
-  //   </ScrollView>
-  // )
-
-  // const renderHeader = () => (
-  //   <View style={styles.header}>
-  //     <View style={styles.panelHeader}>
-  //       <View style={styles.panelHandle} />
-  //     </View>
-  //   </View>
-  // )
-
-  //const bs = React.createRef()
 
   return (
     <View style={styles.container}>
@@ -150,11 +117,13 @@ const EditProfileScreen = () => {
           </ImageBackground>
         </View>
       </View>
+
       <View style={styles.panel}>
         <View style={{ alignItems: "center" }}>
           <Text style={styles.panelTitle}>Upload Photo</Text>
           <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
         </View>
+
         <TouchableOpacity onPress={takePhotoFromCamera}>
           <LinearGradient
             style={styles.panelButton}
@@ -184,7 +153,7 @@ const EditProfileScreen = () => {
       <TouchableOpacity
         style={styles.commandButton}
         onPress={() => {
-          navigation.navigate("BototomSheet")
+          navigation.navigate("BottomSheet")
         }}
       >
         <Text style={styles.panelButtonTitle}>Next</Text>
@@ -199,7 +168,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f7f7f7",
     flex: 1,
-    margin: 10,
+    margin: 20,
     paddingVertical: 10,
     justifyContent: "center",
   },
@@ -288,15 +257,5 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: "#05375a",
   },
+  //
 })
-
-// export default function Profile(props) {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Profile</Text>
-//     </View>
-//   )
-// }
-// const styles = StyleSheet.create({
-//   container: {},
-// })

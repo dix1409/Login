@@ -1,87 +1,74 @@
-import React, { useState } from "react"
+import React from "react"
 import {
   View,
   Text,
-  StyleSheet,
-  TextInput,
+  Button,
   TouchableOpacity,
-  Image,
-  StatusBar,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
+  Dimensions,
+  TextInput,
   Platform,
-  Keyboard,
+  StyleSheet,
   ScrollView,
-  SafeAreaView,
-  ActivityIndicator,
+  StatusBar,
 } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Animatable from "react-native-animatable"
 //import LinearGradient from "react-native-linear-gradient"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Feather from "react-native-vector-icons/Feather"
-import { Ionicons } from "@expo/vector-icons"
-// import Fire from '../Fire';
-// import UserPermissions from '../utilities/UserPermissions';
-//import * as ImagePicker from 'expo-image-picker';
-import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
-import "firebase/compat/firestore"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-const firebaseConfig = {
-  apiKey: "AIzaSyBi8VDfQchDQJLJNQ_mQO4EqxjfDTIlHJM",
-  authDomain: "e-tuts.firebaseapp.com",
-  projectId: "e-tuts",
-  storageBucket: "e-tuts.appspot.com",
-  messagingSenderId: "257278662825",
-  appId: "1:257278662825:web:93fd59b2bf6e34bacc71b8",
-  measurementId: "G-WP121F1W02",
-}
-const app = firebase.initializeApp(firebaseConfig)
-const db = firebase.firestore(app)
-const userRef = db.collection("user")
-const RegisterScreen = ({ navigation }) => {
-  const [secureTextEntry, setsecurePassword] = useState(true)
-  //const [confirm, setconfirm] = useState(true)
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [logo, setlogo] = useState(true)
-  //const [avatar, setAvatar] = useState();
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
 
-  const handleSignUp = () => {
-    setIsLoading(true)
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email.trim(), password.trim())
-      .then(
-        (userCredentials) =>
-          userCredentials.user.updateProfile({
-            displayName: name,
-          }),
+const SignInScreen = ({ navigation }) => {
+  const [data, setData] = React.useState({
+    username: "",
+    password: "",
+    confirm_password: "",
+    check_textInputChange: false,
+    secureTextEntry: true,
+    confirm_secureTextEntry: true,
+  })
 
-        setIsLoading(false),
-        navigation.navigate("Home")
-      )
-      .catch((err) => setError(err.message))
-    userRef.doc(email).set({
-      username: name,
-      userEmail: email,
-      userPassword: password,
+  const textInputChange = (val) => {
+    if (val.length !== 0) {
+      setData({
+        ...data,
+        username: val,
+        check_textInputChange: true,
+      })
+    } else {
+      setData({
+        ...data,
+        username: val,
+        check_textInputChange: false,
+      })
+    }
+  }
+
+  const handlePasswordChange = (val) => {
+    setData({
+      ...data,
+      password: val,
+    })
+  }
+
+  const handleConfirmPasswordChange = (val) => {
+    setData({
+      ...data,
+      confirm_password: val,
     })
   }
 
   const updateSecureTextEntry = () => {
-    setsecurePassword(!secureTextEntry)
+    setData({
+      ...data,
+      secureTextEntry: !data.secureTextEntry,
+    })
   }
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size="large" color="red" />
-      </View>
-    )
+
+  const updateConfirmSecureTextEntry = () => {
+    setData({
+      ...data,
+      confirm_secureTextEntry: !data.confirm_secureTextEntry,
+    })
   }
 
   return (
@@ -92,9 +79,6 @@ const RegisterScreen = ({ navigation }) => {
       </View>
       <Animatable.View animation="fadeInUpBig" style={styles.footer}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.errorMessage}>
-            {!!error && <Text style={styles.error}>{error}</Text>}
-          </View>
           <Text style={styles.text_footer}>Username</Text>
           <View style={styles.action}>
             <FontAwesome name="user-o" color="#05375a" size={20} />
@@ -102,32 +86,13 @@ const RegisterScreen = ({ navigation }) => {
               placeholder="Your Username"
               style={styles.textInput}
               autoCapitalize="none"
-              onChangeText={(val) => setName(val)}
+              onChangeText={(val) => textInputChange(val)}
             />
-            {name ? (
+            {data.check_textInputChange ? (
               <Animatable.View animation="bounceIn">
                 <Feather name="check-circle" color="green" size={20} />
               </Animatable.View>
             ) : null}
-          </View>
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                marginTop: 35,
-              },
-            ]}
-          >
-            Email Address
-          </Text>
-          <View style={styles.action}>
-            <Feather name="lock" color="#05375a" size={20} />
-            <TextInput
-              placeholder="Your Email Address"
-              style={styles.textInput}
-              autoCapitalize="none"
-              onChangeText={(val) => setEmail(val)}
-            />
           </View>
 
           <Text
@@ -144,13 +109,13 @@ const RegisterScreen = ({ navigation }) => {
             <Feather name="lock" color="#05375a" size={20} />
             <TextInput
               placeholder="Your Password"
-              secureTextEntry={secureTextEntry}
+              secureTextEntry={data.secureTextEntry ? true : false}
               style={styles.textInput}
               autoCapitalize="none"
-              onChangeText={(val) => setPassword(val)}
+              onChangeText={(val) => handlePasswordChange(val)}
             />
             <TouchableOpacity onPress={updateSecureTextEntry}>
-              {secureTextEntry ? (
+              {data.secureTextEntry ? (
                 <Feather name="eye-off" color="grey" size={20} />
               ) : (
                 <Feather name="eye" color="grey" size={20} />
@@ -158,22 +123,8 @@ const RegisterScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.textPrivate}>
-            <Text style={styles.color_textPrivate}>
-              By signing up you agree to our
-            </Text>
-            <Text style={[styles.color_textPrivate, { fontWeight: "bold" }]}>
-              {" "}
-              Terms of service
-            </Text>
-            <Text style={styles.color_textPrivate}> and</Text>
-            <Text style={[styles.color_textPrivate, { fontWeight: "bold" }]}>
-              {" "}
-              Privacy policy
-            </Text>
-          </View>
           <View style={styles.button}>
-            <TouchableOpacity style={styles.signIn} onPress={handleSignUp}>
+            <TouchableOpacity style={styles.signIn} onPress={() => {}}>
               <LinearGradient
                 colors={["#FFA07A", "#FF6347"]}
                 style={styles.signIn}
@@ -220,6 +171,8 @@ const RegisterScreen = ({ navigation }) => {
   )
 }
 
+export default SignInScreen
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -257,7 +210,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    marginTop: Platform.OS === "ios" ? 0 : -5,
+    marginTop: Platform.OS === "ios" ? 0 : -12,
     paddingLeft: 10,
     color: "#05375a",
   },
@@ -284,17 +237,4 @@ const styles = StyleSheet.create({
   color_textPrivate: {
     color: "grey",
   },
-  errorMessage: {
-    height: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  error: {
-    color: "#FF3B30",
-    fontSize: 13,
-    fontWeight: "600",
-    textAlign: "center",
-  },
 })
-export default RegisterScreen

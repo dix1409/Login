@@ -4,12 +4,14 @@ import "react-native-gesture-handler"
 import React, { useState, useEffect } from "react"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import LodingScreen from "./screen/LodingScreen"
+
 import HomeScreen from "./screen/HomeScreen"
 import LoginScreen from "./screen/LoginScreen"
 import RegisterScreen from "./screen/RegisterScreen"
+import ForgatPassword from "./screen/ForgatPassword"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 // import * as firebase from "firebase";
-import OnboardingScreen from "./screen/slides"
+import OnboardingScreen from "./screen/SplashScreen"
 import { initializeApp } from "firebase/app"
 import { navigationRef } from "./Nav/RootNavigation"
 import firebase from "firebase/compat/app"
@@ -34,50 +36,28 @@ import * as RootNavigation from "./Nav/RootNavigation"
 const AuthStack = createStackNavigator()
 
 const App = () => {
-  //console.disableYellowBox = true
+  console.disableYellowBox = true
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  // async function IsLoggedIn() {
-  //   try {
-  //     await new Promise((resolve, reject) =>
-  //       firebase.auth().onAuthStateChanged(
-  //         (user) => {
-  //           if (user) {
-  //             // User is signed in.
-
-  //             resolve(user);
-  //             return false;
-  //           } else {
-  //             // No user is signed in.
-  //             reject("no user logged in");
-  //             return false;
-  //           }
-  //         },
-  //         // Prevent console error
-  //         (error) => reject(error)
-  //       )
-  //     );
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // }
-  // const Logged = IsLoggedIn();
-  // console.log(Logged);
-
   useEffect(() => {
     console.log("Rerendering 😱")
   })
 
-  useEffect(() => {
+  useEffect(async () => {
     const unsub = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         RootNavigation.navigate("Home")
-        setIsLoggedIn(true)
       } else {
-        RootNavigation.navigate("Login")
-        setIsLoggedIn(false)
+        RootNavigation.navigate("onBording")
+        AsyncStorage.setItem("isLoggedin", "true")
       }
     })
+    const appData = await AsyncStorage.getItem("isLoggedIn")
+    console.log(appData)
+    if (appData !== null) {
+      setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
+    }
     return unsub
   }, [])
 
@@ -91,6 +71,7 @@ const App = () => {
         <AppStack.Screen name="onBording" component={OnboardingScreen} />
         <AppStack.Screen name="Login" component={LoginScreen} />
         <AppStack.Screen name="Register" component={RegisterScreen} />
+        <AppStack.Screen name="ForgatPassword" component={ForgatPassword} />
         <AppStack.Screen name="Home" component={HomeScreen} />
       </AppStack.Navigator>
     </NavigationContainer>

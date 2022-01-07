@@ -1,4 +1,5 @@
 import React from "react"
+
 import {
   ImageBackground,
   StyleSheet,
@@ -14,17 +15,68 @@ import {
   Fontlisto,
   MaterialIcons,
 } from "@expo/vector-icons"
-export default function ChatInput(props) {
+import firebase from "firebase/compat/app"
+import { useFonts } from "expo-font"
+
+import { SafeAreaView } from "react-native-safe-area-context"
+import moment from "moment"
+export default function ChatInput({ item }) {
+  const [loaded] = useFonts({
+    OpanSans: require("../../static/OpenSans/OpenSans-Regular.ttf"),
+  })
+
+  const auth = firebase.auth().currentUser.email
+  // console.log(item)
+  const isMymsg = item.user === auth ? true : false
   return (
-    <View style={styles.container}>
-      <View style={styles.mainContainer}>
-        <FontAwesome5 name="laugh-beam" size={24} color="gray" />
-        <TextInput style={styles.textInput} multiline={true} />
+    <SafeAreaView style={styles.container}>
+      <View
+        style={[
+          styles.msgContainer,
+          {
+            backgroundColor: !isMymsg ? "white" : "#34B7F1",
+            marginLeft: isMymsg ? "40%" : 0,
+            marginRight: !isMymsg ? "40%" : 0,
+          },
+        ]}
+      >
+        {!isMymsg && <Text style={styles.name}>{item.name}</Text>}
+        <Text
+          style={[
+            styles.msg,
+            {
+              color: !isMymsg ? "#34B7F1" : "#FFFFFF",
+            },
+          ]}
+        >
+          {item.content}
+        </Text>
+        {/* <Text style={styles.time}>{moment(item.crateBy).fromNow()}</Text> */}
       </View>
-      <View style={styles.btnContainer}>
-        <MaterialIcons name="send" size={28} color={white} />
-      </View>
-    </View>
+    </SafeAreaView>
   )
 }
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+  },
+  msgContainer: {
+    borderRadius: 20,
+    padding: 10,
+  },
+  name: {
+    fontWeight: "bold",
+    marginBottom: 5,
+    fontFamily: "OpanSans",
+  },
+  msg: {
+    color: "#fff",
+    fontWeight: "100",
+    fontSize: 17,
+    fontFamily: "OpanSans",
+  },
+  time: {
+    alignSelf: "flex-end",
+    color: "gray",
+  },
+})

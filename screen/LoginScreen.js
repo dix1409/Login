@@ -6,148 +6,212 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  ActivityIndicator,
+  TouchableWithoutFeedback,
 } from "react-native"
+import styles from "./style"
+//import SafeAreaView from "react-native-safe-area-context"
+import { LinearGradient } from "expo-linear-gradient"
+import * as Animatable from "react-native-animatable"
+//import LinearGradient from "react-native-linear-gradient"
+import FontAwesome from "react-native-vector-icons/FontAwesome"
+import Feather from "react-native-vector-icons/Feather"
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import "firebase/compat/firestore"
+//import { TouchableWithoutFeedback } from "react-native-web"
+import { useTheme } from "react-native-paper"
+const firebaseConfig = {
+  apiKey: "AIzaSyBi8VDfQchDQJLJNQ_mQO4EqxjfDTIlHJM",
+  authDomain: "e-tuts.firebaseapp.com",
+  projectId: "e-tuts",
+  storageBucket: "e-tuts.appspot.com",
+  messagingSenderId: "257278662825",
+  appId: "1:257278662825:web:93fd59b2bf6e34bacc71b8",
+  measurementId: "G-WP121F1W02",
+}
+const app = firebase.initializeApp(firebaseConfig)
+const db = firebase.firestore(app)
 
 const LoginScreen = ({ navigation }) => {
+  const [secureTextEntry, setsecurePassword] = useState(true)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
+  const { colors } = useTheme()
   const handleLogin = () => {
     setIsLoading(true)
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(email.trim(), password.trim())
       .then((user) => {
         setIsLoading(false)
+        if (user) {
+          navigation.navigate("Home")
+        } else {
+          navigation.navigate("Login")
+        }
       })
-      .catch((err) => setError(err.message))
+      .catch((err) => {
+        setIsLoading(false)
+        setError(err.message)
+        navigation.navigate("Login")
+      })
   }
 
   //   LayoutAnimation.easeInEaseOut();
 
   if (isLoading) {
-    return <Text>Loading....</Text>
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" color="red" />
+      </View>
+    )
   }
-
+  const updateSecureTextEntry = () => {
+    setsecurePassword(!secureTextEntry)
+  }
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
-
-      {/* <Image
-          source={require('../assets/authHeader.png')}
-          style={{ width: 504, resizeMode: 'contain', marginLeft: -50, marginTop: -100, marginBottom: 0 }}
-        />
-        <Image 
-          source={require('../assets/authHeader.png')}
-          style={{ width: 504, resizeMode: 'contain', position: 'absolute', bottom: -180, left: 50, opacity: 0.4, transform: [{ rotate: '-20deg' }] }}
-        />
-        <Image
-          source={require('../assets/loginLogo.png')}
-          style={{ resizeMode: 'contain', width: 180, marginTop: -180, marginBottom: -100, alignSelf: 'center' }}
-        />
-   */}
-      <Text style={styles.greeting}>{`SportApp`}</Text>
-
-      <View style={styles.errorMessage}>
-        {!!error && <Text style={styles.error}>{error}</Text>}
-      </View>
-
-      <View style={styles.form}>
-        <View>
-          <Text style={styles.inputTitle}>Email Address</Text>
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            onChangeText={(email) => setEmail(email)}
-            value={email}
-          />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <StatusBar backgroundColor="#FF6347" barStyle="light-content" />
+        <View style={styles.header}>
+          <Text style={styles.text_header}>Welcome!</Text>
         </View>
-        <View style={{ marginTop: 32 }}>
-          <Text style={styles.inputTitle}>Password</Text>
-          <TextInput
-            style={styles.input}
-            secureTextEntry
-            autoCapitalize="none"
-            onChangeText={(password) => setPassword(password)}
-            value={password}
-          />
-        </View>
+        <Animatable.View
+          animation="fadeInUpBig"
+          style={[
+            styles.footer,
+            {
+              backgroundColor: colors.background,
+            },
+          ]}
+        >
+          <View style={styles.errorMessage}>
+            {!!error && <Text style={styles.error}>{error}</Text>}
+          </View>
+          <Text
+            style={[
+              styles.text_footer,
+              {
+                color: colors.text,
+              },
+            ]}
+          >
+            Email Address
+          </Text>
+          <View style={styles.action}>
+            <FontAwesome name="user-o" color={colors.text} size={20} />
+            <TextInput
+              placeholder="Your Username"
+              placeholderTextColor="#666666"
+              style={[
+                styles.textInput,
+                {
+                  color: colors.text,
+                },
+              ]}
+              autoCapitalize="none"
+              onChangeText={(val) => setEmail(val)}
+            />
+          </View>
+
+          <Text
+            style={[
+              styles.text_footer,
+              {
+                color: colors.text,
+                marginTop: 35,
+              },
+            ]}
+          >
+            Password
+          </Text>
+          <View style={styles.action}>
+            <Feather name="lock" color={colors.text} size={20} />
+            <TextInput
+              placeholder="Your Password"
+              placeholderTextColor="#666666"
+              secureTextEntry={secureTextEntry}
+              style={[
+                styles.textInput,
+                {
+                  color: colors.text,
+                },
+              ]}
+              autoCapitalize="none"
+              onChangeText={(val) => setPassword(val)}
+            />
+            <TouchableOpacity onPress={updateSecureTextEntry}>
+              {secureTextEntry ? (
+                <Feather name="eye-off" color="grey" size={20} />
+              ) : (
+                <Feather name="eye" color="grey" size={20} />
+              )}
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("ForgatPassword")
+            }}
+          >
+            <Text style={{ color: "#FF6347", marginTop: 15 }}>
+              Forgot password?
+            </Text>
+          </TouchableOpacity>
+          <View style={styles.button}>
+            <TouchableOpacity style={styles.signIn} onPress={handleLogin}>
+              <LinearGradient
+                colors={["#FFA07A", "#FF6347"]}
+                style={styles.signIn}
+              >
+                <Text
+                  style={[
+                    styles.textSign,
+                    {
+                      color: "#fff",
+                    },
+                  ]}
+                >
+                  Sign In
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Register")}
+              style={[
+                styles.signIn,
+                {
+                  borderColor: "#FF6347",
+                  borderWidth: 1,
+                  marginTop: 15,
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.textSign,
+                  {
+                    color: "#FF6347",
+                  },
+                ]}
+              >
+                Sign Up
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Animatable.View>
       </View>
-
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Sign in</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={{ alignSelf: "center", marginTop: 32 }}
-        onPress={() => navigation.navigate("Register")}
-      >
-        <Text style={{ color: "#414959", fontSize: 13 }}>
-          New to SocialApp?{" "}
-          <Text style={{ fontWeight: "500", color: "#1F7EED" }}>Sign Up</Text>
-        </Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 
 export default LoginScreen
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  greeting: {
-    fontSize: 48,
-    fontWeight: "800",
-    textAlign: "center",
-    color: "#007AFF",
-  },
-  errorMessage: {
-    height: 72,
-    alignItems: "center",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  error: {
-    color: "#FF3B30",
-    fontSize: 13,
-    fontWeight: "600",
-    textAlign: "center",
-  },
-  form: {
-    marginBottom: 48,
-    marginHorizontal: 30,
-  },
-  inputTitle: {
-    color: "#8a8f9e",
-    fontSize: 10,
-    textTransform: "uppercase",
-  },
-  input: {
-    borderBottomColor: "#8a8f9e",
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    height: 40,
-    fontSize: 15,
-    color: "#161f3d",
-  },
-  button: {
-    marginHorizontal: 30,
-    backgroundColor: "#1F7EED",
-    borderRadius: 26,
-    height: 52,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: "500",
-  },
-})

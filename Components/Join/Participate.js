@@ -43,7 +43,6 @@ export default function Participate({ navigation, route }) {
           </View>
         )
       })}
-      <Text>hello</Text>
     </View>
   )
 }

@@ -9,6 +9,9 @@ import {
   Pressable,
 } from "react-native"
 import { useFonts } from "expo-font"
+import * as Location from "expo-location"
+import { SafeAreaView } from "react-native-safe-area-context"
+
 export default function ThirdScreen({ route, navigation }) {
   const [mode, setMode] = useState("")
   const [participate, setparticipate] = useState("")
@@ -20,11 +23,11 @@ export default function ThirdScreen({ route, navigation }) {
 
   const eventTitle = route.params.eventTitle
   const Name = route.params.Name
-  const Date = route.params.date
-  const Location = route.params.Location
-  console.log(eventTitle, Name, Date, Location)
+  const date = route.params.date
+
+  console.log(eventTitle, Name, date)
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.greetingTitle}>Additional Details</Text>
       </View>
@@ -32,86 +35,130 @@ export default function ThirdScreen({ route, navigation }) {
         <Text style={{ fontFamily: "OpanSans" }}>Skill Level</Text>
         <View style={{ marginTop: 15, flexDirection: "row" }}>
           <Pressable
-            style={({ pressed }) => [
-              {
-                backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-              },
+            style={[
               styles.btn,
+              {
+                backgroundColor: skill === "Beginner" ? "green" : "white",
+              },
             ]}
             onPress={() => {
               setskill("Beginner")
             }}
           >
-            <Text style={{ fontFamily: "OpanSans" }}>Beginner</Text>
+            <Text
+              style={{
+                fontFamily: "OpanSans",
+
+                color: skill === "Beginner" ? "white" : "black",
+              }}
+            >
+              Beginner
+            </Text>
           </Pressable>
           <Pressable
-            style={({ pressed }) => [
-              {
-                backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-              },
+            style={[
               styles.btn,
+              {
+                backgroundColor: skill === "Intermidate" ? "green" : "white",
+              },
             ]}
             onPress={() => {
               setskill("Intermidate")
             }}
           >
-            <Text style={{ fontFamily: "OpanSans" }}>Intermediate</Text>
+            <Text
+              style={{
+                fontFamily: "OpanSans",
+                color: skill === "Intermidate" ? "white" : "black",
+              }}
+            >
+              Intermediate
+            </Text>
           </Pressable>
           <Pressable
-            style={({ pressed }) => [
-              {
-                backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-              },
+            style={[
               styles.btn,
+              {
+                backgroundColor: skill === "Expert" ? "green" : "white",
+              },
             ]}
             onPress={() => {
               setskill("Expert")
             }}
           >
-            <Text style={{ fontFamily: "OpanSans" }}>Expert</Text>
+            <Text
+              style={{
+                fontFamily: "OpanSans",
+                color: skill === "Expert" ? "white" : "black",
+              }}
+            >
+              Expert
+            </Text>
           </Pressable>
         </View>
         <View style={{ marginTop: 32 }}>
           <Text style={{ fontFamily: "OpanSans" }}>Participants</Text>
           <View style={{ marginTop: 15, flexDirection: "row" }}>
             <Pressable
-              style={({ pressed }) => [
-                {
-                  backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-                },
+              style={[
                 styles.btn,
+                {
+                  backgroundColor:
+                    participate === "Everyone" ? "green" : "white",
+                },
               ]}
               onPress={() => {
                 setparticipate("Everyone")
               }}
             >
-              <Text style={{ fontFamily: "OpanSans" }}>Everyone</Text>
+              <Text
+                style={{
+                  fontFamily: "OpanSans",
+                  color: participate === "Everyone" ? "white" : "black",
+                }}
+              >
+                Everyone
+              </Text>
             </Pressable>
             <Pressable
-              style={({ pressed }) => [
-                {
-                  backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-                },
+              style={[
                 styles.btn,
+                {
+                  backgroundColor: participate === "Male" ? "green" : "white",
+                },
               ]}
               onPress={() => {
                 setparticipate("Male")
               }}
             >
-              <Text style={{ fontFamily: "OpanSans" }}>Male</Text>
+              <Text
+                style={{
+                  fontFamily: "OpanSans",
+                  color: participate === "Male" ? "white" : "black",
+                }}
+              >
+                Male
+              </Text>
             </Pressable>
             <Pressable
-              style={({ pressed }) => [
-                {
-                  backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-                },
+              style={[
                 styles.btn,
+                {
+                  backgroundColor: participate === "Female" ? "green" : "white",
+                },
               ]}
               onPress={() => {
                 setparticipate("Female")
               }}
             >
-              <Text>Female</Text>
+              <Text
+                style={{
+                  fontFamily: "OpanSans",
+                  color: participate === "Female" ? "white" : "black",
+                }}
+              >
+                Female
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -120,34 +167,49 @@ export default function ThirdScreen({ route, navigation }) {
           <Text style={{ fontFamily: "OpanSans" }}>Mode</Text>
           <View style={{ marginTop: 15, flexDirection: "row" }}>
             <Pressable
-              style={({ pressed }) => [
-                {
-                  backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-                },
+              style={[
                 styles.btn,
+                {
+                  backgroundColor: mode === "Paid" ? "green" : "white",
+                },
               ]}
               onPress={() => {
                 setMode("Paid")
               }}
             >
-              <Text style={{ fontFamily: "OpanSans" }}>Paid</Text>
+              <Text
+                style={{
+                  fontFamily: "OpanSans",
+                  color: mode === "Paid" ? "white" : "black",
+                }}
+              >
+                Paid
+              </Text>
             </Pressable>
 
             <Pressable
-              style={({ pressed }) => [
-                {
-                  backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-                },
+              style={[
                 styles.btn,
+                {
+                  backgroundColor: mode === "Free" ? "green" : "white",
+                },
               ]}
               onPress={() => {
                 setMode("Free")
               }}
             >
-              <Text style={{ fontFamily: "OpanSans" }}>Free</Text>
+              <Text
+                style={{
+                  fontFamily: "OpanSans",
+                  color: mode === "Free" ? "white" : "black",
+                }}
+              >
+                Free
+              </Text>
             </Pressable>
           </View>
         </View>
+        <View style={{ marginTop: 32 }}></View>
       </View>
       <View
         style={{
@@ -173,18 +235,18 @@ export default function ThirdScreen({ route, navigation }) {
             navigation.navigate("Fourth", {
               eventTitle: eventTitle,
               Name: Name,
-              date: Date,
-              Location: Location,
-              mode: mode,
-              skill: skill,
-              participate: participate,
+              date: date,
+
+              mode: mode.trim(),
+              skill: skill.trim(),
+              participate: participate.trim(),
             })
           }}
         >
           <Text style={{ color: "white", fontFamily: "OpanSans" }}>Next</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 const styles = StyleSheet.create({
@@ -198,6 +260,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: "center",
     justifyContent: "flex-start",
+    marginTop: 32,
   },
   greetingTitle: {
     fontSize: 22,

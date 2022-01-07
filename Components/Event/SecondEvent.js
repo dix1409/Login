@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"
 import {
   ImageBackground,
   StyleSheet,
@@ -9,138 +9,154 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
-} from "react-native";
-import { useRoute } from "@react-navigation/native";
-import DatePicker from "react-native-datepicker";
-import { useFonts } from "expo-font";
-export default function SecondEvent({ navigation }) {
-  const [error, seterror] = useState("");
-  const [eventTitle, setTitle] = useState("");
-  const [Name, setName] = useState("");
-  const [Date, setDate] = useState("");
-  const [Location, setLocation] = useState("");
+  TouchableWithoutFeedback,
+  Platform,
+  Keyboard,
+  Dimensions,
+} from "react-native"
+
+import DatePicker from "react-native-datepicker"
+import PlacesInput from "react-native-places-input"
+import { useFonts } from "expo-font"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
+export default function SecondEvent({ navigation, route }) {
+  const [error, seterror] = useState("")
+  const [eventTitle, setTitle] = useState("")
+  const [Name, setName] = useState("")
+  const [Date, setDate] = useState("")
+
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
-  });
+  })
+
   const Check = () => {
     if (eventTitle === "") {
-      return 0;
+      return 0
     }
     if (Name === "") {
-      return 0;
+      return 0
     }
-    if (Location === "") {
-      return 0;
-    }
-    return 1;
-  };
-  const route = useRoute();
+
+    return 1
+  }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.greetingTitle}>
-          What are the Details of the Event?
-        </Text>
-      </View>
-      <KeyboardAvoidingView
+    <SafeAreaView style={styles.container}>
+      <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
         style={styles.container}
-        // behavior="position"
-        // keyboardVerticalOffset={-550}
       >
-        <View style={styles.form}>
-          <View style={styles.errorMessage}>
-            {!!error && <Text style={styles.error}>{error}</Text>}
-          </View>
-          <View style={{ marginTop: 32 }}>
-            <Text style={styles.inputTitle}>Sport Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(title) => setTitle(title)}
-            />
-          </View>
-          <View style={{ marginTop: 32 }}>
-            <Text style={styles.inputTitle}>Event Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(Name) => setName(Name)}
-            />
-          </View>
-          <View style={{ marginTop: 32 }}>
-            <Text style={styles.inputTitle}>Event Time</Text>
-            <DatePicker
-              style={styles.input}
-              mode="date"
-              format="DD/MM/YYYY"
-              minDate="01-01-2021"
-              maxDate="01-01-2050"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  position: "absolute",
-                  right: -5,
-                  top: 4,
-                  marginLeft: 0,
-                },
-                dateInput: {
-                  borderColor: "#000",
-                  alignItems: "flex-start",
-                  borderWidth: 0,
-                  borderBottomWidth: 1,
-                },
+        <KeyboardAvoidingView style={styles.container}>
+          <ScrollView
+            style={styles.container}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.headerContainer}>
+              <Text style={styles.greetingTitle}>
+                What are the Details of the Event?
+              </Text>
+            </View>
+            <View
+              style={styles.container}
+              // behavior="position"
+              // keyboardVerticalOffset={-550}
+            >
+              <View style={styles.form}>
+                <View style={styles.errorMessage}>
+                  {!!error && <Text style={styles.error}>{error}</Text>}
+                </View>
 
-                dateText: {
-                  fontSize: 17,
-                },
+                <View style={{ marginTop: 32 }}>
+                  <Text style={styles.inputTitle}>Sport Name</Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={(title) => setTitle(title)}
+                    value={eventTitle}
+                  />
+                </View>
+                <View style={{ marginTop: 32 }}>
+                  <Text style={styles.inputTitle}>Event Name</Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={(Name) => setName(Name)}
+                  />
+                </View>
+                <View style={{ marginTop: 32 }}>
+                  <Text style={styles.inputTitle}>Event Time</Text>
+                  <DatePicker
+                    style={styles.input}
+                    mode="date"
+                    format="DD/MM/YYYY"
+                    minDate="01-01-2021"
+                    maxDate="01-01-2050"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    customStyles={{
+                      dateIcon: {
+                        position: "absolute",
+                        right: -5,
+                        top: 4,
+                        marginLeft: 0,
+                      },
+                      dateInput: {
+                        borderColor: "#000",
+                        alignItems: "flex-start",
+                        borderWidth: 0,
+                        borderBottomWidth: 1,
+                      },
+
+                      dateText: {
+                        fontSize: 17,
+                      },
+                    }}
+                    onDateChange={(date) => {
+                      setDate(date)
+                    }}
+                    date={Date}
+                  />
+                </View>
+              </View>
+            </View>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+                // marginBottom: 10,
               }}
-              onDateChange={(date) => {
-                setDate(date);
-              }}
-            />
-          </View>
-          <View style={{ marginTop: 32 }}>
-            <Text style={styles.inputTitle}>Event Location</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(input) => setLocation(input)}
-            />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: 10,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#333",
-            borderRadius: 26,
-            height: 52,
-            justifyContent: "center",
-            alignItems: "center",
-            width: "60%",
-            textAlign: "center",
-          }}
-          onPress={() => {
-            Check()
-              ? navigation.navigate("Third", {
-                  eventTitle: eventTitle,
-                  Name: Name,
-                  date: Date,
-                  Location: Location,
-                })
-              : seterror("Please Fill All The Details");
-          }}
-        >
-          <Text style={{ color: "white", fontFamily: "OpanSans" }}>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#333",
+                  borderRadius: 26,
+                  height: 52,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "60%",
+                  marginTop: 35,
+                  textAlign: "center",
+                }}
+                onPress={() => {
+                  Check()
+                    ? navigation.navigate("Third", {
+                        eventTitle: eventTitle.trim(),
+                        Name: Name.trim(),
+                        date: Date.trim(),
+                      })
+                    : seterror("Please Fill All The Details")
+                }}
+              >
+                <Text style={{ color: "white", fontFamily: "OpanSans" }}>
+                  Next
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
+  )
 }
 const styles = StyleSheet.create({
   container: {
@@ -149,6 +165,7 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     //
     width: "100%",
+    marginTop: 10,
   },
   headerContainer: {
     alignItems: "center",
@@ -165,6 +182,7 @@ const styles = StyleSheet.create({
   form: {
     marginTop: 20,
     marginHorizontal: 30,
+    marginBottom: 10,
   },
   inputTitle: {
     color: "#000",
@@ -183,7 +201,6 @@ const styles = StyleSheet.create({
   errorMessage: {
     alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
   },
   error: {
     color: "#FF3B30",
@@ -191,4 +208,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
   },
-});
+})

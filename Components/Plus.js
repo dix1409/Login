@@ -6,6 +6,7 @@ import First from "./Event/FirstEvent"
 import Second from "./Event/SecondEvent"
 import Third from "./Event/ThirdEvent"
 import Fourth from "./Event/FourthEvent"
+import Fifth from "./Event/FifthEvent"
 const CreateEvent = createStackNavigator()
 const Eventnavigation = () => {
   return (
@@ -18,6 +19,7 @@ const Eventnavigation = () => {
       <CreateEvent.Screen name="Second" component={Second} />
       <CreateEvent.Screen name="Third" component={Third} />
       <CreateEvent.Screen name="Fourth" component={Fourth} />
+      <CreateEvent.Screen name="Fifth" component={Fifth} />
     </CreateEvent.Navigator>
   )
 }

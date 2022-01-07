@@ -1,13 +1,140 @@
-import React from "react";
-import { ImageBackground, StyleSheet, View, Image, Text } from "react-native";
-
+import React, { useEffect, useState } from "react"
+import {
+  ImageBackground,
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  Dimensions,
+  ActivityIndicator,
+  TextInput,
+} from "react-native"
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps"
+import { SafeAreaView } from "react-native-safe-area-context"
+import firebase from "firebase/compat/app"
+import { db } from "./Event/Firestore"
 export default function location(props) {
+  const [loading, setloading] = useState(false)
+  const [region, setregion] = useState([])
+  const [latitude, setlatitude] = useState("")
+  const [longitude, setlongitude] = useState("")
+  const [accuracy, setaccuracy] = useState("")
+  const auth = firebase.auth().currentUser.email
+  useEffect(() => {
+    db.collection("user")
+      .doc(auth)
+      .collection("location")
+      .onSnapshot((querySnapshot) => {
+        let location = []
+        querySnapshot.forEach((doc) => {
+          location.push(doc.data())
+        })
+        setregion([...location])
+      })
+    console.log(region)
+  }, [])
+  useEffect(() => {
+    if (latitude === "") {
+      if (region.length > 0) {
+        region.forEach((data) => {
+          console.log(data.latitude)
+          setlatitude(data.latitude)
+          setaccuracy(data.accuracy)
+        })
+      }
+    }
+    if (longitude === "") {
+      if (region.length > 0) {
+        region.forEach((data) => {
+          // console.log(data.latitude)
+          setlongitude(data.longitude)
+        })
+      }
+    }
+    if (longitude === "") {
+      setloading(true)
+    } else {
+      console.log("yes")
+      setloading(false)
+    }
+  })
+
+  console.log()
+  const oneDegreeOfLongitudeInMeters = 111.32 * 1000
+  const circumference = (40075 / 360) * 1000
+
+  const latDelta =
+    parseInt(accuracy) * (1 / (Math.cos(latitude) * circumference))
+  const lonDelta = parseInt(accuracy) / oneDegreeOfLongitudeInMeters
   return (
-    <View style={styles.container}>
-      <Text>Location</Text>
-    </View>
-  );
+    <SafeAreaView style={styles.container}>
+      {!loading && (
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          provider={PROVIDER_GOOGLE}
+          loadingEnabled={true}
+          loadingIndicatorColor="#666666"
+          loadingBackgroundColor="#eeeeee"
+          moveOnMarkerPress={false}
+          showsUserLocation={true}
+          showsCompass={true}
+          showsPointsOfInterest={false}
+        >
+          <Marker
+            coordinate={{
+              latitude: parseFloat(latitude),
+              longitude: parseFloat(longitude),
+            }}
+          ></Marker>
+        </MapView>
+      )}
+      {loading && (
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="gray" />
+        </View>
+      )}
+      {/* <View
+        style={{
+          position: "absolute",
+          marginTop: Platform.OS === "ios" ? 40 : 20,
+          flexDirection: "row",
+          backgroundColor: "#fff",
+          width: "70%",
+          alignSelf: "center",
+          borderRadius: 5,
+          padding: 10,
+          shadowColor: "#ccc",
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.5,
+          shadowRadius: 5,
+          elevation: 10,
+        }}
+      >
+        <TextInput placeholder="search" style={{ flex: 1, padding: 0 }} />
+      </View> */}
+    </SafeAreaView>
+  )
 }
 const styles = StyleSheet.create({
-  container: {},
-});
+  container: {
+    flex: 1,
+
+    backgroundColor: "#fff",
+  },
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height * 0.9,
+  },
+})

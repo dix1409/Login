@@ -14,33 +14,18 @@ import { useFonts } from "expo-font"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
 import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
-import "firebase/compat/firestore"
-import { getDatabase, ref, onValue, set } from "firebase/database"
-import { QuerySnapshot } from "firebase/firestore"
-// Required for side-effects
-require("firebase/firestore")
-const firebaseConfig = {
-  apiKey: "AIzaSyBi8VDfQchDQJLJNQ_mQO4EqxjfDTIlHJM",
-  authDomain: "e-tuts.firebaseapp.com",
-  projectId: "e-tuts",
-  storageBucket: "e-tuts.appspot.com",
-  messagingSenderId: "257278662825",
-  appId: "1:257278662825:web:93fd59b2bf6e34bacc71b8",
-  measurementId: "G-WP121F1W02",
-}
-const app = firebase.initializeApp(firebaseConfig)
-const db = firebase.firestore(app)
+import { db } from "./Firestore"
 const Inforef = db.collection("data")
+const userRed = db.collection("user")
 const slide = [
-  { id: 1, title: "⚾ Cricket" },
-  { id: 2, title: "🏸 badminton" },
-  { id: 3, title: "⚽ Football" },
-  { id: 4, title: "🥊 Boxing" },
+  { id: 1, title: "Cricket", subTitle: "⚾ " },
+  { id: 2, title: "badminton", subTitle: "🏸 " },
+  { id: 3, title: "Football", subTitle: "⚽ " },
+  { id: 4, title: "Boxing", subTitle: "🥊 " },
 ]
 export default function First({ navigation }) {
   const [data, setdata] = useState([])
-
+  const auth = firebase.auth().currentUser.email
   // const getData = () => {
   //   Inforef.get().then((querySnapshot) => {
   //     console.log("Total users: ", querySnapshot.size);
@@ -97,12 +82,12 @@ export default function First({ navigation }) {
           alignItems: "center",
         }}
       >
-        <Text style={styles.title}>👋heyy {TimeCheck()}</Text>
+        <Text style={styles.title}>👋Heyy {TimeCheck()}</Text>
       </View>
       <View>
         <ImageBackground
           style={{ width: "100%", height: 200 }}
-          source={require("../../Rectangle.png")}
+          source={require("../../Photo/Rectangle.png")}
         >
           <View style={{ flexDirection: "row", marginHorizontal: 15 }}>
             <View
@@ -112,11 +97,24 @@ export default function First({ navigation }) {
                 margin: 5,
               }}
             >
-              <Text style={{ fontSize: 32, color: "#f7f7f7" }}>Create </Text>
               <Text
-                style={{ fontSize: 32, color: "#f7f7f7", marginBottom: 15 }}
+                style={{
+                  fontSize: 28,
+                  color: "#f7f7f7",
+                  fontFamily: "OpanSans",
+                }}
               >
-                New Event
+                Create{" "}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 28,
+                  color: "#f7f7f7",
+                  marginBottom: 15,
+                  fontFamily: "OpanSans",
+                }}
+              >
+                New Events
               </Text>
               <TouchableOpacity
                 style={{
@@ -150,15 +148,15 @@ export default function First({ navigation }) {
             </View>
             <View style={{ justifyContent: "flex-end", width: "50%" }}>
               <Image
-                source={require("../../pale-playing-football.png")}
+                source={require("../../Photo/pale-playing-football.png")}
                 style={{ width: "100%", height: "100%" }}
               />
             </View>
           </View>
         </ImageBackground>
       </View>
-      <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View style={{ marginTop: "4%" }}>
+        {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {slide.map((item) => {
             return (
               <TouchableOpacity
@@ -168,34 +166,57 @@ export default function First({ navigation }) {
                   height: 30,
                   backgroundColor: "#ffff",
                   marginLeft: 5,
+
                   alignItems: "center",
                   justifyContent: "center",
                   marginBottom: 20,
                   borderRadius: 5,
                 }}
+                onPress={() => {
+                  navigation.navigate("Second")
+                }}
               >
-                <View>
+                <View style={{ flexDirection: "row" }}>
+                  <Text>{item.subTitle}</Text>
                   <Text>{item.title}</Text>
                 </View>
               </TouchableOpacity>
             )
           })}
-        </ScrollView>
+        </ScrollView> */}
       </View>
       <View
         style={{
           flex: 1,
         }}
       >
-        <Text style={{ fontSize: 18, marginHorizontal: 5 }}>
-          Recommand Event
+        <Text
+          style={{ fontSize: 18, marginHorizontal: 5, fontFamily: "OpanSans" }}
+        >
+          Your Events
         </Text>
-        {/* <View
+        <View
           style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
         >
-          <Text style={{ fontSize: 20 }}>There Is No Event Available</Text>
-        </View> */}
-        <ScrollView horizontal>
+          <Text style={{ fontSize: 20, fontFamily: "OpanSans" }}>
+            No Event Created{" "}
+          </Text>
+          <Text style={{ fontSize: 18, fontFamily: "OpanSans" }}>
+            Click On{" "}
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "OpanSans",
+                fontWeight: "bold",
+              }}
+            >
+              {" "}
+              "Create Event"
+            </Text>{" "}
+            To Create Event.
+          </Text>
+        </View>
+        {/* <ScrollView horizontal>
           {data.map((item) => {
             return (
               <View key={item.eventTitle}>
@@ -204,7 +225,7 @@ export default function First({ navigation }) {
               </View>
             )
           })}
-        </ScrollView>
+        </ScrollView> */}
       </View>
     </View>
   )

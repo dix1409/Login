@@ -1,13 +1,13 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Image } from "react-native";
-import location from "./location";
-import Chat from "./Chat";
-import Plus from "./Plus";
-import Profile from "./Profile";
-import Search from "./Search";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { View, Image } from "react-native"
+import location from "./location"
+import Chat from "./Chat"
+import Plus from "./Plus"
+import Profile from "./MainProfile"
+import Search from "./Search"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
   return (
@@ -15,9 +15,8 @@ const Tabs = () => {
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,
-      }}
-      style={{
-        bottom: 0,
+        // keyboardHidesTabBar: true,
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tab.Screen
@@ -31,7 +30,7 @@ const Tabs = () => {
                 size={25}
                 color={focused ? "#000" : "gray"}
               />
-            );
+            )
           },
         }}
       />
@@ -46,7 +45,7 @@ const Tabs = () => {
                 size={25}
                 color={focused ? "#000" : "gray"}
               />
-            );
+            )
           },
         }}
       />
@@ -61,7 +60,7 @@ const Tabs = () => {
                 size={25}
                 color={focused ? "#000" : "gray"}
               />
-            );
+            )
           },
         }}
       />
@@ -76,7 +75,7 @@ const Tabs = () => {
                 size={25}
                 color={focused ? "#000" : "gray"}
               />
-            );
+            )
           },
         }}
       />
@@ -92,11 +91,11 @@ const Tabs = () => {
                 size={25}
                 color={focused ? "#000" : "gray"}
               />
-            );
+            )
           },
         }}
       />
     </Tab.Navigator>
-  );
-};
-export default Tabs;
+  )
+}
+export default Tabs
