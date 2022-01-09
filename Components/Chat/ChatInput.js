@@ -1,4 +1,5 @@
 import React from "react"
+import { useContext, createContext } from "react"
 
 import {
   ImageBackground,
@@ -15,19 +16,22 @@ import {
   Fontlisto,
   MaterialIcons,
 } from "@expo/vector-icons"
-import firebase from "firebase/compat/app"
-import { useFonts } from "expo-font"
 
+import { useFonts } from "expo-font"
+import { auth } from "../Event/Firestore"
 import { SafeAreaView } from "react-native-safe-area-context"
 import moment from "moment"
 export default function ChatInput({ item }) {
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Regular.ttf"),
   })
-
-  const auth = firebase.auth().currentUser.email
+  const [email, setemail] = useState("")
+  useEffect(() => {
+    const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
+    setemail(emails)
+  })
   // console.log(item)
-  const isMymsg = item.user === auth ? true : false
+  const isMymsg = item.user === email ? true : false
   return (
     <SafeAreaView style={styles.container}>
       <View

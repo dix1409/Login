@@ -19,40 +19,44 @@ import { LinearGradient } from "expo-linear-gradient"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Feather from "react-native-vector-icons/Feather"
-import Modal from "react-native-modalbox"
+
 import { AntDesign } from "@expo/vector-icons"
-// import * as Animatable from "react-native-animatable"
-//import BottomSheet from "@gorhom/bottom-sheet"
-//import Animated from "react-native-reanimated"
-import { db } from "../Event/Firestore"
-import { doc, setDoc } from "firebase/firestore"
+
+import { db, auth } from "../Event/Firestore"
+
 import * as ImagePicker from "expo-image-picker"
 
 import { useFonts } from "expo-font"
 const { height, width } = Dimensions.get("window")
 import { BottomSheet } from "react-native-btr"
-const EditProfileScreen = ({ navigation }) => {
+import { doc, updateDoc } from "firebase/firestore"
+const EditProfileScreen = ({ navigation, route }) => {
   const [status, requestPermission] = ImagePicker.useCameraPermissions()
-
-  const [image, setImage] = useState(null)
-  const [first, setfirst] = useState("")
-  const [last, setlast] = useState("")
-  const [phone, setphone] = useState("")
-  const [country, setcountry] = useState("")
-  const [city, setcity] = useState("")
-  const { colors } = useTheme()
-  const [visible, setVisible] = useState(false)
-  const [error, setError] = useState("")
-  const toggleBottomNavigationView = () => {
-    //Toggling the visibility state of the bottom sheet
-    setVisible(!visible)
-  }
   const [email, setemail] = useState("")
   useEffect(() => {
     const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
     setemail(emails)
   })
-  const timestamp = firebase.firestore.Timestamp.now().seconds
+  const profiledata = route.params.Profile
+
+  const [image, setImage] = useState(profiledata.image)
+  const [first, setfirst] = useState(profiledata.firstname)
+  const [last, setlast] = useState(profiledata.lastname)
+  const [phone, setphone] = useState(profiledata.phone)
+  const [country, setcountry] = useState(profiledata.country)
+  const [city, setcity] = useState(profiledata.city)
+  const { colors } = useTheme()
+  const [visible, setVisible] = useState(false)
+  const [error, setError] = useState("")
+  const [loaded] = useFonts({
+    OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
+  })
+  const toggleBottomNavigationView = () => {
+    //Toggling the visibility state of the bottom sheet
+    setVisible(!visible)
+  }
+
+  // const timestamp = firebase.firestore.Timestamp.now().seconds
   const takePhotoFromCamera = async () => {
     requestPermission()
     if (status.granted) {
@@ -83,42 +87,28 @@ const EditProfileScreen = ({ navigation }) => {
       setImage(result.uri)
     }
   }
-
+  // console.log(profiledata)
+  // console.log(first)
+  // console.log(image)
   const submitDetail = () => {
     console.log(first)
-    const profileref = doc(collection(db, "user", email, "profile"))
-    setDoc(profileref, {
+    const profileref = doc(db, "user", email, "profile", profiledata.id)
+    updateDoc(profileref, {
       firstname: first,
       lastname: last,
       phone: phone,
       country: country,
       city: city,
       image: image,
-    }).catch((err) => {
-      console.log(err)
     })
+      .then(() => {
+        navigation.navigate("info")
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
-  const Check = () => {
-    if (first === "") {
-      setError("Fill All Details")
-      return 0
-    } else if (last === "") {
-      setError("Fill All Details")
-      return 0
-    } else if (phone === "") {
-      setError("Fill All Details")
-      return 0
-    } else if (city === "") {
-      setError("Fill All Details")
-      return 0
-    } else if (country === "") {
-      setError("Fill All Details")
-      return 0
-    } else {
-      submitDetail()
-      navigation.navigate("ProfileScreen")
-    }
-  }
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback
@@ -273,6 +263,7 @@ const EditProfileScreen = ({ navigation }) => {
                     },
                   ]}
                   onChangeText={(text) => setfirst(text)}
+                  value={first}
                 />
               </View>
               <View style={styles.action}>
@@ -288,6 +279,7 @@ const EditProfileScreen = ({ navigation }) => {
                     },
                   ]}
                   onChangeText={(text) => setlast(text)}
+                  value={last}
                 />
               </View>
               <View style={styles.action}>
@@ -304,6 +296,7 @@ const EditProfileScreen = ({ navigation }) => {
                     },
                   ]}
                   onChangeText={(text) => setphone(text)}
+                  value={phone}
                 />
               </View>
 
@@ -336,9 +329,13 @@ const EditProfileScreen = ({ navigation }) => {
                     },
                   ]}
                   onChangeText={(text) => setcity(text)}
+                  value={city}
                 />
               </View>
-              <TouchableOpacity style={styles.commandButton} onPress={Check}>
+              <TouchableOpacity
+                style={styles.commandButton}
+                onPress={submitDetail}
+              >
                 <Text style={styles.panelButtonTitle}>Done</Text>
               </TouchableOpacity>
             </View>

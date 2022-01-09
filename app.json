@@ -17,19 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "config":{
-      "ios.config.googleMapsApiKey":"AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA"
-      }
+      "supportsTablet": true
+     
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "config":{
-      "android.config.googleMaps.apiKey":"AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA"
-      },
+      "googleServicesFile": "./google-services.json",
     
       "package": "test.com"
 
@@ -42,7 +38,13 @@
     "expo-image-picker",
     {
       "photosPermission": "The app accesses your photos to let you share them with your friends."
-    }]
+    }
+   
+  
+  ],
+  "@react-native-firebase/app"
+ 
 
     ]}
+    
 }

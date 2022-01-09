@@ -19,7 +19,7 @@ import {
 } from "react-native"
 
 import KeyboardSpacer from "react-native-keyboard-spacer"
-import firebase from "firebase/compat/app"
+
 import {
   MaterialCommunityIcons,
   FontAwesome5,
@@ -29,20 +29,21 @@ import {
 } from "@expo/vector-icons"
 import SafeAreaView from "react-native-safe-area-context"
 import style from "./style"
-require("firebase/firestore")
-const firebaseConfig = {
-  apiKey: "AIzaSyBi8VDfQchDQJLJNQ_mQO4EqxjfDTIlHJM",
-  authDomain: "e-tuts.firebaseapp.com",
-  projectId: "e-tuts",
-  storageBucket: "e-tuts.appspot.com",
-  messagingSenderId: "257278662825",
-  appId: "1:257278662825:web:93fd59b2bf6e34bacc71b8",
-  measurementId: "G-WP121F1W02",
-}
+import {
+  doc,
+  setDoc,
+  onSnapshot,
+  where,
+  query,
+  orderBy,
+  Timestamp,
+  collection,
+} from "firebase/firestore"
+import { db, auth } from "../Event/Firestore"
+
 import { useTheme } from "react-navigation"
 import ChatInput from "./ChatInput"
-const app = firebase.initializeApp(firebaseConfig)
-const db = firebase.firestore(app)
+
 import moment from "moment"
 
 //LogBox.ignoreLogs("Setting a timer for a long period of time")
@@ -51,33 +52,32 @@ export default function Chats({ navigation, route }) {
   const [username, setusername] = useState("")
   const [msg, setmsg] = useState()
   const [Allmsg, setAllmsg] = useState([])
-  const auth = firebase.auth().currentUser.email
+
   const event_id = route.params.user
   //console.log(event_id)
 
-  const Timestamp = firebase.firestore.Timestamp.now().seconds
-
+  const Time = Timestamp.now().seconds
+  const [email, setemail] = useState("")
   useEffect(() => {
-    const name = db
-      .collection("user")
-      .doc(auth)
-      .onSnapshot((documentSnapshot) => {
-        let user = documentSnapshot.data()
-        setusername(user.username)
-      })
+    const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
+    setemail(emails)
+  })
+  useEffect(() => {
+    const nameRef = doc(db, "user", email)
+    onSnapshot(nameRef, (documentSnapshot) => {
+      let user = documentSnapshot.data()
+      setusername(user.username)
+    })
+    const ChatRef = doc(collection(db, "event", event_id, "message"))
+    const ref = query(ChatRef, orderBy("CrateBy", "desc"))
 
-    db.collection("event")
-      .doc(event_id)
-      .collection("message")
-      .orderBy("CrateBy", "desc")
-      .onSnapshot((querySnapshot) => {
-        let massage = []
-        querySnapshot.forEach((doc) => {
-          massage.push({ ...doc.data(), id: doc.id })
-        })
-        setAllmsg([...massage])
+    onSnapshot(ref, (querySnapshot) => {
+      let massage = []
+      querySnapshot.forEach((doc) => {
+        massage.push({ ...doc.data(), id: doc.id })
       })
-    return name
+      setAllmsg([...massage])
+    })
   }, [])
   //console.log(username)
   useEffect(() => {
@@ -88,14 +88,14 @@ export default function Chats({ navigation, route }) {
     }
   })
   // console.log(Allmsg)
-  const msgDel = db.collection("event").doc(event_id).collection("message")
+  const msgDel = doc(collection(db, "event", event_id, "messsage"))
 
-  const saveChat = (msg, Timestamp) => {
-    msgDel.add({
+  const saveChat = (msg, Time) => {
+    setDoc(msgDel, {
       content: msg,
-      CrateBy: Timestamp,
+      CrateBy: Time,
       isDelete: false,
-      user: auth,
+      user: email,
       name: username,
     })
   }
@@ -125,7 +125,7 @@ export default function Chats({ navigation, route }) {
             <TouchableOpacity
               disabled={disable}
               onPress={() => {
-                saveChat(msg, Timestamp)
+                saveChat(msg, Time)
                 setmsg()
               }}
             >

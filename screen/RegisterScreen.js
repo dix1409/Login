@@ -15,6 +15,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native"
+
 import { LinearGradient } from "expo-linear-gradient"
 import * as Animatable from "react-native-animatable"
 //import LinearGradient from "react-native-linear-gradient"
@@ -24,22 +25,12 @@ import { Ionicons } from "@expo/vector-icons"
 // import Fire from '../Fire';
 // import UserPermissions from '../utilities/UserPermissions';
 //import * as ImagePicker from 'expo-image-picker';
-import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
-import "firebase/compat/firestore"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-const firebaseConfig = {
-  apiKey: "AIzaSyBi8VDfQchDQJLJNQ_mQO4EqxjfDTIlHJM",
-  authDomain: "e-tuts.firebaseapp.com",
-  projectId: "e-tuts",
-  storageBucket: "e-tuts.appspot.com",
-  messagingSenderId: "257278662825",
-  appId: "1:257278662825:web:93fd59b2bf6e34bacc71b8",
-  measurementId: "G-WP121F1W02",
-}
-const app = firebase.initializeApp(firebaseConfig)
-const db = firebase.firestore(app)
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { doc, setDoc } from "firebase/firestore"
+import { db, auth } from "../Components/Event/Firestore"
+
 const userRef = db.collection("user")
+
 const RegisterScreen = ({ navigation }) => {
   const [secureTextEntry, setsecurePassword] = useState(true)
   //const [confirm, setconfirm] = useState(true)
@@ -53,24 +44,25 @@ const RegisterScreen = ({ navigation }) => {
 
   const handleSignUp = () => {
     setIsLoading(true)
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email.trim(), password.trim())
+
+    createUserWithEmailAndPassword(auth, email.trim(), password.trim())
       .then(
         (userCredentials) =>
           userCredentials.user.updateProfile({
             displayName: name,
           }),
 
+        setDoc(doc(db, "user", email), {
+          username: name,
+          userEmail: email,
+          userPassword: password,
+        }),
         setIsLoading(false),
-        navigation.navigate("Home")
+        navigation.navigate("Home", {
+          email: email,
+        })
       )
       .catch((err) => setError(err.message))
-    userRef.doc(email).set({
-      username: name,
-      userEmail: email,
-      userPassword: password,
-    })
   }
 
   const updateSecureTextEntry = () => {

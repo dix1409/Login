@@ -18,21 +18,37 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons"
-const EventRef = db.collection("data")
+import { useFonts } from "expo-font"
+import { getDatabase, ref, onValue, set } from "firebase/database"
+import {
+  query,
+  collection,
+  onSnapshot,
+  orderBy,
+  where,
+} from "firebase/firestore"
+const EventRef = ref(collection(db, "data"))
 export default function ShowEvent({ navigation, route }) {
   const [event, setevent] = useState([])
   const [show, setshow] = useState(true)
   const title = route.params.title
+  const [loaded] = useFonts({
+    OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
+  })
   useEffect(() => {
-    EventRef.where("eventTitle", "==", title)
-      .orderBy("date", "desc")
-      .onSnapshot((querySnapshot) => {
-        let events = []
-        querySnapshot.forEach((doc) => {
-          events.push({ ...doc.data(), id: doc.id })
-        })
-        setevent([...events])
+    const ref = query(
+      EventRef,
+      where("eventTitle", "==", title),
+      orderBy("data", "desc")
+    )
+
+    onSnapshot(ref, (querySnapshot) => {
+      let events = []
+      querySnapshot.forEach((doc) => {
+        events.push({ ...doc.data(), id: doc.id })
       })
+      setevent([...events])
+    })
     console.log(event)
   }, [])
   useEffect(() => {
@@ -46,7 +62,7 @@ export default function ShowEvent({ navigation, route }) {
     <SafeAreaView style={styles.container}>
       {show &&
         event.map((data) => (
-          <View style={styles.box}>
+          <View style={styles.box} key={data.id}>
             <View
               style={{
                 height: "100%",
@@ -60,7 +76,7 @@ export default function ShowEvent({ navigation, route }) {
               />
             </View>
             <View style={{ justifyContent: "center", marginRight: "auto" }}>
-              <Text>{data.name}</Text>
+              <Text style={{ fontFamily: "OpanSans" }}>{data.name}</Text>
               <View
                 style={{
                   flexDirection: "row",
@@ -73,7 +89,9 @@ export default function ShowEvent({ navigation, route }) {
                   size={15}
                   style={{ marginRight: 10 }}
                 />
-                <Text style={{ marginRight: 10 }}>{data.date}</Text>
+                <Text style={{ marginRight: 10, fontFamily: "OpanSans" }}>
+                  {data.date}
+                </Text>
                 <Text>{data.time}</Text>
               </View>
               <View
@@ -89,7 +107,7 @@ export default function ShowEvent({ navigation, route }) {
                   color="black"
                   style={{ marginRight: 10 }}
                 />
-                <Text>{data.prize} Rs.</Text>
+                <Text style={{ fontFamily: "OpanSans" }}>{data.prize} Rs.</Text>
               </View>
             </View>
             <View

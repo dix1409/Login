@@ -13,10 +13,8 @@ import {
 import { useFonts } from "expo-font"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
-import firebase from "firebase/compat/app"
 import { db } from "./Firestore"
-const Inforef = db.collection("data")
-const userRed = db.collection("user")
+
 const slide = [
   { id: 1, title: "Cricket", subTitle: "⚾ " },
   { id: 2, title: "badminton", subTitle: "🏸 " },
@@ -24,8 +22,6 @@ const slide = [
   { id: 4, title: "Boxing", subTitle: "🥊 " },
 ]
 export default function First({ navigation }) {
-  const [data, setdata] = useState([])
-  const auth = firebase.auth().currentUser.email
   // const getData = () => {
   //   Inforef.get().then((querySnapshot) => {
   //     console.log("Total users: ", querySnapshot.size);
@@ -38,16 +34,16 @@ export default function First({ navigation }) {
   //   });
   // };
 
-  useEffect(() => {
-    Inforef.onSnapshot((querySnapShot) => {
-      let DataTemp = []
-      querySnapShot.forEach((doc) => {
-        DataTemp.push(doc.data())
-      })
-      setdata(DataTemp)
-    })
-  }, [])
-  console.log(data)
+  // useEffect(() => {
+  //   Inforef.onSnapshot((querySnapShot) => {
+  //     let DataTemp = []
+  //     querySnapShot.forEach((doc) => {
+  //       DataTemp.push(doc.data())
+  //     })
+  //     setdata(DataTemp)
+  //   })
+  // }, [])
+  // console.log(data)
 
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),

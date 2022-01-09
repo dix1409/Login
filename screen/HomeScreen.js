@@ -1,17 +1,15 @@
 import React, { Component, useState, useEffect } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
-import "firebase/compat/firestore"
-import { NavigationContainer } from "@react-navigation/native"
+
 import Tabs from "../Components/Tabs"
 import * as Location from "expo-location"
-import { db } from "../Components/Event/Firestore"
+import { db, auth } from "../Components/Event/Firestore"
+import { doc, setDoc, collection, onSnapshot, addDoc } from "firebase/firestore"
 export default function HomeScreen() {
   const [isEmpty, setisEmpty] = useState(false)
   const [location, setlocation] = useState({})
-  const auth = firebase.auth().currentUser.email
-  console.log(auth)
+
   useEffect(() => {
     const checkPermission = async () => {
       const hasPermission = await Location.requestBackgroundPermissionsAsync()
@@ -39,23 +37,26 @@ export default function HomeScreen() {
     }
     getUserLocation()
   }, [])
-
+  let email
   useEffect(() => {
-    db.collection("user")
-      .doc(auth)
-      .collection("location")
-      .onSnapshot((querySnapshot) => {
-        if (querySnapshot.size === 0) {
-          setisEmpty(true)
-        }
-      })
+    email = auth.currentUser.email ? auth.currentUser.email : "unknown"
+  })
+  useEffect(() => {
+    const userref = doc(collection(db, "user", email, "joinEvent"))
+    onSnapshot(userref, (querySnapshot) => {
+      if (querySnapshot.size === 0) {
+        setisEmpty(true)
+      }
+    })
     if (isEmpty) {
       if (Object.entries(location).length != 0) {
-        db.collection("user").doc(auth).collection("location").add(location)
+        const locationRef = doc(collection(db, "user", email, "location"))
+        addDoc(locationRef, location)
       }
       setisEmpty(false)
     }
   }, [])
+
   return (
     <NavigationContainer independent={true}>
       <Tabs />

@@ -23,30 +23,10 @@ import { useTheme } from "react-native-paper"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
-import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
-import "firebase/compat/firestore"
-import { getDatabase, ref, onValue, set } from "firebase/database"
-import { QuerySnapshot } from "firebase/firestore"
-// Required for side-effects
-require("firebase/firestore")
-const firebaseConfig = {
-  apiKey: "AIzaSyBi8VDfQchDQJLJNQ_mQO4EqxjfDTIlHJM",
-  authDomain: "e-tuts.firebaseapp.com",
-  projectId: "e-tuts",
-  storageBucket: "e-tuts.appspot.com",
-  messagingSenderId: "257278662825",
-  appId: "1:257278662825:web:93fd59b2bf6e34bacc71b8",
-  measurementId: "G-WP121F1W02",
-}
-const app = firebase.initializeApp(firebaseConfig)
-const db = firebase.firestore(app)
-const Inforef = db.collection("data")
 const { height, width } = Dimensions.get("window")
 export default function First({ navigation }) {
   const [serach, setserach] = useState("")
-  const [dataCricket, setCricket] = useState([])
-  const [dataFootball, setdataFootball] = useState([])
+
   const [isLoading, setIsLoading] = useState(false)
   const { colors } = useTheme()
   // const getData = () => {
@@ -61,21 +41,6 @@ export default function First({ navigation }) {
   //   });
   // };
 
-  useEffect(() => {
-    setIsLoading(true)
-    Inforef.orderBy("date")
-      .limit(10)
-      .onSnapshot((querySnapShot) => {
-        let DataTemp = []
-        querySnapShot.forEach((doc) => {
-          DataTemp.push({ ...doc.data(), id: doc.id })
-        })
-        setCricket([...DataTemp])
-      })
-    if (dataCricket !== null) {
-      setIsLoading(false)
-    }
-  }, [])
   //console.log(dataCricket)
 
   const [loaded] = useFonts({

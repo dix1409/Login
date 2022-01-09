@@ -11,26 +11,29 @@ import {
 } from "react-native"
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps"
 import { SafeAreaView } from "react-native-safe-area-context"
-import firebase from "firebase/compat/app"
-import { db } from "./Event/Firestore"
+import { doc, setdoc, onSnapshot, collection } from "firebase/firestore"
+import { db, auth } from "./Event/Firestore"
 export default function location(props) {
   const [loading, setloading] = useState(false)
   const [region, setregion] = useState([])
   const [latitude, setlatitude] = useState("")
   const [longitude, setlongitude] = useState("")
   const [accuracy, setaccuracy] = useState("")
-  const auth = firebase.auth().currentUser.email
+  const [email, setemail] = useState("")
   useEffect(() => {
-    db.collection("user")
-      .doc(auth)
-      .collection("location")
-      .onSnapshot((querySnapshot) => {
-        let location = []
-        querySnapshot.forEach((doc) => {
-          location.push(doc.data())
-        })
-        setregion([...location])
+    const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
+    setemail(emails)
+  })
+  useEffect(() => {
+    const locationref = doc(collection(db, "user", email, "location"))
+
+    onSnapshot(locationref, (querySnapshot) => {
+      let location = []
+      querySnapshot.forEach((doc) => {
+        location.push(doc.data())
       })
+      setregion([...location])
+    })
     console.log(region)
   }, [])
   useEffect(() => {
@@ -46,7 +49,7 @@ export default function location(props) {
     if (longitude === "") {
       if (region.length > 0) {
         region.forEach((data) => {
-          // console.log(data.latitude)
+          console.log(data.longitude)
           setlongitude(data.longitude)
         })
       }
@@ -63,9 +66,6 @@ export default function location(props) {
   const oneDegreeOfLongitudeInMeters = 111.32 * 1000
   const circumference = (40075 / 360) * 1000
 
-  const latDelta =
-    parseInt(accuracy) * (1 / (Math.cos(latitude) * circumference))
-  const lonDelta = parseInt(accuracy) / oneDegreeOfLongitudeInMeters
   return (
     <SafeAreaView style={styles.container}>
       {!loading && (

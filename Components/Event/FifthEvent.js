@@ -15,15 +15,15 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native"
-import firebase from "firebase/compat/app"
-import { db } from "./Firestore"
+
+import { db, auth } from "./Firestore"
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import MapView from "react-native-maps"
 import { Entypo, AntDesign } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
-const Inforef = db.collection("data")
-const userRef = db.collection("user")
+import { collection, doc, setDoc } from "firebase/firestore"
+
 const { height, width } = Dimensions.get("screen")
 export default function FifthEvent({ route, navigation }) {
   const date = route.params.date
@@ -33,7 +33,11 @@ export default function FifthEvent({ route, navigation }) {
   const [latitude, setlatitude] = useState("")
   const [longitude, setlongitude] = useState("")
 
-  const auth = firebase.auth().currentUser.email
+  const [email, setemail] = useState("")
+  useEffect(() => {
+    const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
+    setemail(emails)
+  })
   const eventTitle = route.params.eventTitle
   const name = route.params.name
   const time = route.params.time
@@ -45,7 +49,8 @@ export default function FifthEvent({ route, navigation }) {
   const prize = route.params.prize
   const fees = route.params.fees
   const UpdateApp = () => {
-    Inforef.add({
+    const Inforef = doc(collection(db, "data"))
+    setDoc(Inforef, {
       name: name,
       location: location,
       mode: mode,
@@ -61,28 +66,25 @@ export default function FifthEvent({ route, navigation }) {
       latitude: latitude,
       longitude: longitude,
     })
-    userRef
-      .doc(auth)
-      .collection("Ownevent")
-      .add({
-        name: name,
-        location: location.trim(),
-        mode: mode,
-        eventTitle: eventTitle,
-        skill: skill,
-        participate: participate,
-        comment: comment,
-        date: date.trim(),
-        prize: prize.trim(),
-        time: time.trim(),
-        count: participateCount.trim(),
-        fees: fees.trim(),
-        latitude: latitude,
-        longitude: longitude,
-      })
-      .then(() => {
-        setvisible(true)
-      })
+    const userRef = doc(collection(db, "user", email, "Ownevent"))
+    setDoc(userRef, {
+      name: name,
+      location: location.trim(),
+      mode: mode,
+      eventTitle: eventTitle,
+      skill: skill,
+      participate: participate,
+      comment: comment,
+      date: date.trim(),
+      prize: prize.trim(),
+      time: time.trim(),
+      count: participateCount.trim(),
+      fees: fees.trim(),
+      latitude: latitude,
+      longitude: longitude,
+    }).then(() => {
+      setvisible(true)
+    })
   }
   return (
     <SafeAreaView style={styles.container}>
