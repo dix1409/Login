@@ -18,8 +18,6 @@ import {
   Platform,
 } from "react-native"
 
-import KeyboardSpacer from "react-native-keyboard-spacer"
-
 import {
   MaterialCommunityIcons,
   FontAwesome5,
@@ -38,12 +36,13 @@ import {
   orderBy,
   Timestamp,
   collection,
+  collectionGroup,
 } from "firebase/firestore"
 import { db, auth } from "../Event/Firestore"
 
 import { useTheme } from "react-navigation"
 import ChatInput from "./ChatInput"
-
+import { uid } from "uid"
 import moment from "moment"
 
 //LogBox.ignoreLogs("Setting a timer for a long period of time")
@@ -63,22 +62,24 @@ export default function Chats({ navigation, route }) {
     setemail(emails)
   })
   useEffect(() => {
-    const nameRef = doc(db, "user", email)
-    onSnapshot(nameRef, (documentSnapshot) => {
-      let user = documentSnapshot.data()
-      setusername(user.username)
-    })
-    const ChatRef = doc(collection(db, "event", event_id, "message"))
-    const ref = query(ChatRef, orderBy("CrateBy", "desc"))
-
-    onSnapshot(ref, (querySnapshot) => {
-      let massage = []
-      querySnapshot.forEach((doc) => {
-        massage.push({ ...doc.data(), id: doc.id })
+    if (email) {
+      const nameRef = doc(db, "user", email)
+      onSnapshot(nameRef, (documentSnapshot) => {
+        let user = documentSnapshot.data()
+        setusername(user.username)
       })
-      setAllmsg([...massage])
-    })
-  }, [])
+      const ChatRef = collectionGroup(db, "event", event_id, "message")
+      const ref = query(ChatRef, orderBy("CrateBy", "desc"))
+
+      onSnapshot(ref, (querySnapshot) => {
+        let massage = []
+        querySnapshot.forEach((doc) => {
+          massage.push({ ...doc.data(), id: doc.id })
+        })
+        setAllmsg([...massage])
+      })
+    }
+  }, [email])
   //console.log(username)
   useEffect(() => {
     if (msg == null || msg == "") {
@@ -88,7 +89,7 @@ export default function Chats({ navigation, route }) {
     }
   })
   // console.log(Allmsg)
-  const msgDel = doc(collection(db, "event", event_id, "messsage"))
+  const msgDel = collection(db, "event", event_id, "messsage")
 
   const saveChat = (msg, Time) => {
     setDoc(msgDel, {
