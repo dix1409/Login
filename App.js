@@ -14,13 +14,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import OnboardingScreen from "./screen/SplashScreen"
 import { Provider } from "react-redux"
 import { navigationRef } from "./Nav/RootNavigation"
-
+import { auth } from "./Components/Event/Firestore"
 const AppStack = createStackNavigator()
 import * as RootNavigation from "./Nav/RootNavigation"
-const store = createStore(rootReducer)
-const App = () => {
-  cosnt[(email, setemail)] = useState("")
 
+const App = () => {
   console.disableYellowBox = true
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   useEffect(() => {
@@ -41,8 +39,8 @@ const App = () => {
     //     }
     //   })
     // }
-    const unsub = onAuthStateChanged((user) => {
-      console.log(user)
+    const unsub = onAuthStateChanged(auth, (user) => {
+      //console.log(user)
       if (user) {
         RootNavigation.navigate("Home")
       } else {

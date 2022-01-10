@@ -9,14 +9,21 @@ import {
   FlatList,
 } from "react-native"
 import { db } from "../Event/Firestore"
-import { onSnapshot, where, orderBy, doc, query } from "firebase/firestore"
+import {
+  onSnapshot,
+  where,
+  orderBy,
+  doc,
+  query,
+  collection,
+} from "firebase/firestore"
 
 export default function SearchResult({ navigation, route }) {
   const [serchResult, setserchResult] = useState([])
   const [count, setcount] = useState("")
   const value = route.params.value
   useEffect(() => {
-    const Eventref = doc(collection(db, "data"))
+    const Eventref = collection(db, "data")
     const ref = query(
       Eventref,
       where("eventTitle", "==", value),

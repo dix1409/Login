@@ -2,7 +2,7 @@ import firebase from "firebase/app"
 import "firebase/auth"
 import "firebase/firestore"
 import { initializeApp } from "firebase/app"
-import { getDatabase, ref, onValue, set } from "firebase/database"
+
 import { getAuth } from "firebase/auth"
 import { getFirestore } from "firebase/firestore"
 
@@ -17,8 +17,8 @@ const firebaseConfig = {
   appId: "1:257278662825:web:93fd59b2bf6e34bacc71b8",
   measurementId: "G-WP121F1W02",
 }
-const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
+initializeApp(firebaseConfig)
+const auth = getAuth()
 
-const db = getFirestore(app)
+const db = getFirestore()
 export { db, auth }

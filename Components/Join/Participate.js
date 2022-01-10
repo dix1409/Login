@@ -14,7 +14,7 @@ import { useFonts } from "expo-font"
 import { SafeAreaView } from "react-native-safe-area-context"
 // Required for side-effects
 import { db } from "../Event/Firestore"
-import { doc, setDoc, onSnapshot } from "firebase/firestore"
+import { doc, setDoc, onSnapshot, collection } from "firebase/firestore"
 export default function Participate({ navigation, route }) {
   const [event, setevent] = useState([])
   const [loaded] = useFonts({
@@ -22,7 +22,7 @@ export default function Participate({ navigation, route }) {
   })
   const id = route.params.id
   useEffect(() => {
-    const pepole = doc(collection(db, "event", id, "participate"))
+    const pepole = collection(db, "event", id, "participate")
     onSnapshot(pepole, (querySnapshot) => {
       const participate = []
       querySnapshot.forEach((doc) => {

@@ -273,7 +273,7 @@ const Mapstyle = [
   },
 ]
 const userref = collection(db, "user")
-
+import { uid } from "uid"
 export default function joinEvent({ navigation, route }) {
   const [email, setemail] = useState("")
   useEffect(() => {
@@ -293,37 +293,39 @@ export default function joinEvent({ navigation, route }) {
   })
 
   useEffect(() => {
-    const ref = query(userref, where("userEmail", "==", email))
+    if (email) {
+      const ref = query(userref, where("userEmail", "==", email))
 
-    onSnapshot(ref, (querySnapshot) => {
-      let user = []
-      querySnapshot.forEach((doc) => {
-        user.push(doc.data())
+      onSnapshot(ref, (querySnapshot) => {
+        let user = []
+        querySnapshot.forEach((doc) => {
+          user.push(doc.data())
+        })
+        setuserdata([...user])
       })
-      setuserdata([...user])
-    })
-  }, [])
-  console.log(userdata)
+    }
+  }, [email])
+  // console.log(userdata)
   let userinfo = []
   userdata.forEach((data) => {
     userinfo = data
   })
 
-  // console.log(userinfo)
+  console.log(userinfo)
 
   // console.log(event)
   // console.log(auth)
   const joinEvents = () => {
-    const participateref = collection(db, "event", event.id, "participate")
+    const participateref = doc(db, "event", event.id, "participate", email)
 
-    addDoc(participateref, {
+    setDoc(participateref, {
       username: userinfo.username,
       userEmail: userinfo.userEmail,
       userPassword: userinfo.userPassword,
     })
-    const userrefs = collection(db, "user", email, "joinEvent")
+    const userrefs = doc(db, "user", email, "joinEvent", event.id)
 
-    addDoc(userrefs, {
+    setDoc(userrefs, {
       name: event.name,
       Location: event.location,
       mode: event.mode,
@@ -343,16 +345,18 @@ export default function joinEvent({ navigation, route }) {
     // console.log("hello")
   }
   const checkJoin = () => {
-    const userref = collection(db, "user", email, "joinEvent")
-    const ref = query(userref, where("id", "==", event.id))
+    if (email) {
+      const userref = doc(db, "user", email, "joinEvent", event.id)
+      // const ref = query(userref, where("id", "==", event.id))
 
-    onSnapshot(ref, (querySnapshot) => {
-      console.log(querySnapshot.size)
-      if (querySnapshot.size === 1) {
-        setjoin(true)
-        // console.log(join)
-      }
-    })
+      onSnapshot(userref, (querySnapshot) => {
+        // console.log(querySnapshot)
+        if (querySnapshot.exists()) {
+          setjoin(true)
+          // console.log(join)
+        }
+      })
+    }
   }
   checkJoin()
   console.log(event)

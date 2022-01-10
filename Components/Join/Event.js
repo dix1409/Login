@@ -179,7 +179,9 @@ export default function First({ navigation }) {
                 navigation.navigate("fourth", {
                   value: serach.trim(),
                 })
+                setserach("")
               }}
+              value={serach}
             />
           </View>
         </View>

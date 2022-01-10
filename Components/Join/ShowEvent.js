@@ -27,7 +27,7 @@ import {
   orderBy,
   where,
 } from "firebase/firestore"
-const EventRef = ref(collection(db, "data"))
+const EventRef = collection(db, "data")
 export default function ShowEvent({ navigation, route }) {
   const [event, setevent] = useState([])
   const [show, setshow] = useState(true)
@@ -36,10 +36,11 @@ export default function ShowEvent({ navigation, route }) {
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
   useEffect(() => {
+    // console.log(title)
     const ref = query(
       EventRef,
       where("eventTitle", "==", title),
-      orderBy("data", "desc")
+      orderBy("date", "desc")
     )
 
     onSnapshot(ref, (querySnapshot) => {
@@ -49,7 +50,7 @@ export default function ShowEvent({ navigation, route }) {
       })
       setevent([...events])
     })
-    console.log(event)
+    // console.log(event)
   }, [])
   useEffect(() => {
     if (event.length == 0) {

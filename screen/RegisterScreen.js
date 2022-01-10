@@ -29,8 +29,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth"
 import { doc, setDoc } from "firebase/firestore"
 import { db, auth } from "../Components/Event/Firestore"
 
-const userRef = db.collection("user")
-
 const RegisterScreen = ({ navigation }) => {
   const [secureTextEntry, setsecurePassword] = useState(true)
   //const [confirm, setconfirm] = useState(true)

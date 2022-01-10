@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   ImageBackground,
   StyleSheet,
@@ -15,14 +15,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native"
-
+import { uid } from "uid"
 import { db, auth } from "./Firestore"
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import MapView from "react-native-maps"
 import { Entypo, AntDesign } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { collection, doc, setDoc } from "firebase/firestore"
+import { collection, doc, setDoc, addDoc } from "firebase/firestore"
 
 const { height, width } = Dimensions.get("screen")
 export default function FifthEvent({ route, navigation }) {
@@ -49,24 +49,26 @@ export default function FifthEvent({ route, navigation }) {
   const prize = route.params.prize
   const fees = route.params.fees
   const UpdateApp = () => {
-    const Inforef = doc(collection(db, "data"))
-    setDoc(Inforef, {
-      name: name,
-      location: location,
-      mode: mode,
-      eventTitle: eventTitle,
-      skill: skill,
-      participate: participate,
-      comment: comment,
-      date: date,
-      count: participateCount,
-      prize: prize.trim(),
-      time: time.trim(),
-      fees: fees,
-      latitude: latitude,
-      longitude: longitude,
-    })
-    const userRef = doc(collection(db, "user", email, "Ownevent"))
+    if (email) {
+      const Inforef = collection(db, "data")
+      addDoc(Inforef, {
+        name: name,
+        location: location,
+        mode: mode,
+        eventTitle: eventTitle,
+        skill: skill,
+        participate: participate,
+        comment: comment,
+        date: date,
+        count: participateCount,
+        prize: prize.trim(),
+        time: time.trim(),
+        fees: fees,
+        latitude: latitude,
+        longitude: longitude,
+      })
+    }
+    const userRef = doc(db, "user", email, "Ownevent", uid(16))
     setDoc(userRef, {
       name: name,
       location: location.trim(),

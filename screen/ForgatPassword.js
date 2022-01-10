@@ -14,7 +14,8 @@ import {
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import styles from "./style"
 import { useTheme } from "react-native-paper"
-import firebase from "firebase/compat/app"
+import { db, auth } from "../Components/Event/Firestore"
+import { sendPasswordResetEmail } from "firebase/auth"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Animatable from "react-native-animatable"
 export default function ForgatPassword({ navigation }) {
@@ -25,7 +26,7 @@ export default function ForgatPassword({ navigation }) {
 
   const handlePasswordReset = async () => {
     try {
-      await firebase.auth().sendPasswordResetEmail(email.trim())
+      await sendPasswordResetEmail(auth, email.trim())
       console.log("Password reset email sent successfully")
       setvisible(true)
       setTimeout(() => {

@@ -11,7 +11,13 @@ import {
 } from "react-native"
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { doc, setdoc, onSnapshot, collection } from "firebase/firestore"
+import {
+  doc,
+  setdoc,
+  onSnapshot,
+  collection,
+  collectionGroup,
+} from "firebase/firestore"
 import { db, auth } from "./Event/Firestore"
 export default function location(props) {
   const [loading, setloading] = useState(false)
@@ -20,49 +26,58 @@ export default function location(props) {
   const [longitude, setlongitude] = useState("")
   const [accuracy, setaccuracy] = useState("")
   const [email, setemail] = useState("")
+  const [ready, setready] = useState(false)
   useEffect(() => {
     const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
     setemail(emails)
   })
-  useEffect(() => {
-    const locationref = doc(collection(db, "user", email, "location"))
+  // console.log(email)
 
-    onSnapshot(locationref, (querySnapshot) => {
-      let location = []
-      querySnapshot.forEach((doc) => {
-        location.push(doc.data())
-      })
-      setregion([...location])
-    })
-    console.log(region)
-  }, [])
   useEffect(() => {
-    if (latitude === "") {
-      if (region.length > 0) {
-        region.forEach((data) => {
-          console.log(data.latitude)
-          setlatitude(data.latitude)
-          setaccuracy(data.accuracy)
-        })
-      }
+    if (email) {
+      const locationref = doc(db, "user", email, "location", "doc")
+
+      onSnapshot(locationref, (querySnapshot) => {
+        let location = []
+
+        location.push(querySnapshot.data())
+        // console.log(querySnapshot.data())
+
+        setregion([...location])
+      })
+      //  console.log(region)
     }
-    if (longitude === "") {
-      if (region.length > 0) {
-        region.forEach((data) => {
-          console.log(data.longitude)
-          setlongitude(data.longitude)
-        })
+    setready(true)
+  }, [email])
+  useEffect(() => {
+    if (ready) {
+      if (latitude === "") {
+        if (region.length > 0) {
+          region.forEach((data) => {
+            //  console.log(data.latitude)
+            setlatitude(data.latitude)
+            setaccuracy(data.accuracy)
+          })
+        }
       }
-    }
-    if (longitude === "") {
-      setloading(true)
-    } else {
-      console.log("yes")
-      setloading(false)
+      if (longitude === "") {
+        if (region.length > 0) {
+          region.forEach((data) => {
+            //  console.log(data.longitude)
+            setlongitude(data.longitude)
+          })
+        }
+      }
+      if (longitude === "") {
+        setloading(true)
+      } else {
+        //  console.log("yes")
+        setloading(false)
+      }
     }
   })
 
-  console.log()
+  // console.log()
   const oneDegreeOfLongitudeInMeters = 111.32 * 1000
   const circumference = (40075 / 360) * 1000
 
@@ -74,8 +89,8 @@ export default function location(props) {
           initialRegion={{
             latitude: parseFloat(latitude),
             longitude: parseFloat(longitude),
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.022,
+            longitudeDelta: 0.021,
           }}
           provider={PROVIDER_GOOGLE}
           loadingEnabled={true}

@@ -26,7 +26,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Feather from "react-native-vector-icons/Feather"
 import { auth } from "../Components/Event/Firestore"
 //import { TouchableWithoutFeedback } from "react-native-web"
-
+import { useTheme } from "react-native-paper"
 const LoginScreen = ({ navigation }) => {
   const [secureTextEntry, setsecurePassword] = useState(true)
   const [email, setEmail] = useState("")

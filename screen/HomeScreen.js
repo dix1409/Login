@@ -1,11 +1,18 @@
 import React, { Component, useState, useEffect } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import firebase from "firebase/compat/app"
 
 import Tabs from "../Components/Tabs"
 import * as Location from "expo-location"
 import { db, auth } from "../Components/Event/Firestore"
-import { doc, setDoc, collection, onSnapshot, addDoc } from "firebase/firestore"
+import {
+  doc,
+  setDoc,
+  collection,
+  onSnapshot,
+  addDoc,
+  collectionGroup,
+} from "firebase/firestore"
+import { NavigationContainer } from "@react-navigation/native"
 export default function HomeScreen() {
   const [isEmpty, setisEmpty] = useState(false)
   const [location, setlocation] = useState({})
@@ -37,25 +44,25 @@ export default function HomeScreen() {
     }
     getUserLocation()
   }, [])
-  let email
+
+  const email = auth.currentUser.email ? auth.currentUser.email : "unknown"
+
   useEffect(() => {
-    email = auth.currentUser.email ? auth.currentUser.email : "unknown"
-  })
-  useEffect(() => {
-    const userref = doc(collection(db, "user", email, "joinEvent"))
-    onSnapshot(userref, (querySnapshot) => {
-      if (querySnapshot.size === 0) {
+    const usersref = doc(db, "user", email, "location", "doc")
+    //const userref = collection(db, users, "location")
+
+    onSnapshot(usersref, (querySnapshot) => {
+      if (!querySnapshot.exists()) {
         setisEmpty(true)
       }
     })
     if (isEmpty) {
       if (Object.entries(location).length != 0) {
-        const locationRef = doc(collection(db, "user", email, "location"))
-        addDoc(locationRef, location)
+        setDoc(doc(db, "user", email, "location", "doc"), location)
       }
       setisEmpty(false)
     }
-  }, [])
+  })
 
   return (
     <NavigationContainer independent={true}>
