@@ -26,10 +26,16 @@
         "backgroundColor": "#FFFFFF"
       },
       "googleServicesFile": "./google-services.json",
-    
-      "package": "test.com"
+     
+      "package": "test.com",
+      "config": {
+        "googleMaps":{
+        "apiKey": "AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA"
+        }
+      }
 
     },
+  
     "web": {
       "favicon": "./assets/favicon.png"
     },

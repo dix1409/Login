@@ -23,7 +23,7 @@ import MapView from "react-native-maps"
 import { Entypo, AntDesign } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { collection, doc, setDoc, addDoc } from "firebase/firestore"
-
+import { GOOGLE_API_KEY } from "@env"
 const { height, width } = Dimensions.get("screen")
 export default function FifthEvent({ route, navigation }) {
   const date = route.params.date
@@ -120,7 +120,7 @@ export default function FifthEvent({ route, navigation }) {
                 nearbyPlacesAPI="GooglePlacesSearch"
                 keyboardAppearance={"light"}
                 query={{
-                  key: "AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA",
+                  key: GOOGLE_API_KEY,
                   language: "en",
                 }}
                 debounce={400}

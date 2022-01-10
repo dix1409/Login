@@ -30,7 +30,7 @@ export default function ChatInput({ item }) {
     const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
     setemail(emails)
   })
-  // console.log(item)
+  console.log(item)
   const isMymsg = item.user === email ? true : false
   return (
     <SafeAreaView style={styles.container}>

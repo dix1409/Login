@@ -17,7 +17,7 @@ import {
   KeyboardAwareScrollView,
   Platform,
 } from "react-native"
-
+import { uid } from "uid"
 import {
   MaterialCommunityIcons,
   FontAwesome5,
@@ -37,12 +37,12 @@ import {
   Timestamp,
   collection,
   collectionGroup,
+  addDoc,
 } from "firebase/firestore"
 import { db, auth } from "../Event/Firestore"
 
 import { useTheme } from "react-navigation"
 import ChatInput from "./ChatInput"
-import { uid } from "uid"
 import moment from "moment"
 
 //LogBox.ignoreLogs("Setting a timer for a long period of time")
@@ -68,12 +68,13 @@ export default function Chats({ navigation, route }) {
         let user = documentSnapshot.data()
         setusername(user.username)
       })
-      const ChatRef = collectionGroup(db, "event", event_id, "message")
+      const ChatRef = collection(db, `event/${event_id}/message`)
       const ref = query(ChatRef, orderBy("CrateBy", "desc"))
 
       onSnapshot(ref, (querySnapshot) => {
         let massage = []
         querySnapshot.forEach((doc) => {
+          console.log(doc.data())
           massage.push({ ...doc.data(), id: doc.id })
         })
         setAllmsg([...massage])
@@ -92,7 +93,7 @@ export default function Chats({ navigation, route }) {
   const msgDel = collection(db, "event", event_id, "messsage")
 
   const saveChat = (msg, Time) => {
-    setDoc(msgDel, {
+    addDoc(msgDel, {
       content: msg,
       CrateBy: Time,
       isDelete: false,

@@ -10,7 +10,7 @@ import {
   FlatList,
 } from "react-native"
 import firebase from "firebase/app"
-import { doc, onSnapshot } from "firebase/firestore"
+import { collection, doc, onSnapshot } from "firebase/firestore"
 import { db, auth } from "../Event/Firestore"
 import styles from "./style"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -24,17 +24,23 @@ export default function Chatting({ navigation }) {
     setemail(emails)
   })
   useEffect(() => {
-    const userchatref = doc(db, "user", email)
+    console.log(email)
+    if (email) {
+      console.log(email)
+      const userchatref = collection(db, `user/${email}/joinEvent`)
 
-    onSnapshot(userchatref, (querySnapshot) => {
-      let eventTitle = []
-      querySnapshot.forEach((doc) => {
-        eventTitle.push(doc.data())
+      onSnapshot(userchatref, (querySnapshot) => {
+        let eventTitle = []
+        querySnapshot.forEach((doc) => {
+          console.log(doc.data())
+          eventTitle.push(doc.data())
+        })
+        setevent([...eventTitle])
       })
-      setevent([...eventTitle])
-    })
+
+      console.log(event)
+    }
   }, [])
-  console.log(event)
   return (
     <SafeAreaView style={stylecustom.container}>
       {/* {event.map((item) => {

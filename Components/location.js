@@ -20,7 +20,7 @@ import {
 } from "firebase/firestore"
 import { db, auth } from "./Event/Firestore"
 export default function location(props) {
-  const [loading, setloading] = useState(false)
+  const [loading, setloading] = useState(true)
   const [region, setregion] = useState([])
   const [latitude, setlatitude] = useState("")
   const [longitude, setlongitude] = useState("")
@@ -31,7 +31,7 @@ export default function location(props) {
     const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
     setemail(emails)
   })
-  // console.log(email)
+  console.log(email)
 
   useEffect(() => {
     if (email) {
@@ -47,9 +47,12 @@ export default function location(props) {
       })
       //  console.log(region)
     }
-    setready(true)
+    if (email === auth.currentUser.email) {
+      setready(true)
+    }
   }, [email])
   useEffect(() => {
+    console.log(ready)
     if (ready) {
       if (latitude === "") {
         if (region.length > 0) {
@@ -68,15 +71,16 @@ export default function location(props) {
           })
         }
       }
-      if (longitude === "") {
-        setloading(true)
-      } else {
-        //  console.log("yes")
-        setloading(false)
-      }
+    }
+  }, [ready])
+  useEffect(() => {
+    if (longitude === "") {
+      setloading(true)
+    } else {
+      //  console.log("yes")
+      setloading(false)
     }
   })
-
   // console.log()
   const oneDegreeOfLongitudeInMeters = 111.32 * 1000
   const circumference = (40075 / 360) * 1000
@@ -92,6 +96,7 @@ export default function location(props) {
             latitudeDelta: 0.022,
             longitudeDelta: 0.021,
           }}
+          key={"AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA"}
           provider={PROVIDER_GOOGLE}
           loadingEnabled={true}
           loadingIndicatorColor="#666666"
