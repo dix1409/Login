@@ -22,6 +22,7 @@ import { useFonts } from "expo-font"
 import { useTheme } from "react-native-paper"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import { MaterialIcons } from "@expo/vector-icons"
 
 const { height, width } = Dimensions.get("window")
 export default function First({ navigation }) {
@@ -73,22 +74,26 @@ export default function First({ navigation }) {
   const data = [
     {
       Id: 1,
-      Image: require("../../Photo/ball-hitting-wicket-stumps_1302-15526.jpg"),
+      Image:
+        "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fball-hitting-wicket-stumps_1302-15526.jpg?alt=media&token=b033b6f0-432b-4589-bcc2-9f8cc17b550d",
       titie: "Cricket",
     },
     {
       Id: 2,
-      Image: require("../../Photo/volleyball-court-composition-outdoor-scenery-with-cityscape-team-players-with-net-sitting-referee-illustration_1284-57172.jpg"),
+      Image:
+        "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fvolleyball-court-composition-outdoor-scenery-with-cityscape-team-players-with-net-sitting-referee-illustration_1284-57172.jpg?alt=media&token=cd3e443f-32e8-4fb7-8b5d-ae5029cc44a8",
       titie: "Volleyball",
     },
     {
       Id: 3,
-      Image: require("../../Photo/two-soccer-player-stadium_151223-56.jpg"),
+      Image:
+        "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Ftwo-soccer-player-stadium_151223-56.jpg?alt=media&token=c4b6fe49-c2d3-47b0-a1b3-97c0d7fcce52",
       titie: "Football",
     },
     {
       Id: 4,
-      Image: require("../../Photo/badminton-2.png"),
+      Image:
+        "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fbadminton-2.png?alt=media&token=e7d34cc8-a850-4ddd-9b61-22fbdf4719b0",
       titie: "Badminton",
     },
   ]
@@ -96,7 +101,7 @@ export default function First({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <StatusBar style={{ backgroundColor: "#f7f7f7" }} />
+        <StatusBar style={{ backgroundColor: "#E5E1D9" }} />
         <View
           style={{
             marginTop: 5,
@@ -110,7 +115,10 @@ export default function First({ navigation }) {
         <View>
           <ImageBackground
             style={{ width: "100%", height: 200 }}
-            source={require("../../Photo/Rectangle.png")}
+            source={{
+              uri: "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2FRectangle.png?alt=media&token=557ce281-ead8-4d8f-b09d-c069829fde81",
+            }}
+            resizeMode="contain"
           >
             <View style={{ flexDirection: "row", marginHorizontal: 15 }}>
               <View
@@ -126,10 +134,38 @@ export default function First({ navigation }) {
                 >
                   New Event
                 </Text>
+                <TouchableOpacity
+                  style={{
+                    width: "80%",
+                    backgroundColor: "#fff",
+                    borderRadius: 12,
+                    height: 44,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "row",
+
+                    // marginVertical: 15,
+                  }}
+                  onPress={() => navigation.navigate("Near")}
+                >
+                  <MaterialIcons name="event" size={20} color={"#9A9A9A"} />
+                  <Text
+                    style={{
+                      marginLeft: 1,
+                      color: "#9A9A9A",
+                      textAlign: "center",
+                      fontSize: 15,
+                    }}
+                  >
+                    Explore Event
+                  </Text>
+                </TouchableOpacity>
               </View>
-              <View style={{ justifyContent: "flex-end", width: "50%" }}>
+              <View style={{ justifyContent: "flex-end", width: "48%" }}>
                 <Image
-                  source={require("../../Photo/image-removebg-preview.png")}
+                  source={{
+                    uri: "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fimage-removebg-preview.png?alt=media&token=b04a3985-0f23-4ffc-bf5c-b9bb7a133110",
+                  }}
                   style={{ width: "100%", height: "100%" }}
                 />
               </View>
@@ -200,69 +236,7 @@ export default function First({ navigation }) {
           >
             Recommended Event
           </Text>
-          {/* <View
-          style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
-        >
-          <Text style={{ fontSize: 20 }}>There Is No Event Available</Text>
-        </View> */}
-          {/* <Text>Cricket</Text>
-          <ScrollView
-            horizontal
-            style={{ marginVertical: 10 }}
-            showsHorizontalScrollIndicator={false}
-          >
-            {dataCricket.map((item) => {
-              return (
-                <TouchableOpacity
-                  style={{
-                    marginHorizontal: 10,
-                    backgroundColor: "#fff",
-                    width: 100,
-                    height: 100,
-                    borderRadius: 10,
-                  }}
-                  key={item.eventTitle}
-                  onPress={() => {
-                    navigation.navigate("second", { item: item })
-                  }}
-                >
-                  <View>
-                    <Text>{item.eventTitle}</Text>
-                    <Text>{item.name}</Text>
-                  </View>
-                </TouchableOpacity>
-              )
-            })}
-          </ScrollView>
-          <Text>Football</Text>
-          <ScrollView
-            horizontal
-            style={{ marginVertical: 10 }}
-            showsHorizontalScrollIndicator={false}
-          >
-            {dataCricket.map((item) => {
-              return (
-                <TouchableOpacity
-                  style={{
-                    marginHorizontal: 10,
-                    backgroundColor: "#fff",
-                    width: 100,
-                    height: 100,
-                    borderRadius: 10,
-                  }}
-                  key={item.eventTitle}
-                  onPress={() => {
-                    navigation.navigate("second", { item: item })
-                  }}
-                >
-                  <View>
-                    <Text>{item.eventTitle}</Text>
-                    <Text>{item.name}</Text>
-                  </View>
-                </TouchableOpacity>
-              )
-            })}
-          </ScrollView>*/}
+
           <View
             style={{
               flex: 1,
@@ -300,7 +274,7 @@ export default function First({ navigation }) {
                   >
                     <Text
                       style={{
-                        color: "red",
+                        color: "black",
                         marginLeft: 3,
                         fontSize: 16,
                         fontFamily: "OpanSans",
@@ -309,7 +283,7 @@ export default function First({ navigation }) {
                       {item.titie}
                     </Text>
                     <Image
-                      source={item.Image}
+                      source={{ uri: item.Image }}
                       style={{
                         width: "100%",
                         height: "100%",

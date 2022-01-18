@@ -6,9 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./Photo/logo.png",
+      "image": "./Photo/splashimage.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#75c475"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,8 +17,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-     
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA"
+        }
+      ,
+      "googleServicesFile":"./GoogleService-Info.plist",
+      "bundleIdentifier": "test.com"
     },
     "android": {
       "adaptiveIcon": {

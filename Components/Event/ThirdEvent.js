@@ -16,7 +16,7 @@ export default function ThirdScreen({ route, navigation }) {
   const [mode, setMode] = useState("")
   const [participate, setparticipate] = useState("")
   const [skill, setskill] = useState("")
-
+  const [error, seterror] = useState("")
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
@@ -24,21 +24,35 @@ export default function ThirdScreen({ route, navigation }) {
   const eventTitle = route.params.eventTitle
   const Name = route.params.Name
   const date = route.params.date
-
-  console.log(eventTitle, Name, date)
+  const chack = () => {
+    if (mode === "") {
+      return 0
+    } else if (skill === "") {
+      return 0
+    } else if (participate === "") {
+      return 0
+    } else {
+      return 1
+    }
+  }
+  //console.log(eventTitle, Name, date)
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.greetingTitle}>Additional Details</Text>
       </View>
+
       <View style={styles.form}>
+        <View style={styles.errorMessage}>
+          {!!error && <Text style={styles.error}>{error}</Text>}
+        </View>
         <Text style={{ fontFamily: "OpanSans" }}>Skill Level</Text>
         <View style={{ marginTop: 15, flexDirection: "row" }}>
           <Pressable
             style={[
               styles.btn,
               {
-                backgroundColor: skill === "Beginner" ? "green" : "white",
+                backgroundColor: skill === "Beginner" ? "#D0FF6C" : "white",
               },
             ]}
             onPress={() => {
@@ -49,7 +63,7 @@ export default function ThirdScreen({ route, navigation }) {
               style={{
                 fontFamily: "OpanSans",
 
-                color: skill === "Beginner" ? "white" : "black",
+                color: "black",
               }}
             >
               Beginner
@@ -59,7 +73,7 @@ export default function ThirdScreen({ route, navigation }) {
             style={[
               styles.btn,
               {
-                backgroundColor: skill === "Intermidate" ? "green" : "white",
+                backgroundColor: skill === "Intermidate" ? "#D0FF6C" : "white",
               },
             ]}
             onPress={() => {
@@ -69,7 +83,7 @@ export default function ThirdScreen({ route, navigation }) {
             <Text
               style={{
                 fontFamily: "OpanSans",
-                color: skill === "Intermidate" ? "white" : "black",
+                color: "black",
               }}
             >
               Intermediate
@@ -79,7 +93,7 @@ export default function ThirdScreen({ route, navigation }) {
             style={[
               styles.btn,
               {
-                backgroundColor: skill === "Expert" ? "green" : "white",
+                backgroundColor: skill === "Expert" ? "#D0FF6C" : "white",
               },
             ]}
             onPress={() => {
@@ -89,7 +103,7 @@ export default function ThirdScreen({ route, navigation }) {
             <Text
               style={{
                 fontFamily: "OpanSans",
-                color: skill === "Expert" ? "white" : "black",
+                color: "black",
               }}
             >
               Expert
@@ -104,7 +118,7 @@ export default function ThirdScreen({ route, navigation }) {
                 styles.btn,
                 {
                   backgroundColor:
-                    participate === "Everyone" ? "green" : "white",
+                    participate === "Everyone" ? "#D0FF6C" : "white",
                 },
               ]}
               onPress={() => {
@@ -114,7 +128,7 @@ export default function ThirdScreen({ route, navigation }) {
               <Text
                 style={{
                   fontFamily: "OpanSans",
-                  color: participate === "Everyone" ? "white" : "black",
+                  color: "black",
                 }}
               >
                 Everyone
@@ -124,7 +138,7 @@ export default function ThirdScreen({ route, navigation }) {
               style={[
                 styles.btn,
                 {
-                  backgroundColor: participate === "Male" ? "green" : "white",
+                  backgroundColor: participate === "Male" ? "#D0FF6C" : "white",
                 },
               ]}
               onPress={() => {
@@ -134,7 +148,7 @@ export default function ThirdScreen({ route, navigation }) {
               <Text
                 style={{
                   fontFamily: "OpanSans",
-                  color: participate === "Male" ? "white" : "black",
+                  color: "black",
                 }}
               >
                 Male
@@ -144,7 +158,8 @@ export default function ThirdScreen({ route, navigation }) {
               style={[
                 styles.btn,
                 {
-                  backgroundColor: participate === "Female" ? "green" : "white",
+                  backgroundColor:
+                    participate === "Female" ? "#D0FF6C" : "white",
                 },
               ]}
               onPress={() => {
@@ -154,7 +169,7 @@ export default function ThirdScreen({ route, navigation }) {
               <Text
                 style={{
                   fontFamily: "OpanSans",
-                  color: participate === "Female" ? "white" : "black",
+                  color: "black",
                 }}
               >
                 Female
@@ -170,7 +185,7 @@ export default function ThirdScreen({ route, navigation }) {
               style={[
                 styles.btn,
                 {
-                  backgroundColor: mode === "Paid" ? "green" : "white",
+                  backgroundColor: mode === "Paid" ? "#D0FF6C" : "white",
                 },
               ]}
               onPress={() => {
@@ -180,7 +195,7 @@ export default function ThirdScreen({ route, navigation }) {
               <Text
                 style={{
                   fontFamily: "OpanSans",
-                  color: mode === "Paid" ? "white" : "black",
+                  color: "black",
                 }}
               >
                 Paid
@@ -191,7 +206,7 @@ export default function ThirdScreen({ route, navigation }) {
               style={[
                 styles.btn,
                 {
-                  backgroundColor: mode === "Free" ? "green" : "white",
+                  backgroundColor: mode === "Free" ? "#D0FF6C" : "white",
                 },
               ]}
               onPress={() => {
@@ -201,7 +216,7 @@ export default function ThirdScreen({ route, navigation }) {
               <Text
                 style={{
                   fontFamily: "OpanSans",
-                  color: mode === "Free" ? "white" : "black",
+                  color: "black",
                 }}
               >
                 Free
@@ -228,19 +243,21 @@ export default function ThirdScreen({ route, navigation }) {
             justifyContent: "center",
             alignItems: "center",
             width: "60%",
-            textAlign: "center",
+
             bottom: 2,
           }}
           onPress={() => {
-            navigation.navigate("Fourth", {
-              eventTitle: eventTitle,
-              Name: Name,
-              date: date,
+            chack()
+              ? navigation.navigate("Fourth", {
+                  eventTitle: eventTitle,
+                  Name: Name,
+                  date: date,
 
-              mode: mode.trim(),
-              skill: skill.trim(),
-              participate: participate.trim(),
-            })
+                  mode: mode.trim(),
+                  skill: skill.trim(),
+                  participate: participate.trim(),
+                })
+              : seterror("Please Fill All Detail")
           }}
         >
           <Text style={{ color: "white", fontFamily: "OpanSans" }}>Next</Text>
@@ -281,6 +298,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "33%",
+    textAlign: "center",
+  },
+  errorMessage: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  error: {
+    color: "#FF3B30",
+    fontSize: 13,
+    fontWeight: "600",
     textAlign: "center",
   },
 })

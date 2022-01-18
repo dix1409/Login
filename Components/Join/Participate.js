@@ -20,6 +20,7 @@ export default function Participate({ navigation, route }) {
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
+
   const id = route.params.id
   useEffect(() => {
     const pepole = collection(db, "event", id, "participate")
@@ -77,7 +78,9 @@ export default function Participate({ navigation, route }) {
             >
               <Image
                 style={styles.image}
-                source={require("../../Photo/user.png")}
+                source={{
+                  uri: item.Profile.image,
+                }}
               />
             </View>
             <Text style={styles.name}>{item.username}</Text>

@@ -15,56 +15,54 @@ import JoinEvents from "./Join/joinEvent"
 import Participate from "./Join/Participate"
 import SearchResult from "./Join/SearchResult"
 import ShowEvent from "./Join/ShowEvent"
+import ShowNearEvent from "./Join/ShowNearEvent"
 const JoinEvent = createStackNavigator()
 const Eventnavigation = () => {
   return (
-    <NavigationContainer independent={true}>
-      <JoinEvent.Navigator
-        screenOptions={{
-          headerShown: false,
+    // <NavigationContainer independent={true}>
+    <JoinEvent.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <JoinEvent.Screen name="first" component={Event} />
+      <JoinEvent.Screen name="second" component={JoinEvents} />
+      <JoinEvent.Screen
+        name="Near"
+        component={ShowNearEvent}
+        options={{
+          headerShown: true,
+          headerTitle: "Explore Event",
         }}
-      >
-        <JoinEvent.Screen name="first" component={Event} />
-        <JoinEvent.Screen
-          name="second"
-          component={JoinEvents}
-          options={{
-            headerRight: (
-              <Button
-                onPress={() => alert("This is a button!")}
-                title="Info"
-                color="#fff"
-              />
-            ),
-          }}
-        />
-        <JoinEvent.Screen name="third" component={Participate} />
-        <JoinEvent.Screen name="fourth" component={SearchResult} />
-        <JoinEvent.Screen
-          name="fifth"
-          component={ShowEvent}
-          options={({ route }) => ({
-            headerShown: true,
-            headerTitle: route.params.title,
-            headerStyle: {
-              backgroundColor: "#FF6347",
-            },
-            headerTitleStyle: {
-              color: "#fff",
-            },
-            headerTintColor: "white",
-          })}
-        />
-      </JoinEvent.Navigator>
-    </NavigationContainer>
+      />
+      <JoinEvent.Screen name="third" component={Participate} />
+      <JoinEvent.Screen name="fourth" component={SearchResult} />
+      <JoinEvent.Screen
+        name="fifth"
+        component={ShowEvent}
+        options={({ route }) => ({
+          headerShown: true,
+          headerTitle: route.params.title,
+          headerStyle: {
+            backgroundColor: "white",
+          },
+          headerTitleStyle: {
+            color: "#000",
+          },
+          headerTintColor: "black",
+        })}
+      />
+      {/* <JoinEvent.Screen name="test" component={test} /> */}
+    </JoinEvent.Navigator>
+    // </NavigationContainer>
   )
 }
 
 export default function Plus(props) {
   return (
-    <NavigationContainer independent={true}>
-      <Eventnavigation />
-    </NavigationContainer>
+    // <NavigationContainer independent={true}>
+    <Eventnavigation />
+    // </NavigationContainer>
   )
 }
 const styles = StyleSheet.create({

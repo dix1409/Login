@@ -5,7 +5,7 @@ import { initializeApp } from "firebase/app"
 
 import { getAuth } from "firebase/auth"
 import { getFirestore } from "firebase/firestore"
-
+import { getStorage } from "firebase/storage"
 // Required for side-effects
 require("firebase/firestore")
 const firebaseConfig = {
@@ -19,6 +19,7 @@ const firebaseConfig = {
 }
 initializeApp(firebaseConfig)
 const auth = getAuth()
-
+const store = getStorage()
 const db = getFirestore()
-export { db, auth }
+
+export { db, auth, store }

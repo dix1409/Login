@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import {
   View,
   Text,
@@ -39,28 +39,40 @@ const RegisterScreen = ({ navigation }) => {
   //const [avatar, setAvatar] = useState();
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const scrollRef = useRef()
 
   const handleSignUp = () => {
     setIsLoading(true)
+    if (password.trim().length < 6) {
+      setIsLoading(false)
+      setError("Please enter password more then 6 characters")
+      // navigation.navigate("Register")
+      scrollRef.current?.scrollTo({
+        y: 0,
+        animated: true,
+      })
+    } else {
+      createUserWithEmailAndPassword(auth, email.trim(), password.trim())
+        .then((user) => {
+          // console.log("yes"),
+          scrollRef.current?.scrollTo({
+            y: 0,
+            animated: true,
+          })
 
-    createUserWithEmailAndPassword(auth, email.trim(), password.trim())
-      .then(
-        (userCredentials) =>
-          userCredentials.user.updateProfile({
-            displayName: name,
-          }),
-
-        setDoc(doc(db, "user", email), {
-          username: name,
-          userEmail: email,
-          userPassword: password,
-        }),
-        setIsLoading(false),
-        navigation.navigate("Home", {
-          email: email,
+          setIsLoading(false),
+            navigation.navigate("Profile"),
+            setDoc(doc(db, "user", email), {
+              username: name,
+              userEmail: email,
+              userPassword: password,
+            })
         })
-      )
-      .catch((err) => setError(err.message))
+        .catch((err) => {
+          setError(err.message)
+          navigation.navigate("Register")
+        })
+    }
   }
 
   const updateSecureTextEntry = () => {
@@ -77,11 +89,11 @@ const RegisterScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#FF6347" barStyle="light-content" />
-      <View style={styles.header}>
-        <Text style={styles.text_header}>Register Now!</Text>
-      </View>
-      <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} ref={scrollRef}>
+        <View style={styles.header}>
+          <Text style={styles.text_header}>Register Now!</Text>
+        </View>
+        <View style={styles.footer}>
           <View style={styles.errorMessage}>
             {!!error && <Text style={styles.error}>{error}</Text>}
           </View>
@@ -164,48 +176,30 @@ const RegisterScreen = ({ navigation }) => {
           </View>
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn} onPress={handleSignUp}>
-              <LinearGradient
-                colors={["#FFA07A", "#FF6347"]}
-                style={styles.signIn}
-              >
-                <Text
-                  style={[
-                    styles.textSign,
-                    {
-                      color: "#fff",
-                    },
-                  ]}
-                >
-                  Sign Up
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={[
-                styles.signIn,
-                {
-                  borderColor: "#FF6347",
-                  borderWidth: 1,
-                  marginTop: 15,
-                },
-              ]}
-            >
               <Text
                 style={[
                   styles.textSign,
                   {
-                    color: "#FF6347",
+                    color: "#fff",
                   },
                 ]}
               >
-                Sign In
+                Sign Up
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{ marginTop: 10 }}
+            >
+              <Text style={{ color: "black" }}>
+                Already have an account?
+                <Text style={{ color: "#2F80ED" }}>Log In</Text>
               </Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </Animatable.View>
+        </View>
+      </ScrollView>
     </View>
   )
 }
@@ -213,13 +207,15 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FF6347",
+    backgroundColor: "#FFFFFF",
+    height: "100%",
   },
   header: {
     flex: 1,
     justifyContent: "flex-end",
     paddingHorizontal: 20,
-    paddingBottom: 50,
+    // paddingBottom: 50,
+    marginTop: 30,
   },
   footer: {
     flex: Platform.OS === "ios" ? 3 : 5,
@@ -230,7 +226,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
   },
   text_header: {
-    color: "#fff",
+    color: "#000",
     fontWeight: "bold",
     fontSize: 30,
   },
@@ -261,6 +257,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+    backgroundColor: "black",
   },
   textSign: {
     fontSize: 18,

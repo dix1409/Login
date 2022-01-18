@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { View, Image } from "react-native"
+import { View, Image, Platform } from "react-native"
 import location from "./location"
 import Chat from "./Chat"
 import Plus from "./Plus"
@@ -16,8 +16,9 @@ const Tabs = () => {
         tabBarShowLabel: false,
         headerShown: false,
         // keyboardHidesTabBar: true,
-        tabBarHideOnKeyboard: true,
+        tabBarHideOnKeyboard: Platform.OS === "ios" ? false : true,
       }}
+      initialRouteName="Explore"
     >
       <Tab.Screen
         name="Map"

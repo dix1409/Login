@@ -33,22 +33,19 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("")
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-
+  const [done, setdone] = useState(false)
   const { colors } = useTheme()
   const handleLogin = () => {
-    // setIsLoading(true)
-
+    setIsLoading(true)
+    getData()
     signInWithEmailAndPassword(auth, email.trim(), password.trim())
       .then((user) => {
-        alert("login successful")
-
         setIsLoading(false)
-
-        navigation.navigate("Home")
+        done ? navigation.navigate("Home") : navigation.navigate("Profile")
       })
       .catch((err) => {
-        alert("login successful")
         setIsLoading(false)
+        console.log(err.message)
         setError(err.message)
         navigation.navigate("Login")
       })
@@ -63,28 +60,38 @@ const LoginScreen = ({ navigation }) => {
       </View>
     )
   }
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("isDone")
+      console.log(value)
+      if (value !== null) {
+        // value previously stored
+        console.log("yesssss")
+        setdone(true)
+      } else {
+        setdone(false)
+      }
+    } catch (e) {
+      // error reading value
+      setdone(false)
+    }
+  }
   const updateSecureTextEntry = () => {
     setsecurePassword(!secureTextEntry)
   }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <StatusBar backgroundColor="#FF6347" barStyle="light-content" />
-        <View style={styles.header}>
-          <Text style={styles.text_header}>Welcome!</Text>
-        </View>
-        <Animatable.View
-          animation="fadeInUpBig"
-          style={[
-            styles.footer,
-            {
-              backgroundColor: colors.background,
-            },
-          ]}
-        >
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+        <View style={{ justifyContent: "center" }}>
+          <View style={styles.header}>
+            <Text style={styles.text_header}>Welcome!</Text>
+          </View>
+
           <View style={styles.errorMessage}>
             {!!error && <Text style={styles.error}>{error}</Text>}
           </View>
+
           <Text
             style={[
               styles.text_footer,
@@ -151,35 +158,31 @@ const LoginScreen = ({ navigation }) => {
               navigation.navigate("ForgatPassword")
             }}
           >
-            <Text style={{ color: "#FF6347", marginTop: 15 }}>
+            <Text style={{ color: "#2F80ED", marginTop: 15 }}>
               Forgot password?
             </Text>
           </TouchableOpacity>
+
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn} onPress={handleLogin}>
-              <LinearGradient
-                colors={["#FFA07A", "#FF6347"]}
-                style={styles.signIn}
+              <Text
+                style={[
+                  styles.textSign,
+                  {
+                    color: "#fff",
+                  },
+                ]}
               >
-                <Text
-                  style={[
-                    styles.textSign,
-                    {
-                      color: "#fff",
-                    },
-                  ]}
-                >
-                  Sign In
-                </Text>
-              </LinearGradient>
+                Sign In
+              </Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
+          </View>
+          {/* <TouchableOpacity
               onPress={() => navigation.navigate("Register")}
               style={[
                 styles.signIn,
                 {
-                  borderColor: "#FF6347",
+                  borderColor: "#000",
                   borderWidth: 1,
                   marginTop: 15,
                 },
@@ -189,15 +192,27 @@ const LoginScreen = ({ navigation }) => {
                 style={[
                   styles.textSign,
                   {
-                    color: "#FF6347",
+                    color: "#f7f7f7",
                   },
                 ]}
               >
                 Sign Up
               </Text>
-            </TouchableOpacity>
-          </View>
-        </Animatable.View>
+            </TouchableOpacity> */}
+
+          <TouchableOpacity
+            style={{ marginTop: 40, width: "100%", alignItems: "center" }}
+            onPress={() => navigation.navigate("Register")}
+          >
+            <Text>
+              Don’t have an account yet?
+              <Text style={{ color: "#2F80ED", marginHorizontal: 5 }}>
+                {" "}
+                Register
+              </Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   )

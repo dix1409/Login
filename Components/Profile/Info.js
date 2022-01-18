@@ -1,23 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { ScrollView, StatusBar, TouchableOpacity } from "react-native"
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  Dimensions,
-  FlatList,
-} from "react-native"
+import { StyleSheet, View, Text, Dimensions } from "react-native"
 import { useFonts } from "expo-font"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-// import FontAwesome from "react-native-vector-icons/FontAwesome"
-// import Feather from "react-native-vector-icons/Feather"
-import Modal from "react-native-modalbox"
-import { useTheme } from "react-native-paper"
-import { db } from "../Event/Firestore"
 
-import * as Animatable from "react-native-animatable"
+import { useTheme } from "react-native-paper"
+
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons"
 
 const { height, width } = Dimensions.get("window")
@@ -25,8 +13,8 @@ const { height, width } = Dimensions.get("window")
 export default function Info({ navigation, route }) {
   const { colors } = useTheme()
   const userinfo = route.params.userProfile
-  //   const userparams = [...userinfo]
-  //   console.log(userparams)
+
+  const email = route.params.email
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
@@ -39,7 +27,7 @@ export default function Info({ navigation, route }) {
         <View
           style={{
             alignItems: "center",
-            //  justifyContent: "center",
+
             height: height * 0.15,
             marginHorizontal: 15,
             overflow: "hidden",
@@ -69,7 +57,7 @@ export default function Info({ navigation, route }) {
           style={{
             height: height * 0.75,
             backgroundColor: "#fff",
-            //  alignItems: "center",
+
             borderTopStartRadius: 40,
             borderTopEndRadius: 40,
             width: width,
@@ -137,6 +125,7 @@ export default function Info({ navigation, route }) {
               onPress={() => {
                 navigation.navigate("Edit", {
                   Profile: userinfo,
+                  email: email,
                 })
               }}
             >

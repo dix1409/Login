@@ -1,16 +1,20 @@
-import React from "react"
 import { StyleSheet } from "react-native"
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FF6347",
+    backgroundColor: "#ffffff",
+
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    justifyContent: "center",
+    //alignItems: "center",
+    width: "100%",
+    height: "100%",
   },
   header: {
-    flex: 1,
     justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    paddingBottom: 50,
+    alignItems: "center",
   },
   footer: {
     flex: 3,
@@ -19,9 +23,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
     paddingVertical: 30,
+    margin: "auto",
   },
   text_header: {
-    color: "#fff",
+    color: "#333",
     fontWeight: "bold",
     fontSize: 30,
   },
@@ -64,6 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+    backgroundColor: "black",
   },
   textSign: {
     fontSize: 18,
@@ -73,13 +79,47 @@ const styles = StyleSheet.create({
     height: 30,
     alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
   },
   error: {
     color: "#FF3B30",
     fontSize: 13,
     fontWeight: "600",
     textAlign: "center",
+  },
+  subtitle: {
+    color: "#000",
+    fontSize: 14,
+    marginTop: 10,
+    maxWidth: "70%",
+    textAlign: "center",
+    lineHeight: 23,
+  },
+  title: {
+    color: "black",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginTop: 20,
+    textAlign: "center",
+  },
+  image: {
+    height: "100%",
+    width: "100%",
+    resizeMode: "contain",
+  },
+  indicator: {
+    height: 10,
+    width: 10,
+    backgroundColor: "grey",
+    marginHorizontal: 3,
+    borderRadius: 20,
+  },
+  btn: {
+    flex: 1,
+    height: 50,
+    borderRadius: 5,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
 })
 export default styles

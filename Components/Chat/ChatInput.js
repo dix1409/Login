@@ -1,26 +1,10 @@
-import React from "react"
-import { useContext, createContext } from "react"
+import React, { useState, useEffect } from "react"
 
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  TextInput,
-} from "react-native"
-import {
-  MaterialCommunityIcons,
-  FontAwesome5,
-  Entypo,
-  Fontlisto,
-  MaterialIcons,
-} from "@expo/vector-icons"
+import { StyleSheet, View, Text } from "react-native"
 
 import { useFonts } from "expo-font"
 import { auth } from "../Event/Firestore"
-import { SafeAreaView } from "react-native-safe-area-context"
-import moment from "moment"
+
 export default function ChatInput({ item }) {
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Regular.ttf"),
@@ -30,10 +14,10 @@ export default function ChatInput({ item }) {
     const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
     setemail(emails)
   })
-  console.log(item)
+  //console.log(item)
   const isMymsg = item.user === email ? true : false
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View
         style={[
           styles.msgContainer,
@@ -57,7 +41,7 @@ export default function ChatInput({ item }) {
         </Text>
         {/* <Text style={styles.time}>{moment(item.crateBy).fromNow()}</Text> */}
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 const styles = StyleSheet.create({

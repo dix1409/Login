@@ -25,8 +25,7 @@ import {
 } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useFonts } from "expo-font"
-import firebase from "firebase/app"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+
 import { db, auth } from "../Event/Firestore"
 import { Pressable } from "react-native"
 import {
@@ -36,9 +35,10 @@ import {
   orderBy,
   where,
   addDoc,
+  getDocs,
 } from "firebase/firestore"
 import { doc, setDoc } from "firebase/firestore"
-const { height, width } = Dimensions.get("screen")
+const { height, width } = Dimensions.get("window")
 const Mapstyle = [
   {
     elementType: "geometry",
@@ -286,13 +286,15 @@ export default function joinEvent({ navigation, route }) {
   const [size, setsize] = useState(height * 0.5)
   const [showScreen, setshowScreen] = useState(true)
   const [showsize, setshowsize] = useState(false)
+  const [Profile, setProfile] = useState({})
+  const [valid, setvalid] = useState(false)
   const event = route.params.item
 
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
 
-  useEffect(() => {
+  useEffect(async () => {
     if (email) {
       const ref = query(userref, where("userEmail", "==", email))
 
@@ -303,18 +305,37 @@ export default function joinEvent({ navigation, route }) {
         })
         setuserdata([...user])
       })
+      const profileref = collection(db, `user/${email}/profile`)
+
+      onSnapshot(profileref, (querySnapshot) => {
+        if (querySnapshot.empty) {
+          setvalid(false)
+        } else {
+          let Profiledata = []
+          querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            setvalid(true)
+            Profiledata.push({ ...doc.data(), id: doc.id })
+            console.log(doc.data())
+          })
+          if (Profiledata.length > 0) {
+            Profiledata.map((item) => {
+              setProfile(item)
+            })
+          }
+        }
+      })
     }
   }, [email])
   // console.log(userdata)
+
   let userinfo = []
   userdata.forEach((data) => {
     userinfo = data
   })
 
-  console.log(userinfo)
-
-  // console.log(event)
-  // console.log(auth)
+  // console.log(userinfo)
+  console.log(Profile)
   const joinEvents = () => {
     const participateref = doc(db, "event", event.id, "participate", email)
 
@@ -322,6 +343,7 @@ export default function joinEvent({ navigation, route }) {
       username: userinfo.username,
       userEmail: userinfo.userEmail,
       userPassword: userinfo.userPassword,
+      Profile: Profile,
     })
     const userrefs = doc(db, "user", email, "joinEvent", event.id)
 
@@ -335,8 +357,9 @@ export default function joinEvent({ navigation, route }) {
       comment: event.comment,
       date: event.date,
       count: event.count,
-      time: event.time,
-      prize: event.prize,
+      hour: event.hour,
+      minutes: event.minutes,
+
       fees: event.fees,
       id: event.id,
       latitude: event.latitude,
@@ -358,10 +381,13 @@ export default function joinEvent({ navigation, route }) {
       })
     }
   }
+  const alertevent = () => {
+    Alert.alert("Please Set Your Profile")
+  }
   checkJoin()
-  console.log(event)
+  //console.log(event)
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView style={styles.container}>
         <StatusBar backgroundColor="#0e1626" barStyle="light-content" />
         <View
@@ -499,7 +525,7 @@ export default function joinEvent({ navigation, route }) {
                       fontSize: 20,
                     }}
                   >
-                    Your Event Is Succesfully Created.
+                    You Joined Successfully!.
                   </Text>
                 </View>
               </View>
@@ -542,7 +568,7 @@ export default function joinEvent({ navigation, route }) {
           <View style={styles.BoxContainer}>
             <AntDesign name="clockcircle" size={18} color="#1b2534" />
             <Text style={[{ marginRight: 20 }, styles.textStyle]}>
-              {event.time}
+              {event.hour}:{event.minute}
             </Text>
             <FontAwesome name="calendar-times-o" size={18} color="#1b2534" />
             <Text style={styles.textStyle}>{event.date}</Text>
@@ -562,12 +588,12 @@ export default function joinEvent({ navigation, route }) {
               <Text style={styles.textStyle}>Enternance Free 😍😍</Text>
             )}
           </View>
-          <View style={styles.BoxContainer}>
+          {/* <View style={styles.BoxContainer}>
             <FontAwesome5 name="money-bill-wave" size={24} color="black" />
             <Text style={{ marginHorizontal: 10, color: "#c4c6ca" }}>
               Winning Prize:{event.prize}
             </Text>
-          </View>
+          </View> */}
           <View style={styles.BoxContainer}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <AntDesign name="infocirlce" size={24} color="black" />
@@ -578,42 +604,44 @@ export default function joinEvent({ navigation, route }) {
             <Text style={styles.textStyle}>{event.comment}</Text>
           </View>
 
-          <View
-            style={{
-              justifyContent: "flex-end",
-              alignItems: "center",
-              overflow: "hidden",
-              flex: 1,
-              width: "100%",
-            }}
-          >
-            <TouchableOpacity
-              style={styles.btnContainer}
-              onPress={joinEvents}
-              disabled={join}
+          {!join && (
+            <View
+              style={{
+                justifyContent: "flex-end",
+                alignItems: "center",
+                overflow: "hidden",
+                flex: 1,
+                width: "100%",
+              }}
             >
-              <Text style={{ color: "white", fontFamily: "OpanSans" }}>
-                Join
-              </Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                style={[styles.btnContainer, { backgroundColor: "#D0FF6C" }]}
+                onPress={valid ? joinEvents : alertevent}
+                disabled={join}
+              >
+                <Text style={{ color: "black", fontFamily: "OpanSans" }}>
+                  Join
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           {join && (
             <View style={{ width: "100%", alignItems: "center" }}>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("third", { id: event.id })
                 }}
-                style={styles.btnContainer}
+                style={[styles.btnContainer, { backgroundColor: "#D0FF6C" }]}
               >
-                <Text style={{ color: "white", fontFamily: "OpanSans" }}>
-                  View Participtons
+                <Text style={{ color: "black", fontFamily: "OpanSans" }}>
+                  View Participators
                 </Text>
               </TouchableOpacity>
             </View>
           )}
         </ScrollView>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 const styles = StyleSheet.create({
@@ -633,7 +661,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpanSans",
   },
   btnContainer: {
-    backgroundColor: "#ff6a28",
+    backgroundColor: "#000",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 30,

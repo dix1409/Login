@@ -16,6 +16,7 @@ import {
   doc,
   query,
   collection,
+  limit,
 } from "firebase/firestore"
 
 export default function SearchResult({ navigation, route }) {
@@ -27,7 +28,8 @@ export default function SearchResult({ navigation, route }) {
     const ref = query(
       Eventref,
       where("eventTitle", "==", value),
-      orderBy("date", "desc")
+      orderBy("date", "desc"),
+      limit(40)
     )
     onSnapshot(ref, (querySnapshot) => {
       setcount(querySnapshot.size)

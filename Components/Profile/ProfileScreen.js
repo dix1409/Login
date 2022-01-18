@@ -18,8 +18,10 @@ import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons"
 
 const { height, width } = Dimensions.get("window")
 
-export default function ProfileScreen({ navigation }) {
-  const [Image, setImage] = useState(null)
+export default function ProfileScreen({ navigation, route }) {
+  const [Image, setImage] = useState(
+    "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fuser.png?alt=media&token=ff0f0135-7005-41c4-b448-02a08d428789"
+  )
   const [userProfile, setuserProfile] = useState([])
   const [userdata, setuserdata] = useState({})
   const [showuserdata, setshowuserdata] = useState(false)
@@ -35,26 +37,28 @@ export default function ProfileScreen({ navigation }) {
   })
   useEffect(() => {
     //   Join Event
-    const usejoinRef = doc(collectio(db, "user", email, "joinEvent"))
-    onSnapshot(usejoinRef, (querySnapshot) => {
-      setjoinEvent(querySnapshot.size)
-    })
-
-    // Craete Event
-    const userownRef = doc(collection(db, "user", email, "Ownevent"))
-    onSnapshot(userownRef, (querySnapshot) => {
-      setownEvent(querySnapshot.size)
-    })
-    const profileref = doc(collection(db, "user", email, "profile"))
-
-    onSnapshot(profileref, (querySnapshot) => {
-      let Profile = []
-      querySnapshot.forEach((doc) => {
-        Profile.push({ ...doc.data(), id: doc.id })
+    if (email) {
+      const usejoinRef = collection(db, "user", email, "joinEvent")
+      onSnapshot(usejoinRef, (querySnapshot) => {
+        setjoinEvent(querySnapshot.size)
       })
-      setuserProfile([...Profile])
-    })
-  }, [])
+
+      // Craete Event
+      const userownRef = collection(db, "user", email, "Ownevent")
+      onSnapshot(userownRef, (querySnapshot) => {
+        setownEvent(querySnapshot.size)
+      })
+      const profileref = collection(db, "user", email, "profile")
+
+      onSnapshot(profileref, (querySnapshot) => {
+        let Profile = []
+        querySnapshot.forEach((doc) => {
+          Profile.push({ ...doc.data(), id: doc.id })
+        })
+        setuserProfile([...Profile])
+      })
+    }
+  }, [email])
 
   useEffect(() => {
     if (userProfile.length > 0) {
@@ -62,12 +66,14 @@ export default function ProfileScreen({ navigation }) {
 
       userProfile.map((profile) => {
         setuserdata(profile)
-        setImage(profile.image)
       })
+      if (Object.keys(userdata).length > 0) {
+        setImage(userdata.image)
+      }
     }
   })
 
-  //console.log(userdata)
+  //console.log(Image)
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#FF6347" barStyle="light-content" />
@@ -87,8 +93,8 @@ export default function ProfileScreen({ navigation }) {
               fontWeight: "bold",
               fontSize: 22,
               fontFamily: "OpanSans",
-              color: "#fefefe",
-              fontFamily: "OpanSans",
+              color: "#000000",
+
               marginTop: height * 0.05,
             }}
           >
@@ -210,7 +216,9 @@ export default function ProfileScreen({ navigation }) {
                       justifyContent: "center",
                     }}
                     onPress={() => {
-                      navigation.navigate("profile")
+                      navigation.navigate("profile", {
+                        email: email,
+                      })
                     }}
                   >
                     <FontAwesome name="plus" size={20} color="black" />
@@ -243,6 +251,7 @@ export default function ProfileScreen({ navigation }) {
                     onPress={() => {
                       navigation.navigate("info", {
                         userProfile: userdata,
+                        email: email,
                       })
                     }}
                   >
@@ -278,7 +287,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: "#FF6347",
+    backgroundColor: "white",
   },
   action: {
     alignItems: "center",

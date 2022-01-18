@@ -26,8 +26,8 @@ const Eventnavigation = () => {
 
 export default function Plus(props) {
   return (
-    <NavigationContainer independent={true}>
-      <Eventnavigation />
-    </NavigationContainer>
+    // <NavigationContainer independent={true}>
+    <Eventnavigation />
+    // </NavigationContainer>
   )
 }

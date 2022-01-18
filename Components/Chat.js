@@ -1,48 +1,62 @@
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import chatting from "./Chat/Chatting"
+import chatting from "./Chat/ChatTop"
 import chats from "./Chat/Chats"
+
+import join from "./Chat/joinEvents"
 const Stack = createStackNavigator()
-export default function join() {
+export default function chat({ navigation }) {
   return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: true,
+    // <NavigationContainer independent={true}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+      }}
+    >
+      <Stack.Screen
+        name="chatting"
+        component={chatting}
+        options={() => ({
+          title: "Events",
+          headerStyle: {
+            backgroundColor: "white",
+            borderBottomColor: "#f2f2f2",
+            borderBottomWidth: 2,
+            elevation: 20,
+          },
+          headerTitleStyle: {
+            color: "#000",
+          },
+          headerTintColor: "white",
+          headerLeftContainerStyle: {
+            opacity: 0,
+          },
+        })}
+      />
+
+      <Stack.Screen
+        name="chats"
+        component={chats}
+        options={({ route }) => ({
+          headerTitle: route.params.title,
+          headerStyle: {
+            backgroundColor: "white",
+          },
+          headerTitleStyle: {
+            color: "black",
+          },
+          headerTintColor: "black",
+          headerPressOpacity: 1,
+        })}
+      />
+      <Stack.Screen
+        name="join"
+        component={join}
+        options={{
+          headerShown: false,
         }}
-      >
-        <Stack.Screen
-          name="chatting"
-          component={chatting}
-          options={() => ({
-            title: "Events",
-            headerStyle: {
-              backgroundColor: "#FF6347",
-            },
-            headerTitleStyle: {
-              color: "#fff",
-            },
-            headerTintColor: "white",
-            headerLeftContainerStyle: {
-              opacity: 0,
-            },
-          })}
-        />
-        <Stack.Screen
-          name="chats"
-          component={chats}
-          options={({ route }) => ({
-            headerTitle: route.params.title,
-            headerStyle: {
-              backgroundColor: "#FF6347",
-            },
-            headerTitleStyle: {
-              color: "#fff",
-            },
-            headerTintColor: "white",
-          })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+      />
+    </Stack.Navigator>
+    // </NavigationContainer>
   )
 }

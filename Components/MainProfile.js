@@ -8,18 +8,18 @@ import Info from "./Profile/Info"
 const ProfileStack = createStackNavigator()
 export default function MainProfile(props) {
   return (
-    <NavigationContainer independent={true}>
-      <ProfileStack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName="ProfileScreen"
-      >
-        <ProfileStack.Screen name="ProfileScreen" component={ProfileScreen} />
-        <ProfileStack.Screen name="Edit" component={Edit} />
-        <ProfileStack.Screen name="profile" component={profile} />
-        <ProfileStack.Screen name="info" component={Info} />
-      </ProfileStack.Navigator>
-    </NavigationContainer>
+    // <NavigationContainer independent={true}>
+    <ProfileStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="ProfileScreen"
+    >
+      <ProfileStack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <ProfileStack.Screen name="Edit" component={Edit} />
+      <ProfileStack.Screen name="profile" component={profile} />
+      <ProfileStack.Screen name="info" component={Info} />
+    </ProfileStack.Navigator>
+    // </NavigationContainer>
   )
 }
