@@ -12,6 +12,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from "react-native"
 
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -19,19 +20,9 @@ import { useFonts } from "expo-font"
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
 
 import DatePicker from "@react-native-community/datetimepicker"
+const { height } = Dimensions.get("window")
 export default function FourthEvent({ route, navigation }) {
-  const [participateCount, setparticipatecount] = useState(0)
-
-  const [fees, setfees] = useState("")
-  const [ispaid, setispaid] = useState(false)
-  const [error, seterror] = useState("")
   const [Comment, setComment] = useState("")
-  const [hour, sethour] = useState("")
-  const [minute, setminute] = useState("")
-  const eventTitle = route.params.eventTitle
-  const name = route.params.Name
-  const date = route.params.date
-  const [show, setshow] = useState(false)
 
   const mode = route.params.mode
   const skill = route.params.skill
@@ -39,37 +30,37 @@ export default function FourthEvent({ route, navigation }) {
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
-  useEffect(() => {
-    const paid = mode === "Paid" ? true : false
+  const eventTitle = route.params.eventTitle
+  const name = route.params.Name
+  const date = route.params.date
+  const participatecount = route.params.participateCount
+  const fees = route.params.fees
+  const minute = route.params.minute
+  const hour = route.params.hour
 
-    setispaid(paid)
-    return () => {
-      paid
-    }
-  }, [])
-  const Check = () => {
-    if (participateCount === 0) {
-      return 0
-    } else if (hour === "") {
-      return 0
-    } else if (Comment === "") {
-      return 0
-    } else {
-      return 1
-    }
-  }
-  const shown = () => {
-    setshow(!show)
-  }
+  // const Check = () => {
+  //   if (participateCount === 0) {
+  //     return 0
+  //   } else if (hour === "") {
+  //     return 0
+  //   } else if (Comment === "") {
+  //     return 0
+  //   } else {
+  //     return 1
+  //   }
+  // }
+  // const shown = () => {
+  //   setshow(!show)
+  // }
   // const datess = new Date()
   // const time = datess.getMinutes()
-  const onChange = (event, selectedTime) => {
-    if (selectedTime) {
-      sethour(selectedTime.getHours())
-      setminute(selectedTime.getMinutes())
-      shown()
-    }
-  }
+  // const onChange = (event, selectedTime) => {
+  //   if (selectedTime) {
+  //     sethour(selectedTime.getHours())
+  //     setminute(selectedTime.getMinutes())
+  //     shown()
+  //   }
+  // }
   return (
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback
@@ -82,14 +73,10 @@ export default function FourthEvent({ route, navigation }) {
         >
           <ScrollView style={{ flex: 1 }}>
             <View style={{ flex: 0.7, marginLeft: 15 }}>
-              <View style={styles.headerContainer}>
-                <Text style={styles.greetingTitle}>Wanna Add Some Info?</Text>
-              </View>
-
-              <View style={styles.errorMessage}>
+              {/* <View style={styles.errorMessage}>
                 {!!error && <Text style={styles.error}>{error}</Text>}
-              </View>
-              {ispaid && (
+              </View> */}
+              {/* {ispaid && (
                 <View style={styles.headerContainer}>
                   <Text style={[styles.greetingTitle, { fontSize: 16 }]}>
                     Fees
@@ -102,8 +89,8 @@ export default function FourthEvent({ route, navigation }) {
                     }}
                   />
                 </View>
-              )}
-              <View style={styles.headerContainer}>
+              )} */}
+              {/* <View style={styles.headerContainer}>
                 <Text style={[styles.greetingTitle, { fontSize: 16 }]}>
                   Maximum Participants
                 </Text>
@@ -114,7 +101,7 @@ export default function FourthEvent({ route, navigation }) {
                     setparticipatecount(Number(text))
                   }}
                 />
-              </View>
+              </View> */}
 
               {/* <View style={styles.headerContainer}>
                 <Text style={[styles.greetingTitle, { fontSize: 16 }]}>
@@ -127,7 +114,7 @@ export default function FourthEvent({ route, navigation }) {
                   }}
                 />
               </View> */}
-              <View style={styles.headerContainer}>
+              {/* <View style={styles.headerContainer}>
                 <Text style={[styles.greetingTitle, { fontSize: 16 }]}>
                   Event Time
                 </Text>
@@ -144,7 +131,7 @@ export default function FourthEvent({ route, navigation }) {
                 {!show && (
                   <TouchableOpacity onPress={shown}>
                     <View style={styles.input}>
-                      {minute ? (
+                      {minute && hour ? (
                         <Text style={{ marginTop: 15 }}>
                           {hour}:{minute}
                         </Text>
@@ -152,16 +139,54 @@ export default function FourthEvent({ route, navigation }) {
                         <Text style={{ marginTop: 15 }}> set time</Text>
                       )}
                       {/* <Text>{JSON.stringify(Date)}</Text> */}
-                    </View>
+              {/* </View>
                   </TouchableOpacity>
                 )}
+              </View> */}
+              <View style={{ marginTop: 12 }}>
+                <View style={{ height: height * 0.44, marginTop: 22 }}>
+                  <Text
+                    style={{ fontSize: 16, color: "black", marginVertical: 5 }}
+                  >
+                    Event Location
+                  </Text>
+
+                  <GooglePlacesAutocomplete
+                    placeholder="Set Location"
+                    onPress={(data, details = null) => {
+                      // 'details' is provided when fetchDetails = true
+                      console.log(details)
+                      setlocation(details.formatted_address)
+                      setlatitude(details.geometry.location.lat)
+                      setlongitude(details.geometry.location.lng)
+                    }}
+                    fetchDetails={true}
+                    keyboardShouldPersistTaps="always"
+                    nearbyPlacesAPI="GooglePlacesSearch"
+                    query={{
+                      key: "AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA",
+                      language: "en",
+                    }}
+                    debounce={200}
+                    minLength={2}
+                    styles={{
+                      container: {
+                        width: "100%",
+                      },
+                      textInputContainer: {
+                        borderBottomColor: "#8a8f9e",
+                        borderBottomWidth: StyleSheet.hairlineWidth,
+                      },
+                    }}
+                  />
+                </View>
               </View>
-              <View style={styles.headerContainer}>
+              {/* <View style={styles.headerContainer}>
                 <Text style={[styles.greetingTitle, { fontSize: 16 }]}>
-                  Eligiblity
+                  Additional Comments
                 </Text>
-              </View>
-              <View style={styles.Input}>
+              </View> */}
+              {/* <View style={styles.Input}>  
                 <TextInput
                   style={[
                     styles.inputTitle,
@@ -169,6 +194,7 @@ export default function FourthEvent({ route, navigation }) {
                       height: 100,
                       alignContent: "flex-start",
                       justifyContent: "flex-start",
+                      backgroundColor: "#f7f7f7",
                     },
                   ]}
                   multiline={true}
@@ -176,7 +202,7 @@ export default function FourthEvent({ route, navigation }) {
                     setComment(text)
                   }}
                 />
-              </View>
+              </View> */}
             </View>
 
             <View
@@ -190,7 +216,7 @@ export default function FourthEvent({ route, navigation }) {
             >
               <TouchableOpacity
                 style={{
-                  backgroundColor: "#333",
+                  backgroundColor: "#D0FF6C",
                   borderRadius: 26,
                   height: 52,
                   justifyContent: "center",
@@ -201,29 +227,26 @@ export default function FourthEvent({ route, navigation }) {
                   marginTop: 32,
                 }}
                 onPress={() => {
-                  Check()
-                    ? navigation.navigate("Fifth", {
-                        participateCount: participateCount,
+                  navigation.navigate("Fifth", {
+                    participateCount: participatecount,
 
-                        fees: fees,
-                        ispaid: ispaid,
+                    fees: fees,
 
-                        comment: Comment,
-                        eventTitle: eventTitle,
-                        name: name,
-                        date: date,
-                        hours: hour,
-                        minutes: minute,
-                        mode: mode,
-                        skill: skill,
-                        participate: participate,
-                      })
-                    : seterror("Please Fill All Information")
+                    comment: Comment,
+                    eventTitle: eventTitle,
+                    name: name,
+                    date: date,
+                    hours: hour,
+                    minutes: minute,
+                    mode: mode,
+                    skill: skill,
+                    participate: participate,
+                  })
                 }}
               >
                 <Text
                   style={{
-                    color: "white",
+                    color: "black",
                     fontFamily: "OpanSans",
                     fontSize: 18,
                     fontWeight: "bold",
@@ -242,7 +265,7 @@ export default function FourthEvent({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#fff",
     justifyContent: "center",
     // alignItems: "center",
     width: "100%",

@@ -41,19 +41,11 @@ export default function ForgatPassword({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <StatusBar backgroundColor="#FF6347" barStyle="light-content" />
+        <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
         <View style={styles.header}>
           <Text style={styles.text_header}>Forgot Password</Text>
         </View>
-        <Animatable.View
-          animation="fadeInUpBig"
-          style={[
-            styles.footer,
-            {
-              backgroundColor: colors.background,
-            },
-          ]}
-        >
+        <View style={styles.footer}>
           <View style={styles.errorMessage}>
             {!!Error && <Text style={styles.error}>{Error}</Text>}
           </View>
@@ -127,7 +119,7 @@ export default function ForgatPassword({ navigation }) {
           <View style={styles.action}>
             <FontAwesome name="user-o" color={colors.text} size={20} />
             <TextInput
-              placeholder="Your Username"
+              placeholder="Your Email"
               placeholderTextColor="#666666"
               style={[
                 styles.textInput,
@@ -142,24 +134,24 @@ export default function ForgatPassword({ navigation }) {
 
           <View style={styles.button}>
             <TouchableOpacity
-              style={styles.signIn}
+              style={[
+                styles.signIn,
+                {
+                  backgroundColor: "#D0FF6C",
+                },
+              ]}
               onPress={handlePasswordReset}
             >
-              <LinearGradient
-                colors={["#FFA07A", "#FF6347"]}
-                style={styles.signIn}
+              <Text
+                style={[
+                  styles.textSign,
+                  {
+                    color: "#000",
+                  },
+                ]}
               >
-                <Text
-                  style={[
-                    styles.textSign,
-                    {
-                      color: "#fff",
-                    },
-                  ]}
-                >
-                  Sign In
-                </Text>
-              </LinearGradient>
+                Send Link
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -167,8 +159,6 @@ export default function ForgatPassword({ navigation }) {
               style={[
                 styles.signIn,
                 {
-                  borderColor: "#FF6347",
-                  borderWidth: 1,
                   marginTop: 15,
                 },
               ]}
@@ -177,7 +167,7 @@ export default function ForgatPassword({ navigation }) {
                 style={[
                   styles.textSign,
                   {
-                    color: "#FF6347",
+                    color: "#fff",
                   },
                 ]}
               >
@@ -185,7 +175,7 @@ export default function ForgatPassword({ navigation }) {
               </Text>
             </TouchableOpacity>
           </View>
-        </Animatable.View>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   )

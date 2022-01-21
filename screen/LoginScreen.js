@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react"
+import React, { Component, useEffect, useState } from "react"
 import {
   StyleSheet,
   Text,
@@ -12,21 +12,17 @@ import {
   Keyboard,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native"
 import styles from "./style"
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from "firebase/auth"
-//import SafeAreaView from "react-native-safe-area-context"
-import { LinearGradient } from "expo-linear-gradient"
-import * as Animatable from "react-native-animatable"
-//import LinearGradient from "react-native-linear-gradient"
+import { signInWithEmailAndPassword } from "firebase/auth"
+
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Feather from "react-native-vector-icons/Feather"
-import { auth } from "../Components/Event/Firestore"
-//import { TouchableWithoutFeedback } from "react-native-web"
+import { auth, db } from "../Components/Event/Firestore"
+
 import { useTheme } from "react-native-paper"
+import { collection, onSnapshot } from "firebase/firestore"
 const LoginScreen = ({ navigation }) => {
   const [secureTextEntry, setsecurePassword] = useState(true)
   const [email, setEmail] = useState("")
@@ -34,14 +30,34 @@ const LoginScreen = ({ navigation }) => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [done, setdone] = useState(false)
+  const [valid, setvalid] = useState(false)
   const { colors } = useTheme()
+  useEffect(() => {
+    if (email) {
+      const profileref = collection(db, `user/${email}/profile`)
+      onSnapshot(profileref, (query) => {
+        if (query.empty) {
+          console.log("no....")
+          setvalid(false)
+        } else {
+          console.log("yes...")
+          setvalid(true)
+        }
+      })
+    }
+  }, [email])
   const handleLogin = () => {
     setIsLoading(true)
-    getData()
+
+    console.log(valid)
     signInWithEmailAndPassword(auth, email.trim(), password.trim())
       .then((user) => {
         setIsLoading(false)
-        done ? navigation.navigate("Home") : navigation.navigate("Profile")
+        valid
+          ? navigation.navigate("Home")
+          : navigation.navigate("Profile", {
+              email: email,
+            })
       })
       .catch((err) => {
         setIsLoading(false)
@@ -60,15 +76,16 @@ const LoginScreen = ({ navigation }) => {
       </View>
     )
   }
-  const getData = async () => {
+  const getData = () => {
     try {
-      const value = await AsyncStorage.getItem("isDone")
+      const value = AsyncStorage.getItem("isDone")
       console.log(value)
       if (value !== null) {
         // value previously stored
         console.log("yesssss")
         setdone(true)
       } else {
+        console.log("no,,")
         setdone(false)
       }
     } catch (e) {
@@ -76,6 +93,7 @@ const LoginScreen = ({ navigation }) => {
       setdone(false)
     }
   }
+
   const updateSecureTextEntry = () => {
     setsecurePassword(!secureTextEntry)
   }
@@ -84,6 +102,23 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <View style={{ justifyContent: "center" }}>
+          <View
+            style={{
+              alignContent: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <Image
+              source={require("../Photo/a4d795ec247392c955030ff865d1912b.png")}
+              style={{
+                width: 200,
+                height: 200,
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            />
+          </View>
           <View style={styles.header}>
             <Text style={styles.text_header}>Welcome!</Text>
           </View>
@@ -105,7 +140,7 @@ const LoginScreen = ({ navigation }) => {
           <View style={styles.action}>
             <FontAwesome name="user-o" color={colors.text} size={20} />
             <TextInput
-              placeholder="Your Username"
+              placeholder="Your Email"
               placeholderTextColor="#666666"
               style={[
                 styles.textInput,
@@ -173,7 +208,7 @@ const LoginScreen = ({ navigation }) => {
                   },
                 ]}
               >
-                Sign In
+                Login
               </Text>
             </TouchableOpacity>
           </View>

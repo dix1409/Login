@@ -412,7 +412,7 @@ export default function joinEvent({ navigation, route }) {
           </Modal> */}
         </View>
         <View style={{ width: "100%", alignItems: "center" }}>
-          <View style={styles.btnContainer}>
+          <View style={[styles.btnContainer, { backgroundColor: "black" }]}>
             <TouchableOpacity
               onPress={() => {
                 setsize(height)
@@ -426,7 +426,7 @@ export default function joinEvent({ navigation, route }) {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "#ffff", fontFamily: "OpanSans" }}>
+              <Text style={{ color: "white", fontFamily: "OpanSans" }}>
                 View Full
               </Text>
             </TouchableOpacity>
@@ -447,7 +447,7 @@ export default function joinEvent({ navigation, route }) {
           <View style={styles.BoxContainer}>
             <AntDesign name="clockcircle" size={18} color="#1b2534" />
             <Text style={[{ marginRight: 20 }, styles.textStyle]}>
-              {event.hour}:{event.minutes}
+              {event.hour}
             </Text>
             <FontAwesome name="calendar-times-o" size={18} color="#1b2534" />
             <Text style={styles.textStyle}>
@@ -456,7 +456,9 @@ export default function joinEvent({ navigation, route }) {
           </View>
           <View style={styles.BoxContainer}>
             <Ionicons name="location-sharp" size={24} color="#1b2534" />
-            <Text style={styles.textStyle}>{event.Location}</Text>
+            <Text style={styles.textStyle}>
+              {event.Location || event.location}
+            </Text>
           </View>
           <View style={styles.BoxContainer}>
             <FontAwesome5 name="money-bill" size={24} color="#1b2534" />
@@ -478,7 +480,7 @@ export default function joinEvent({ navigation, route }) {
           <View style={styles.BoxContainer}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <AntDesign name="infocirlce" size={24} color="black" />
-              <Text style={styles.textStyle}>Eligiblity</Text>
+              <Text style={styles.textStyle}>Additional Comment</Text>
             </View>
           </View>
           <View style={styles.BoxContainer}>
@@ -495,7 +497,7 @@ export default function joinEvent({ navigation, route }) {
               }}
               style={styles.btnContainer}
             >
-              <Text style={{ color: "white", fontFamily: "OpanSans" }}>
+              <Text style={{ color: "black", fontFamily: "OpanSans" }}>
                 View participation's
               </Text>
             </TouchableOpacity>
@@ -522,7 +524,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpanSans",
   },
   btnContainer: {
-    backgroundColor: "#ff6a28",
+    backgroundColor: "#D0FF6C",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 30,

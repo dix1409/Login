@@ -42,9 +42,9 @@ export default function FifthEvent({ route, navigation }) {
     setemail(emails)
   })
   const eventTitle = route.params.eventTitle
-  const name = route.params.name
-  const hour = route.params.hours
-  const minute = route.params.minutes
+  const name = route.params.Name
+  const hour = route.params.hour
+
   const mode = route.params.mode
   const skill = route.params.skill
   const participate = route.params.participate
@@ -113,7 +113,7 @@ export default function FifthEvent({ route, navigation }) {
           count: participateCount,
 
           hours: hour,
-          minutes: minute,
+
           fees: fees,
           latitude: latitude,
           longitude: longitude,
@@ -121,7 +121,6 @@ export default function FifthEvent({ route, navigation }) {
           //image: image.image,
           owner: image,
           hour: hour,
-          minute: minute,
         })
 
         // own event
@@ -137,7 +136,7 @@ export default function FifthEvent({ route, navigation }) {
           date: date.trim(),
 
           hours: hour,
-          minutes: minute,
+
           count: participateCount,
           fees: fees.trim(),
           latitude: latitude,
@@ -145,7 +144,6 @@ export default function FifthEvent({ route, navigation }) {
           geoHash: CalculateGeoHash(latitude, longitude),
           //image: image.image,
           hour: hour,
-          minute: minute,
         }).then(() => {
           setvisible(true)
         })
@@ -162,9 +160,9 @@ export default function FifthEvent({ route, navigation }) {
           style={styles.container}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <View style={styles.headerContainer}>
+          {/* <View style={styles.headerContainer}>
             <Text style={styles.greetingTitle}>Event Time and Location</Text>
-          </View>
+          </View> */}
           <View style={styles.errorMessage}>
             {!!error && <Text style={styles.error}>{error}</Text>}
           </View>
@@ -277,7 +275,7 @@ export default function FifthEvent({ route, navigation }) {
                 marginBottom: 20,
               }}
               onPress={() => {
-                check() ? UpdateApp() : seterror("Please Fill Address")
+                UpdateApp()
               }}
             >
               <Text style={{ color: "black", fontFamily: "OpanSans" }}>
@@ -294,7 +292,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 5,
-    backgroundColor: "#f7f7f7",
+    backgroundColor: "#fff",
   },
   inputTitle: {
     width: "100%",

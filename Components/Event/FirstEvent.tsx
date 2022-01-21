@@ -15,7 +15,7 @@ import { useFonts } from "expo-font"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
 import { db, auth } from "./Firestore"
-import { collection, onSnapshot } from "firebase/firestore"
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 const slide = [
@@ -26,17 +26,39 @@ const slide = [
 ]
 export default function First({ navigation }) {
   const [email, setemail] = useState("")
+  const [show, setshow] = useState<boolean>()
+  const [event, setevent] = useState([])
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
 
   useEffect(() => {
     const emails = auth.currentUser.email || "unknown"
-    setemail(email)
+    setemail(emails)
   })
-  // useEffect(() => {
-  //   const eventRef=collection(db, `user/${email}/`)
-  // },[email])
+  useEffect(() => {
+    if (email) {
+      const eventRef = collection(db, `user/${email}/Ownevent`)
+      const ref = query(eventRef, orderBy("date", "desc"))
+      onSnapshot(ref, (querySnapshot) => {
+        if (querySnapshot.empty) {
+          console.log("yess")
+          setshow(false)
+        } else {
+          let events = []
+          querySnapshot.forEach((doc) => {
+            events.push({ ...doc.data(), id: doc.id })
+            console.log(doc.data())
+            console.log("yes")
+          })
+          setevent([...events])
+          setshow(true)
+          console.log(event)
+        }
+      })
+    }
+  }, [email])
+
   let today = new Date()
   let curHr = today.getHours()
   let wishes: String
@@ -55,7 +77,7 @@ export default function First({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="dark-content" backgroundColor="#f7f7f7" />
-        <View
+        {/* <View
           style={{
             marginTop: 5,
             marginBottom: 10,
@@ -64,7 +86,7 @@ export default function First({ navigation }) {
           }}
         >
           <Text style={styles.title}>👋Heyy {TimeCheck()}</Text>
-        </View>
+        </View> */}
         <View>
           <ImageBackground
             style={{ width: "100%", height: 200 }}
@@ -185,31 +207,38 @@ export default function First({ navigation }) {
               fontSize: 18,
               marginHorizontal: 5,
               fontFamily: "OpanSans",
+              marginBottom: 10,
             }}
           >
             Your Events
           </Text>
-          <View
-            style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
-          >
-            <Text style={{ fontSize: 20, fontFamily: "OpanSans" }}>
-              No Event Created{" "}
-            </Text>
-            <Text style={{ fontSize: 18, fontFamily: "OpanSans" }}>
-              Click On{" "}
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: "OpanSans",
-                  fontWeight: "bold",
-                }}
-              >
-                {" "}
-                "Create Event"
-              </Text>{" "}
-              To Create Event.
-            </Text>
-          </View>
+          {!show && (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+              }}
+            >
+              <Text style={{ fontSize: 20, fontFamily: "OpanSans" }}>
+                No Event Created{" "}
+              </Text>
+              <Text style={{ fontSize: 18, fontFamily: "OpanSans" }}>
+                Click On{" "}
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontFamily: "OpanSans",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {" "}
+                  "Create Event"
+                </Text>{" "}
+                To Create Event.
+              </Text>
+            </View>
+          )}
           {/* <ScrollView horizontal>
           {data.map((item) => {
             return (
@@ -220,6 +249,27 @@ export default function First({ navigation }) {
             )
           })}
         </ScrollView> */}
+          {show && (
+            <ScrollView>
+              {event.map((item) => (
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => {
+                    navigation.navigate("Chat", {
+                      screen: "join",
+                      params: { item: item },
+                    })
+                  }}
+                >
+                  <View style={styles.itemLeft}>
+                    <View style={styles.square}></View>
+                    <Text style={styles.itemText}>{item.name}</Text>
+                  </View>
+                  <View style={styles.circular}></View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -239,5 +289,40 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     textAlign: "center",
+  },
+  item: {
+    backgroundColor: "#FFF",
+    padding: 15,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    borderColor: "#000",
+    borderWidth: 1,
+  },
+  itemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  square: {
+    width: 24,
+    height: 24,
+    backgroundColor: "#55BCF6",
+    opacity: 0.4,
+    borderRadius: 5,
+    marginRight: 15,
+  },
+  itemText: {
+    maxWidth: "80%",
+    fontSize: 18,
+  },
+  circular: {
+    width: 12,
+    height: 12,
+    borderColor: "#55BCF6",
+    borderWidth: 2,
+    borderRadius: 5,
   },
 })

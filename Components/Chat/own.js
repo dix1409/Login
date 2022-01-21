@@ -93,5 +93,6 @@ const stylecustom = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 5,
+    backgroundColor: "#fff",
   },
 })

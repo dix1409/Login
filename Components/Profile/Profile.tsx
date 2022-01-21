@@ -19,7 +19,11 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Feather from "react-native-vector-icons/Feather"
 import Modal from "react-native-modalbox"
-import { AntDesign } from "@expo/vector-icons"
+import {
+  AntDesign,
+  EvilIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons"
 
 import { db, store } from "../Event/Firestore"
 import { doc, setDoc, Timestamp, collection } from "firebase/firestore"
@@ -38,6 +42,8 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [phone, setphone] = useState("")
   const [country, setcountry] = useState("")
   const [city, setcity] = useState("")
+  const [age, setage] = useState("")
+  const [gender, setgender] = useState("")
   const { colors } = useTheme()
   const [visible, setVisible] = useState(false)
   const [error, setError] = useState("")
@@ -137,6 +143,8 @@ const EditProfileScreen = ({ navigation, route }) => {
       country: country,
       city: city,
       image: url,
+      gender: gender,
+      age: age,
     }).catch((err) => {
       console.log(err)
     })
@@ -357,6 +365,41 @@ const EditProfileScreen = ({ navigation, route }) => {
                     onChangeText={(text) => setphone(text)}
                   />
                 </View>
+                <View style={styles.action}>
+                  <EvilIcons name="user" color={colors.text} size={24} />
+                  <TextInput
+                    placeholder="age"
+                    placeholderTextColor="#666666"
+                    keyboardType="number-pad"
+                    autoCorrect={false}
+                    style={[
+                      styles.textInput,
+                      {
+                        color: colors.text,
+                      },
+                    ]}
+                    onChangeText={(text) => setage(text)}
+                  />
+                </View>
+                <View style={styles.action}>
+                  <MaterialCommunityIcons
+                    name="gender-male-female"
+                    size={24}
+                    color="black"
+                  />
+                  <TextInput
+                    placeholder="Gender"
+                    placeholderTextColor="#666666"
+                    autoCorrect={false}
+                    style={[
+                      styles.textInput,
+                      {
+                        color: colors.text,
+                      },
+                    ]}
+                    onChangeText={(text) => setgender(text)}
+                  />
+                </View>
 
                 <View style={styles.action}>
                   <FontAwesome name="globe" color={colors.text} size={20} />
@@ -415,7 +458,7 @@ export default EditProfileScreen
 
 const styles = StyleSheet.create({
   container: {
-    //backgroundColor: "#f7f7f7",
+    backgroundColor: "#fff",
     flex: 1,
     margin: 10,
     // paddingVertical: 10,

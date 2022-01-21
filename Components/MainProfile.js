@@ -18,7 +18,15 @@ export default function MainProfile(props) {
       <ProfileStack.Screen name="ProfileScreen" component={ProfileScreen} />
       <ProfileStack.Screen name="Edit" component={Edit} />
       <ProfileStack.Screen name="profile" component={profile} />
-      <ProfileStack.Screen name="info" component={Info} />
+      <ProfileStack.Screen
+        name="info"
+        component={Info}
+        options={{
+          headerShown: true,
+          headerTitle: "Personal Info",
+          headerBackTitle: null,
+        }}
+      />
     </ProfileStack.Navigator>
     // </NavigationContainer>
   )

@@ -26,35 +26,6 @@ export default function Info({ navigation, route }) {
       <View style={styles.bgImage}>
         <View
           style={{
-            alignItems: "center",
-
-            height: height * 0.15,
-            marginHorizontal: 15,
-            overflow: "hidden",
-            flexDirection: "row",
-            width: width,
-          }}
-        >
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="arrowleft" size={24} color="#000" />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontWeight: "bold",
-              fontSize: 22,
-              fontFamily: "OpanSans",
-              color: "#000",
-              fontFamily: "OpanSans",
-
-              marginStart: 10,
-            }}
-          >
-            Personal Info
-          </Text>
-        </View>
-
-        <View
-          style={{
             height: height * 0.75,
             backgroundColor: "#fff",
 
@@ -100,7 +71,7 @@ export default function Info({ navigation, route }) {
         <View
           style={{
             alignItems: "center",
-            marginTop: height * 0.75,
+            marginTop: height * 0.55,
             width: width,
           }}
         >

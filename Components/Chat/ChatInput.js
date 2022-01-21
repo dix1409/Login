@@ -22,7 +22,7 @@ export default function ChatInput({ item }) {
         style={[
           styles.msgContainer,
           {
-            backgroundColor: !isMymsg ? "white" : "#34B7F1",
+            backgroundColor: !isMymsg ? "black" : "#D0FF6C",
             marginLeft: isMymsg ? "40%" : 0,
             marginRight: !isMymsg ? "40%" : 0,
           },
@@ -33,7 +33,7 @@ export default function ChatInput({ item }) {
           style={[
             styles.msg,
             {
-              color: !isMymsg ? "#34B7F1" : "#FFFFFF",
+              color: !isMymsg ? "#D0FF6C" : "#000",
             },
           ]}
         >
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
     fontFamily: "OpanSans",
+    color: "white",
   },
   msg: {
     color: "#fff",

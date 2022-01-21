@@ -32,10 +32,10 @@ import { db, auth } from "../Components/Event/Firestore"
 const RegisterScreen = ({ navigation }) => {
   const [secureTextEntry, setsecurePassword] = useState(true)
   //const [confirm, setconfirm] = useState(true)
-  const [name, setName] = useState("")
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [logo, setlogo] = useState(true)
+
   //const [avatar, setAvatar] = useState();
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -63,7 +63,6 @@ const RegisterScreen = ({ navigation }) => {
           setIsLoading(false),
             navigation.navigate("Profile"),
             setDoc(doc(db, "user", email), {
-              username: name,
               userEmail: email,
               userPassword: password,
             })
@@ -97,7 +96,7 @@ const RegisterScreen = ({ navigation }) => {
           <View style={styles.errorMessage}>
             {!!error && <Text style={styles.error}>{error}</Text>}
           </View>
-          <Text style={styles.text_footer}>Username</Text>
+          {/* <Text style={styles.text_footer}>Username</Text>
           <View style={styles.action}>
             <FontAwesome name="user-o" color="#05375a" size={20} />
             <TextInput
@@ -111,7 +110,7 @@ const RegisterScreen = ({ navigation }) => {
                 <Feather name="check-circle" color="green" size={20} />
               </Animatable.View>
             ) : null}
-          </View>
+          </View> */}
           <Text
             style={[
               styles.text_footer,
@@ -184,7 +183,7 @@ const RegisterScreen = ({ navigation }) => {
                   },
                 ]}
               >
-                Sign Up
+                Register
               </Text>
             </TouchableOpacity>
 

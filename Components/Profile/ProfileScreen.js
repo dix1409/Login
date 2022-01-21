@@ -14,7 +14,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { db, auth } from "../Event/Firestore"
 import { onSnapshot, doc, collection } from "firebase/firestore"
 import * as Animatable from "react-native-animatable"
-import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons"
+import { AntDesign, Entypo, Feather, FontAwesome } from "@expo/vector-icons"
 
 const { height, width } = Dimensions.get("window")
 
@@ -225,6 +225,33 @@ export default function ProfileScreen({ navigation, route }) {
                     <Text style={{ marginStart: 10 }}>Add profile</Text>
                   </TouchableOpacity>
                 </View>
+                <View
+                  style={{
+                    width: width * 0.7,
+                    height: 40,
+                    borderColor: "black",
+                    borderWidth: 2,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 20,
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
+                      justifyContent: "center",
+                    }}
+                    onPress={() => {
+                      auth.signOut()
+                    }}
+                  >
+                    <Entypo name="log-out" size={24} color="black" />
+                    <Text style={{ marginStart: 10 }}>Log Out</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
             {showuserdata && (
@@ -238,11 +265,13 @@ export default function ProfileScreen({ navigation, route }) {
                 >
                   <View style={styles.action}>
                     <Text>{joinEvent}</Text>
-                    <Text style={{ fontFamily: "OpanSans" }}>Join Event</Text>
+                    <Text style={{ fontFamily: "OpanSans" }}>
+                      Joined Events
+                    </Text>
                   </View>
                   <View style={styles.action}>
                     <Text>{ownEvent}</Text>
-                    <Text style={{ fontFamily: "OpanSans" }}>Your Event</Text>
+                    <Text style={{ fontFamily: "OpanSans" }}>Your Events</Text>
                   </View>
                 </View>
                 <View style={styles.btnContainer}>
@@ -255,9 +284,9 @@ export default function ProfileScreen({ navigation, route }) {
                       })
                     }}
                   >
-                    <AntDesign name="user" size={24} color="#fff" />
+                    <AntDesign name="user" size={24} color="#000" />
                     <Text style={styles.item}>Personal Info </Text>
-                    <AntDesign name="arrowright" size={24} color="#fff" />
+                    <AntDesign name="arrowright" size={24} color="#000" />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.btnContainer}>
@@ -265,9 +294,9 @@ export default function ProfileScreen({ navigation, route }) {
                     style={styles.box}
                     onPress={() => auth.signOut()}
                   >
-                    <Feather name="log-out" size={24} color="white" />
+                    <Feather name="log-out" size={24} color="black" />
                     <Text style={styles.item}>Log out</Text>
-                    <AntDesign name="arrowright" size={24} color="#fff" />
+                    <AntDesign name="arrowright" size={24} color="#000" />
                   </TouchableOpacity>
                 </View>
               </>
@@ -281,6 +310,7 @@ export default function ProfileScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   bgImage: {
     flex: 1,
@@ -297,7 +327,7 @@ const styles = StyleSheet.create({
     height: 65,
     width: "90%",
     marginTop: 25,
-    backgroundColor: "#74dcff",
+    backgroundColor: "#D0FF6C",
     alignItems: "center",
     borderRadius: 20,
   },
@@ -311,7 +341,7 @@ const styles = StyleSheet.create({
   item: {
     fontSize: 20,
     marginStart: 10,
-    color: "#fafafa",
+    color: "#000",
     marginRight: "auto",
     fontFamily: "OpanSans",
   },

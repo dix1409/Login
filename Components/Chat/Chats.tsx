@@ -26,7 +26,7 @@ import { db } from "../Event/Firestore"
 import ChatInput from "./ChatInput"
 
 export default function Chats({ navigation, route }) {
-  const [disable, setdisable] = useState(false)
+  const [disable, setdisable] = useState(true)
   const [username, setusername] = useState("")
   const [msg, setmsg] = useState<string>("")
   const [Allmsg, setAllmsg] = useState([])
@@ -57,15 +57,25 @@ export default function Chats({ navigation, route }) {
   useEffect(() => {
     if (!keyboard.keyboardShown) {
       setMarginBottom(0)
+      if (msg === "") {
+        setdisable(true)
+      }
     }
   }, [keyboard.keyboardShown])
 
   useEffect(() => {
-    const nameRef = doc(db, "user", email)
-    onSnapshot(nameRef, (documentSnapshot) => {
-      let user = documentSnapshot.data()
-      console.log(user)
-      setusername(user.username)
+    const nameRef = collection(db, `user/${email}/profile`)
+    onSnapshot(nameRef, (querySnapshot) => {
+      let user = []
+      querySnapshot.forEach((doc) => {
+        user.push({ ...doc.data(), id: doc.id })
+      })
+
+      let userdata = Object.assign({}, ...user)
+      if (userdata.firstname) {
+        console.log("name: ", userdata.firstname)
+        // setusername(userdata.firstname)
+      }
     })
     const ChatRef = collection(db, `event/${event_id}/messsage`)
     const ref = query(ChatRef, orderBy("CrateBy", "desc"))
@@ -86,7 +96,7 @@ export default function Chats({ navigation, route }) {
     } else {
       setdisable(false)
     }
-  })
+  }, [keyboard.keyboardShown])
 
   const msgDel = collection(db, "event", event_id, "messsage")
 
@@ -105,6 +115,7 @@ export default function Chats({ navigation, route }) {
       style={{
         flex: 1,
         paddingBottom: Platform.OS === "ios" ? marginBottom : 0,
+        backgroundColor: "white",
       }}
     >
       <FlatList

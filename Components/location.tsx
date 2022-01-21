@@ -29,6 +29,7 @@ import {
   startAt,
   endAt,
   getDocs,
+  onSnapshot,
 } from "firebase/firestore"
 import { db, auth } from "./Event/Firestore"
 import { AntDesign } from "@expo/vector-icons"
@@ -45,12 +46,9 @@ export default function location({ navigation }) {
     if (latitude === 0 && longitude === 0) askPermission()
   }, [])
   useEffect(() => {
-    if (latitude !== 0) {
-      //console.log("")
-      if (event.length === 0) {
-        GetDATA()
-      }
-    }
+    //console.log("")
+
+    GetDATA()
   }, [latitude, longitude])
   // console.log()
   const askPermission = async () => {
@@ -131,10 +129,7 @@ export default function location({ navigation }) {
   if (!longitude || !latitude) {
     return (
       <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
-        <Image
-          source={require("../photoes/Radio-1s-200px.gif")}
-          style={{ width: 200, height: 200 }}
-        />
+        <ActivityIndicator color="red" size="large" />
       </View>
     )
   }

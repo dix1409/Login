@@ -93,7 +93,7 @@ export default function Participate({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    backgroundColor: "#fff",
     marginHorizontal: 10,
   },
   name: {

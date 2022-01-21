@@ -17,7 +17,7 @@ export default function chat({ navigation }) {
         name="chatting"
         component={chatting}
         options={() => ({
-          title: "Events",
+          title: "Chats",
           headerStyle: {
             backgroundColor: "white",
             borderBottomColor: "#f2f2f2",
@@ -31,6 +31,7 @@ export default function chat({ navigation }) {
           headerLeftContainerStyle: {
             opacity: 0,
           },
+          headerLeft: () => null,
         })}
       />
 

@@ -18,7 +18,7 @@ const style = StyleSheet.create({
   square: {
     width: 24,
     height: 24,
-    backgroundColor: "#55BCF6",
+    backgroundColor: "#D0FF6C",
     opacity: 0.4,
     borderRadius: 5,
     marginRight: 15,
@@ -30,7 +30,7 @@ const style = StyleSheet.create({
   circular: {
     width: 12,
     height: 12,
-    borderColor: "#55BCF6",
+    borderColor: "#D0FF6C",
     borderWidth: 2,
     borderRadius: 5,
   },
@@ -41,7 +41,7 @@ const style = StyleSheet.create({
   },
   mainContainer: {
     flexDirection: "row",
-    backgroundColor: "#fff",
+    backgroundColor: "#f7f7f7",
     padding: 10,
 
     borderRadius: 50,
@@ -49,7 +49,7 @@ const style = StyleSheet.create({
     alignItems: "flex-end",
   },
   btnContainer: {
-    backgroundColor: "#FF6347",
+    backgroundColor: "#000",
     borderRadius: 50,
     height: 45,
     width: 45,

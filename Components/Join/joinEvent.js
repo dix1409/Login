@@ -340,7 +340,6 @@ export default function joinEvent({ navigation, route }) {
     const participateref = doc(db, "event", event.id, "participate", email)
 
     setDoc(participateref, {
-      username: userinfo.username,
       userEmail: userinfo.userEmail,
       userPassword: userinfo.userPassword,
       Profile: Profile,
@@ -358,7 +357,6 @@ export default function joinEvent({ navigation, route }) {
       date: event.date,
       count: event.count,
       hour: event.hour,
-      minutes: event.minutes,
 
       fees: event.fees,
       id: event.id,
@@ -525,7 +523,7 @@ export default function joinEvent({ navigation, route }) {
                       fontSize: 20,
                     }}
                   >
-                    You Joined Successfully!.
+                    You Joined Successfully!
                   </Text>
                 </View>
               </View>
@@ -568,7 +566,7 @@ export default function joinEvent({ navigation, route }) {
           <View style={styles.BoxContainer}>
             <AntDesign name="clockcircle" size={18} color="#1b2534" />
             <Text style={[{ marginRight: 20 }, styles.textStyle]}>
-              {event.hour}:{event.minute}
+              {event.hour}
             </Text>
             <FontAwesome name="calendar-times-o" size={18} color="#1b2534" />
             <Text style={styles.textStyle}>{event.date}</Text>
@@ -585,7 +583,7 @@ export default function joinEvent({ navigation, route }) {
               </Text>
             )}
             {event.fees.length === 0 && (
-              <Text style={styles.textStyle}>Enternance Free 😍😍</Text>
+              <Text style={styles.textStyle}>Entrance: Free </Text>
             )}
           </View>
           {/* <View style={styles.BoxContainer}>
@@ -594,16 +592,22 @@ export default function joinEvent({ navigation, route }) {
               Winning Prize:{event.prize}
             </Text>
           </View> */}
+
+          <View style={styles.BoxContainer}>
+            <FontAwesome name="users" size={24} color="black" />
+            <Text style={styles.textStyle}>
+              Participation: {event.participate}
+            </Text>
+          </View>
           <View style={styles.BoxContainer}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <AntDesign name="infocirlce" size={24} color="black" />
-              <Text style={styles.textStyle}>Eligiblity</Text>
+              <Text style={styles.textStyle}>Additional Comment</Text>
             </View>
           </View>
           <View style={styles.BoxContainer}>
             <Text style={styles.textStyle}>{event.comment}</Text>
           </View>
-
           {!join && (
             <View
               style={{
@@ -634,7 +638,7 @@ export default function joinEvent({ navigation, route }) {
                 style={[styles.btnContainer, { backgroundColor: "#D0FF6C" }]}
               >
                 <Text style={{ color: "black", fontFamily: "OpanSans" }}>
-                  View Participators
+                  View Participants
                 </Text>
               </TouchableOpacity>
             </View>

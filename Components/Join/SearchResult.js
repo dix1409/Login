@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  TextInput,
 } from "react-native"
 import { db } from "../Event/Firestore"
 import {
@@ -18,16 +19,17 @@ import {
   collection,
   limit,
 } from "firebase/firestore"
+import { FontAwesome } from "@expo/vector-icons"
 
 export default function SearchResult({ navigation, route }) {
   const [serchResult, setserchResult] = useState([])
   const [count, setcount] = useState("")
-  const value = route.params.value
+  const [value, setvalue] = useState("")
   useEffect(() => {
     const Eventref = collection(db, "data")
     const ref = query(
       Eventref,
-      where("eventTitle", "==", value),
+      where("eventTitle", "==", value.trim()),
       orderBy("date", "desc"),
       limit(40)
     )
@@ -45,9 +47,39 @@ export default function SearchResult({ navigation, route }) {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>
-          You Searched :<Text style={styles.Searchtitle}> {value}</Text>
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+
+            backgroundColor: "#ffff",
+            alignItems: "center",
+            borderRadius: 20,
+            marginRight: "auto",
+            width: "70%",
+          }}
+        >
+          <FontAwesome
+            name="search"
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginHorizontal: 15,
+            }}
+            size={20}
+            color={"gray"}
+          />
+          <TextInput
+            placeholder="Enter Sport name"
+            // onChangeText={(text) => {
+            //   setvalue(text)
+            // }}
+            onSubmitEditing={({
+              nativeEvent: { text, eventCount, target },
+            }) => {
+              setvalue(text)
+            }}
+          />
+        </View>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{
@@ -62,6 +94,9 @@ export default function SearchResult({ navigation, route }) {
           <Text style={{ color: "#000", fontSize: 18 }}>Back</Text>
         </TouchableOpacity>
       </View>
+      <Text style={styles.title}>
+        You Searched :<Text style={styles.Searchtitle}> {value}</Text>
+      </Text>
       <View
         style={{
           marginVertical: 10,

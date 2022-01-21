@@ -102,22 +102,11 @@ export default function First({ navigation }) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <StatusBar style={{ backgroundColor: "#E5E1D9" }} />
-        <View
-          style={{
-            marginTop: 5,
-            marginBottom: 10,
-            padding: 10,
-            alignItems: "center",
-          }}
-        >
-          <Text style={styles.title}>👋heyy {TimeCheck()}</Text>
-        </View>
+
         <View>
           <ImageBackground
             style={{ width: "100%", height: 200 }}
-            source={{
-              uri: "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2FRectangle.png?alt=media&token=557ce281-ead8-4d8f-b09d-c069829fde81",
-            }}
+            source={require("../../Photo/first.png")}
             resizeMode="contain"
           >
             <View style={{ flexDirection: "row", marginHorizontal: 15 }}>

@@ -10,7 +10,7 @@ import {
 } from "react-native"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import Event from "./Join/Event"
+import Event from "./Join/eventcopy"
 import JoinEvents from "./Join/joinEvent"
 import Participate from "./Join/Participate"
 import SearchResult from "./Join/SearchResult"
@@ -25,7 +25,21 @@ const Eventnavigation = () => {
         headerShown: false,
       }}
     >
-      <JoinEvent.Screen name="first" component={Event} />
+      <JoinEvent.Screen
+        name="first"
+        component={Event}
+        options={{
+          headerShown: true,
+          headerTitle: "Explore ",
+          headerTitleStyle: {
+            color: "black",
+          },
+
+          headerLeft: () => {
+            null
+          },
+        }}
+      />
       <JoinEvent.Screen name="second" component={JoinEvents} />
       <JoinEvent.Screen
         name="Near"

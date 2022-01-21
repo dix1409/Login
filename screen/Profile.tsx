@@ -41,19 +41,13 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [visible, setVisible] = useState(false)
   const [error, setError] = useState("")
   const [load, setload] = useState(false)
-  const [email, setemail] = useState("")
+
   const toggleBottomNavigationView = () => {
     //Toggling the visibility state of the bottom sheet
     setVisible(!visible)
   }
-  useEffect(() => {
-    const emails = auth.currentUser.email || "unknown"
-    setemail(emails)
+  const email = route.params.email
 
-    return () => {
-      email
-    }
-  })
   useEffect(() => {
     if (image) {
       uploadimage(image)
@@ -167,6 +161,7 @@ const EditProfileScreen = ({ navigation, route }) => {
   const getdata = async () => {
     try {
       await AsyncStorage.setItem("isDone", "true")
+      console.log("here ...")
     } catch (e) {
       // saving error
       console.log(e)
@@ -412,7 +407,10 @@ const EditProfileScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.commandButton}
-                  onPress={() => navigation.navigate("Home")}
+                  onPress={() => {
+                    getdata()
+                    navigation.navigate("Home")
+                  }}
                 >
                   <Text style={styles.panelButtonTitle}>skip</Text>
                 </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   ImageBackground,
   StyleSheet,
@@ -7,20 +7,29 @@ import {
   Text,
   TouchableOpacity,
   Pressable,
+  TextInput,
+  ScrollView,
 } from "react-native"
 import { useFonts } from "expo-font"
 import * as Location from "expo-location"
 import { SafeAreaView } from "react-native-safe-area-context"
-
+import { useKeyboard } from "@react-native-community/hooks"
 export default function ThirdScreen({ route, navigation }) {
   const [mode, setMode] = useState("")
   const [participate, setparticipate] = useState("")
+  const [participateCount, setparticipatecount] = useState(0)
+  const [fees, setfees] = useState("")
+  const [ispaid, setispaid] = useState(false)
   const [skill, setskill] = useState("")
   const [error, seterror] = useState("")
+  const [Comment, setComment] = useState("")
+  const [marginBottom, setMarginBottom] = useState(0)
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
 
+  const hour = route.params.hour
+  const keyboard = useKeyboard()
   const eventTitle = route.params.eventTitle
   const Name = route.params.Name
   const date = route.params.date
@@ -35,123 +44,49 @@ export default function ThirdScreen({ route, navigation }) {
       return 1
     }
   }
+  useEffect(() => {
+    if (!keyboard.keyboardShown) {
+      setMarginBottom(0)
+    }
+  }, [keyboard.keyboardShown])
   //console.log(eventTitle, Name, date)
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.greetingTitle}>Additional Details</Text>
-      </View>
-
-      <View style={styles.form}>
-        <View style={styles.errorMessage}>
-          {!!error && <Text style={styles.error}>{error}</Text>}
+    <SafeAreaView
+      style={[
+        styles.container,
+        { paddingBottom: Platform.OS === "ios" ? marginBottom : 0 },
+      ]}
+    >
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          <Text style={styles.greetingTitle}>Additional Details</Text>
         </View>
-        <Text style={{ fontFamily: "OpanSans" }}>Skill Level</Text>
-        <View style={{ marginTop: 15, flexDirection: "row" }}>
-          <Pressable
-            style={[
-              styles.btn,
-              {
-                backgroundColor: skill === "Beginner" ? "#D0FF6C" : "white",
-              },
-            ]}
-            onPress={() => {
-              setskill("Beginner")
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "OpanSans",
 
-                color: "black",
-              }}
-            >
-              Beginner
-            </Text>
-          </Pressable>
-          <Pressable
-            style={[
-              styles.btn,
-              {
-                backgroundColor: skill === "Intermidate" ? "#D0FF6C" : "white",
-              },
-            ]}
-            onPress={() => {
-              setskill("Intermidate")
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "OpanSans",
-                color: "black",
-              }}
-            >
-              Intermediate
-            </Text>
-          </Pressable>
-          <Pressable
-            style={[
-              styles.btn,
-              {
-                backgroundColor: skill === "Expert" ? "#D0FF6C" : "white",
-              },
-            ]}
-            onPress={() => {
-              setskill("Expert")
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "OpanSans",
-                color: "black",
-              }}
-            >
-              Expert
-            </Text>
-          </Pressable>
-        </View>
-        <View style={{ marginTop: 32 }}>
-          <Text style={{ fontFamily: "OpanSans" }}>Participants</Text>
+        <View style={styles.form}>
+          <View style={styles.errorMessage}>
+            {!!error && <Text style={styles.error}>{error}</Text>}
+          </View>
+          <Text style={{ fontFamily: "OpanSans" }}>Skill Level</Text>
           <View style={{ marginTop: 15, flexDirection: "row" }}>
             <Pressable
               style={[
                 styles.btn,
                 {
-                  backgroundColor:
-                    participate === "Everyone" ? "#D0FF6C" : "white",
+                  backgroundColor: skill === "Beginner" ? "#D0FF6C" : "white",
                 },
               ]}
               onPress={() => {
-                setparticipate("Everyone")
+                setskill("Beginner")
               }}
             >
               <Text
                 style={{
                   fontFamily: "OpanSans",
+
                   color: "black",
                 }}
               >
-                Everyone
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[
-                styles.btn,
-                {
-                  backgroundColor: participate === "Male" ? "#D0FF6C" : "white",
-                },
-              ]}
-              onPress={() => {
-                setparticipate("Male")
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "OpanSans",
-                  color: "black",
-                }}
-              >
-                Male
+                Beginner
               </Text>
             </Pressable>
             <Pressable
@@ -159,11 +94,11 @@ export default function ThirdScreen({ route, navigation }) {
                 styles.btn,
                 {
                   backgroundColor:
-                    participate === "Female" ? "#D0FF6C" : "white",
+                    skill === "Intermidate" ? "#D0FF6C" : "white",
                 },
               ]}
               onPress={() => {
-                setparticipate("Female")
+                setskill("Intermidate")
               }}
             >
               <Text
@@ -172,24 +107,18 @@ export default function ThirdScreen({ route, navigation }) {
                   color: "black",
                 }}
               >
-                Female
+                Intermediate
               </Text>
             </Pressable>
-          </View>
-        </View>
-
-        <View style={{ marginTop: 32 }}>
-          <Text style={{ fontFamily: "OpanSans" }}>Mode</Text>
-          <View style={{ marginTop: 15, flexDirection: "row" }}>
             <Pressable
               style={[
                 styles.btn,
                 {
-                  backgroundColor: mode === "Paid" ? "#D0FF6C" : "white",
+                  backgroundColor: skill === "Expert" ? "#D0FF6C" : "white",
                 },
               ]}
               onPress={() => {
-                setMode("Paid")
+                setskill("Expert")
               }}
             >
               <Text
@@ -198,78 +127,224 @@ export default function ThirdScreen({ route, navigation }) {
                   color: "black",
                 }}
               >
-                Paid
-              </Text>
-            </Pressable>
-
-            <Pressable
-              style={[
-                styles.btn,
-                {
-                  backgroundColor: mode === "Free" ? "#D0FF6C" : "white",
-                },
-              ]}
-              onPress={() => {
-                setMode("Free")
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "OpanSans",
-                  color: "black",
-                }}
-              >
-                Free
+                Expert
               </Text>
             </Pressable>
           </View>
+          <View style={{ marginTop: 32 }}>
+            <Text style={{ fontFamily: "OpanSans" }}>Participants</Text>
+            <View style={{ marginTop: 15, flexDirection: "row" }}>
+              <Pressable
+                style={[
+                  styles.btn,
+                  {
+                    backgroundColor:
+                      participate === "Everyone" ? "#D0FF6C" : "white",
+                  },
+                ]}
+                onPress={() => {
+                  setparticipate("Everyone")
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "OpanSans",
+                    color: "black",
+                  }}
+                >
+                  Everyone
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.btn,
+                  {
+                    backgroundColor:
+                      participate === "Male" ? "#D0FF6C" : "white",
+                  },
+                ]}
+                onPress={() => {
+                  setparticipate("Male")
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "OpanSans",
+                    color: "black",
+                  }}
+                >
+                  Male
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.btn,
+                  {
+                    backgroundColor:
+                      participate === "Female" ? "#D0FF6C" : "white",
+                  },
+                ]}
+                onPress={() => {
+                  setparticipate("Female")
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "OpanSans",
+                    color: "black",
+                  }}
+                >
+                  Female
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+          <View style={{ marginTop: 32 }}>
+            <Text style={[styles.greetingTitle, { fontSize: 14 }]}>
+              Maximum Participants
+            </Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="decimal-pad"
+              onChangeText={(text) => {
+                setparticipatecount(Number(text))
+              }}
+            />
+          </View>
+          <View style={{ marginTop: 32 }}>
+            <Text style={{ fontFamily: "OpanSans" }}>Entry</Text>
+            <View style={{ marginTop: 15, flexDirection: "row" }}>
+              <Pressable
+                style={[
+                  styles.btn,
+                  {
+                    backgroundColor: mode === "Paid" ? "#D0FF6C" : "white",
+                  },
+                ]}
+                onPress={() => {
+                  setMode("Paid")
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "OpanSans",
+                    color: "black",
+                  }}
+                >
+                  Paid
+                </Text>
+              </Pressable>
+
+              <Pressable
+                style={[
+                  styles.btn,
+                  {
+                    backgroundColor: mode === "Free" ? "#D0FF6C" : "white",
+                  },
+                ]}
+                onPress={() => {
+                  setMode("Free")
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "OpanSans",
+                    color: "black",
+                  }}
+                >
+                  Free
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+          <View style={{ marginTop: 32 }}>
+            {mode === "Paid" && (
+              <>
+                <Text style={[styles.greetingTitle, { fontSize: 16 }]}>
+                  Fees
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  keyboardType="decimal-pad"
+                  onChangeText={(text) => {
+                    setfees(text)
+                  }}
+                />
+              </>
+            )}
+          </View>
+          <View style={{ marginTop: 32 }}>
+            <Text style={[styles.greetingTitle, { fontSize: 14 }]}>
+              Additional Comments
+            </Text>
+          </View>
+
+          <TextInput
+            style={[
+              styles.inputTitle,
+              {
+                height: 100,
+                alignContent: "flex-start",
+                justifyContent: "flex-start",
+                backgroundColor: "#f7f7f7",
+                marginTop: 5,
+              },
+            ]}
+            multiline={true}
+            onChangeText={(text) => {
+              setComment(text)
+            }}
+          />
         </View>
-        <View style={{ marginTop: 32 }}></View>
-      </View>
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          bottom: 0,
-          flex: 0.3,
-          // marginBottom: 10,
-        }}
-      >
-        <TouchableOpacity
+        <View
           style={{
-            backgroundColor: "#333",
-            borderRadius: 26,
-            height: 52,
             justifyContent: "center",
             alignItems: "center",
-            width: "60%",
-
-            bottom: 2,
-          }}
-          onPress={() => {
-            chack()
-              ? navigation.navigate("Fourth", {
-                  eventTitle: eventTitle,
-                  Name: Name,
-                  date: date,
-
-                  mode: mode.trim(),
-                  skill: skill.trim(),
-                  participate: participate.trim(),
-                })
-              : seterror("Please Fill All Detail")
+            bottom: 0,
+            flex: 0.3,
+            // marginBottom: 10,
+            marginVertical: 32,
           }}
         >
-          <Text style={{ color: "white", fontFamily: "OpanSans" }}>Next</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#D0FF6C",
+              borderRadius: 26,
+              height: 52,
+              justifyContent: "center",
+              alignItems: "center",
+              width: "60%",
+
+              bottom: 2,
+            }}
+            onPress={() => {
+              navigation.navigate("Fifth", {
+                eventTitle: eventTitle,
+                Name: Name,
+                date: date,
+
+                mode: mode.trim(),
+                skill: skill.trim(),
+                participate: participate.trim(),
+                fees: fees,
+
+                hour: hour,
+                participateCount: participateCount,
+                comment: Comment,
+              })
+            }}
+          >
+            <Text style={{ color: "black", fontFamily: "OpanSans" }}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#fff",
     // justifyContent: "center",
     //
     width: "100%",
@@ -282,7 +357,7 @@ const styles = StyleSheet.create({
   greetingTitle: {
     fontSize: 22,
     fontWeight: "800",
-    textAlign: "center",
+
     color: "#000",
     fontFamily: "OpanSans",
   },
@@ -299,6 +374,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "33%",
     textAlign: "center",
+    borderColor: "black",
+    borderWidth: 1,
   },
   errorMessage: {
     alignItems: "center",
@@ -309,5 +386,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
     textAlign: "center",
+  },
+  input: {
+    borderBottomColor: "#8a8f9e",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    height: 40,
+    width: "80%",
+    fontSize: 15,
+    color: "#161f3d",
+    width: "100%",
   },
 })

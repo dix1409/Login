@@ -20,7 +20,11 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Feather from "react-native-vector-icons/Feather"
 import { store } from "../Event/Firestore"
-import { AntDesign } from "@expo/vector-icons"
+import {
+  AntDesign,
+  EvilIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons"
 import { ref, deleteObject } from "firebase/storage"
 
 import { db, auth } from "../Event/Firestore"
@@ -45,6 +49,9 @@ const EditProfileScreen = ({ navigation, route }) => {
   const { colors } = useTheme()
   const [visible, setVisible] = useState(false)
   const [error, setError] = useState("")
+  const [age, setage] = useState(profiledata.age)
+  const [gender, setgender] = useState(profiledata.gender)
+  const [url, seturl] = useState("")
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
@@ -52,6 +59,11 @@ const EditProfileScreen = ({ navigation, route }) => {
     //Toggling the visibility state of the bottom sheet
     setVisible(!visible)
   }
+  useEffect(() => {
+    if (image !== profiledata.image) {
+      uploadimage(image)
+    }
+  }, [image])
 
   // const timestamp = firebase.firestore.Timestamp.now().seconds
   const takePhotoFromCamera = async () => {
@@ -66,9 +78,7 @@ const EditProfileScreen = ({ navigation, route }) => {
       })
       if (photo) {
         setImage(photo.uri)
-        if (image) {
-          uploadimage()
-        }
+
         // console.log(photo.base64)
       }
     }
@@ -88,22 +98,51 @@ const EditProfileScreen = ({ navigation, route }) => {
 
     if (!result.cancelled) {
       setImage(result.uri)
-      if (image) {
-        uploadimage()
-      }
     }
   }
-  const uploadimage = async () => {
-    const response = await fetch(image)
+  const uploadimage = async (uri: RequestInfo) => {
+    const response = await fetch(uri)
     const blob = await response.blob()
 
     const refs = ref(store, email)
 
     uploadBytes(refs, blob).then((snapshot) => {
       console.log("Uploaded a blob or file!")
+      getDownloadurl()
     })
   }
+  const getDownloadurl = () => {
+    const starsRef = ref(store, email)
 
+    // Get the download URL
+    getDownloadURL(starsRef)
+      .then((url) => {
+        // Insert url into an <img> tag to "download"
+        seturl(url)
+        console.log(url)
+      })
+      .catch((error) => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case "storage/object-not-found":
+            // File doesn't exist
+            break
+          case "storage/unauthorized":
+            // User doesn't have permission to access the object
+            break
+          case "storage/canceled":
+            // User canceled the upload
+            break
+
+          // ...
+
+          case "storage/unknown":
+            // Unknown error occurred, inspect the server response
+            break
+        }
+      })
+  }
   const submitDetail = () => {
     // console.log(first)
     const profileref = doc(db, "user", email, "profile", profiledata.id)
@@ -113,7 +152,9 @@ const EditProfileScreen = ({ navigation, route }) => {
       phone: phone,
       country: country,
       city: city,
-      image: image,
+      image: url ? url : image,
+      gender: gender,
+      age: age,
     })
       .then(() => {
         navigation.navigate("ProfileScreen")
@@ -230,36 +271,28 @@ const EditProfileScreen = ({ navigation, route }) => {
                       </Text>
                     </View>
 
-                    <TouchableOpacity onPress={takePhotoFromCamera}>
-                      <LinearGradient
-                        style={styles.panelButton}
-                        colors={["#A9CBFF", "#5398F3"]}
-                      >
-                        <Text style={styles.panelButtonTitle}>Take Photo</Text>
-                      </LinearGradient>
+                    <TouchableOpacity
+                      onPress={takePhotoFromCamera}
+                      style={styles.panelButton}
+                    >
+                      <Text style={styles.panelButtonTitle}>Take Photo</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={choosePhotoFromLibrary}>
-                      <LinearGradient
-                        style={styles.panelButton}
-                        colors={["#A9CBFF", "#5398F3"]}
-                      >
-                        <Text style={styles.panelButtonTitle}>
-                          Choose From Library
-                        </Text>
-                      </LinearGradient>
+                    <TouchableOpacity
+                      onPress={choosePhotoFromLibrary}
+                      style={styles.panelButton}
+                    >
+                      <Text style={styles.panelButtonTitle}>
+                        Choose From Library
+                      </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
                         toggleBottomNavigationView()
                         setImage(null)
                       }}
+                      style={styles.panelButton}
                     >
-                      <LinearGradient
-                        colors={["#A9CBFF", "#5398F3"]}
-                        style={styles.panelButton}
-                      >
-                        <Text style={styles.panelButtonTitle}>Cancel</Text>
-                      </LinearGradient>
+                      <Text style={styles.panelButtonTitle}>Cancel</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -313,7 +346,43 @@ const EditProfileScreen = ({ navigation, route }) => {
                   value={phone}
                 />
               </View>
-
+              <View style={styles.action}>
+                <EvilIcons name="user" color={colors.text} size={28} />
+                <TextInput
+                  placeholder="age"
+                  placeholderTextColor="#666666"
+                  keyboardType="number-pad"
+                  autoCorrect={false}
+                  style={[
+                    styles.textInput,
+                    {
+                      color: colors.text,
+                    },
+                  ]}
+                  onChangeText={(text) => setage(Number(text))}
+                  value={age.toString()}
+                />
+              </View>
+              <View style={styles.action}>
+                <MaterialCommunityIcons
+                  name="gender-male-female"
+                  size={24}
+                  color="black"
+                />
+                <TextInput
+                  placeholder="Gender"
+                  placeholderTextColor="#666666"
+                  autoCorrect={false}
+                  style={[
+                    styles.textInput,
+                    {
+                      color: colors.text,
+                    },
+                  ]}
+                  // onChangeText={(text) => setgender(text)}
+                  value={gender}
+                />
+              </View>
               <View style={styles.action}>
                 <FontAwesome name="globe" color={colors.text} size={20} />
                 <TextInput
@@ -330,6 +399,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                   value={country}
                 />
               </View>
+
               <View style={styles.action}>
                 <Icon name="map-marker-outline" color={colors.text} size={20} />
                 <TextInput
@@ -364,7 +434,7 @@ export default EditProfileScreen
 
 const styles = StyleSheet.create({
   container: {
-    //backgroundColor: "#f7f7f7",
+    backgroundColor: "#fff",
     flex: 1,
     margin: 10,
     // paddingVertical: 10,
@@ -373,7 +443,7 @@ const styles = StyleSheet.create({
   commandButton: {
     padding: 15,
     borderRadius: 10,
-    backgroundColor: "#FF6347",
+    backgroundColor: "#D0FF6C",
     alignItems: "center",
     marginTop: 10,
     marginHorizontal: 20,
@@ -424,14 +494,14 @@ const styles = StyleSheet.create({
   panelButton: {
     padding: 13,
     borderRadius: 10,
-    backgroundColor: "#A9CBFF",
+    backgroundColor: "#D0FF6C",
     alignItems: "center",
     marginVertical: 7,
   },
   panelButtonTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   action: {
     flexDirection: "row",
