@@ -16,6 +16,8 @@ import Participate from "./Join/Participate"
 import SearchResult from "./Join/SearchResult"
 import ShowEvent from "./Join/ShowEvent"
 import ShowNearEvent from "./Join/ShowNearEvent"
+import ownEvent from "./Join/Ownevent"
+import deleteevent from "./Join/deleteevent"
 const JoinEvent = createStackNavigator()
 const Eventnavigation = () => {
   return (
@@ -41,6 +43,19 @@ const Eventnavigation = () => {
         }}
       />
       <JoinEvent.Screen name="second" component={JoinEvents} />
+      <JoinEvent.Screen name="delete" component={deleteevent} />
+      <JoinEvent.Screen
+        name="ownEvent"
+        component={ownEvent}
+        options={{
+          headerShown: true,
+          headerTitle: "Your Event",
+          headerTitleStyle: {
+            color: "black",
+          },
+        }}
+      />
+
       <JoinEvent.Screen
         name="Near"
         component={ShowNearEvent}

@@ -18,7 +18,7 @@ const Tabs = () => {
         // keyboardHidesTabBar: true,
         tabBarHideOnKeyboard: Platform.OS === "ios" ? false : true,
       }}
-      initialRouteName="Explore"
+      initialRouteName="Map"
     >
       <Tab.Screen
         name="Map"

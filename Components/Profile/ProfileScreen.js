@@ -69,6 +69,7 @@ export default function ProfileScreen({ navigation, route }) {
       })
       if (Object.keys(userdata).length > 0) {
         setImage(userdata.image)
+        console.log(Image)
       }
     }
   })

@@ -9,11 +9,13 @@ import {
   Pressable,
   TextInput,
   ScrollView,
+  Dimensions,
 } from "react-native"
 import { useFonts } from "expo-font"
 import * as Location from "expo-location"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useKeyboard } from "@react-native-community/hooks"
+const { height, width } = Dimensions.get("window")
 export default function ThirdScreen({ route, navigation }) {
   const [mode, setMode] = useState("")
   const [participate, setparticipate] = useState("")
@@ -33,6 +35,7 @@ export default function ThirdScreen({ route, navigation }) {
   const eventTitle = route.params.eventTitle
   const Name = route.params.Name
   const date = route.params.date
+  console.log(hour)
   const chack = () => {
     if (mode === "") {
       return 0
@@ -295,47 +298,49 @@ export default function ThirdScreen({ route, navigation }) {
               setComment(text)
             }}
           />
-        </View>
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            bottom: 0,
-            flex: 0.3,
-            // marginBottom: 10,
-            marginVertical: 32,
-          }}
-        >
-          <TouchableOpacity
+          <View
             style={{
-              backgroundColor: "#D0FF6C",
-              borderRadius: 26,
-              height: 52,
               justifyContent: "center",
               alignItems: "center",
-              width: "60%",
-
-              bottom: 2,
-            }}
-            onPress={() => {
-              navigation.navigate("Fifth", {
-                eventTitle: eventTitle,
-                Name: Name,
-                date: date,
-
-                mode: mode.trim(),
-                skill: skill.trim(),
-                participate: participate.trim(),
-                fees: fees,
-
-                hour: hour,
-                participateCount: participateCount,
-                comment: Comment,
-              })
+              bottom: 0,
+              flex: 0.3,
+              // marginBottom: 10,
+              marginVertical: 32,
             }}
           >
-            <Text style={{ color: "black", fontFamily: "OpanSans" }}>Next</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#D0FF6C",
+                borderRadius: 26,
+                height: 52,
+                justifyContent: "center",
+                alignItems: "center",
+                width: "60%",
+
+                bottom: 2,
+              }}
+              onPress={() => {
+                navigation.navigate("Fifth", {
+                  eventTitle: eventTitle,
+                  Name: Name,
+                  date: date,
+
+                  mode: mode.trim(),
+                  skill: skill.trim(),
+                  participate: participate.trim(),
+                  fees: fees,
+
+                  hour: hour,
+                  participateCount: participateCount,
+                  comment: Comment,
+                })
+              }}
+            >
+              <Text style={{ color: "black", fontFamily: "OpanSans" }}>
+                Next
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -348,6 +353,7 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     //
     width: "100%",
+    height: height,
   },
   headerContainer: {
     alignItems: "center",

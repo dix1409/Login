@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Image,
+  ScrollView,
 } from "react-native"
 import styles from "./style"
 import { signInWithEmailAndPassword } from "firebase/auth"
@@ -101,26 +102,27 @@ const LoginScreen = ({ navigation }) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-        <View style={{ justifyContent: "center" }}>
+        <View style={{ justifyContent: "center", marginBottom: 30 }}>
           <View
             style={{
               alignContent: "center",
               justifyContent: "center",
-              width: "100%",
+              width: 150,
+              height: 150,
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             <Image
-              source={require("../Photo/a4d795ec247392c955030ff865d1912b.png")}
+              source={require("../Photo/logo2.png")}
               style={{
-                width: 200,
-                height: 200,
-                marginLeft: "auto",
-                marginRight: "auto",
+                width: "100%",
+                height: "100%",
               }}
             />
           </View>
           <View style={styles.header}>
-            <Text style={styles.text_header}>Welcome!</Text>
+            <Text style={styles.text_header}>Welcome to Sportana</Text>
           </View>
 
           <View style={styles.errorMessage}>

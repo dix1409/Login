@@ -10,12 +10,15 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Dimensions,
+  Button,
 } from "react-native"
-import { Picker } from "@react-native-picker/picker"
+import DateTimePickerModal from "react-native-modal-datetime-picker"
 import DatePicker from "@react-native-community/datetimepicker"
 import { useKeyboard } from "@react-native-community/hooks"
 import { useFonts } from "expo-font"
 import { SafeAreaView } from "react-native-safe-area-context"
+const { height } = Dimensions.get("window")
 
 export default function SecondEvent({ navigation, route }) {
   const [error, seterror] = useState("")
@@ -65,27 +68,26 @@ export default function SecondEvent({ navigation, route }) {
   const shown = () => {
     setshow(!show)
   }
-  // const shownTime = () => {
-  //   settimeshow(!timeshow)
-  // }
-  // const onChangeTime = (event, selectedTime) => {
-  //   if (selectedTime) {
-  //     sethour(
-  //       selectedTime.getHours() < 10
-  //         ? `0${selectedTime.getHours()}`
-  //         : selectedTime.getHours()
-  //     )
-  //     setminute(
-  //       selectedTime.getMinutes() < 10
-  //         ? `0${selectedTime.getMinutes()}`
-  //         : selectedTime.getMinutes()
-  //     )
-  //     if (hour && minute) {
-  //       console.log(hour)
-  //       settimeshow(false)
-  //     }
-  //   }
-  // }
+  const shownTime = () => {
+    settimeshow(!timeshow)
+  }
+  const onChangeTime = (selectedTime) => {
+    console.log(selectedTime.getHours())
+
+    sethour(
+      selectedTime.getHours() < 10
+        ? `0${selectedTime.getHours()}`
+        : selectedTime.getHours()
+    )
+    setminute(
+      selectedTime.getMinutes() < 10
+        ? `0${selectedTime.getMinutes()}`
+        : selectedTime.getMinutes()
+    )
+
+    console.log("yesss.")
+    settimeshow(false)
+  }
   const onChange = (event, selectedDate) => {
     if (selectedDate) {
       const currentDate = selectedDate
@@ -96,6 +98,7 @@ export default function SecondEvent({ navigation, route }) {
       setshow(false)
     }
   }
+
   return (
     <SafeAreaView
       style={[
@@ -177,16 +180,24 @@ export default function SecondEvent({ navigation, route }) {
               </View>
               <View style={{ marginTop: 32 }}>
                 <Text style={styles.inputTitle}>Event Time</Text>
-                {/* {timeshow && (
-                  <DatePicker
-                    style={styles.input}
+
+                {/* <DatePicker
+                  //   style={styles.input}
+                  //   mode="time"
+                  //   is24Hour={true}
+                  //   onTouchCancel={shownTime}
+                  //   onChange={onChangeTime}
+                  //   value={new Date()}
+                  // /> */}
+                {timeshow && (
+                  <DateTimePickerModal
                     mode="time"
-                    is24Hour={true}
-                    onTouchCancel={shownTime}
-                    onChange={onChangeTime}
-                    value={new Date()}
+                    isVisible={timeshow}
+                    onConfirm={onChangeTime}
+                    onCancel={() => shownTime()}
                   />
                 )}
+
                 {!timeshow && (
                   <TouchableOpacity onPress={shownTime}>
                     <View style={styles.input}>
@@ -198,49 +209,49 @@ export default function SecondEvent({ navigation, route }) {
                         <Text style={{ marginTop: 15 }}> set time</Text>
                       )}
                       {/* <Text>{JSON.stringify(Date)}</Text> */}
-                {/* </View>
+                    </View>
                   </TouchableOpacity>
-                )}  */}
-                <TextInput
+                )}
+                {/* <TextInput
                   style={styles.input}
                   placeholder="Type an Event Time"
                   onChangeText={(time) => sethour(time)}
-                />
+                /> */}
+              </View>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+
+                  // marginBottom: 10,
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#D0FF6C",
+                    borderRadius: 26,
+                    height: 52,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "60%",
+                    marginTop: 35,
+                  }}
+                  onPress={() => {
+                    navigation.navigate("Third", {
+                      eventTitle: eventTitle.trim(),
+                      Name: Name.trim(),
+                      date: Dates.trim(),
+
+                      hour: `${hour}:${minute}`,
+                    })
+                  }}
+                >
+                  <Text style={{ color: "black", fontFamily: "OpanSans" }}>
+                    Next
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              flex: 1,
-              // marginBottom: 10,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#D0FF6C",
-                borderRadius: 26,
-                height: 52,
-                justifyContent: "center",
-                alignItems: "center",
-                width: "60%",
-                marginTop: 35,
-              }}
-              onPress={() => {
-                navigation.navigate("Third", {
-                  eventTitle: eventTitle.trim(),
-                  Name: Name.trim(),
-                  date: Dates.trim(),
-
-                  hour: hour,
-                })
-              }}
-            >
-              <Text style={{ color: "black", fontFamily: "OpanSans" }}>
-                Next
-              </Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -255,6 +266,7 @@ const styles = StyleSheet.create({
     //
     width: "100%",
     marginTop: 10,
+    height: height,
   },
   headerContainer: {
     justifyContent: "flex-start",

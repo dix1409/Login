@@ -1,6 +1,7 @@
 import "react-native-gesture-handler"
 
 import React, { useState, useEffect } from "react"
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { onAuthStateChanged } from "firebase/auth"
@@ -32,8 +33,10 @@ const App = () => {
         // value previously stored
         console.log("yesssss")
         setFirst(false)
+        console.log(First)
       } else {
         setFirst(true)
+        console.log(First)
       }
     } catch (e) {
       // error reading value
@@ -52,7 +55,7 @@ const App = () => {
         : RootNavigation.navigate("OnBordingScreen")
     })
     return unsub
-  }, [])
+  }, [First])
 
   return (
     <NavigationContainer ref={navigationRef}>

@@ -272,14 +272,9 @@ const Mapstyle = [
     ],
   },
 ]
-const userref = collection(db, "user")
+
 import { uid } from "uid"
 export default function joinEvent({ navigation, route }) {
-  const [email, setemail] = useState("")
-  useEffect(() => {
-    const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"
-    setemail(emails)
-  })
   const [userdata, setuserdata] = useState([])
   const [visible, setvisible] = useState(false)
   const [join, setjoin] = useState(false)
@@ -293,40 +288,43 @@ export default function joinEvent({ navigation, route }) {
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
+  const email = auth.currentUser.email
+  useEffect(() => {
+    console.log("yes")
+    const ref = doc(db, "user", email)
+    console.log("tes 1")
 
-  useEffect(async () => {
-    if (email) {
-      const ref = query(userref, where("userEmail", "==", email))
+    onSnapshot(ref, (querySnapshot) => {
+      let user = []
 
-      onSnapshot(ref, (querySnapshot) => {
-        let user = []
+      user.push(querySnapshot.data())
+      console.log(user)
+      setuserdata([...user])
+    })
+    const profileref = collection(db, `user/${email}/profile`)
+
+    onSnapshot(profileref, (querySnapshot) => {
+      console.log("yup..")
+      if (querySnapshot.empty) {
+        setvalid(false)
+        console.log("nope")
+      } else {
+        let Profiledata = []
         querySnapshot.forEach((doc) => {
-          user.push(doc.data())
+          // doc.data() is never undefined for query doc snapshots
+          setvalid(true)
+          console.log("no...")
+          console.log(doc.data())
+          Profiledata.push({ ...doc.data(), id: doc.id })
         })
-        setuserdata([...user])
-      })
-      const profileref = collection(db, `user/${email}/profile`)
-
-      onSnapshot(profileref, (querySnapshot) => {
-        if (querySnapshot.empty) {
-          setvalid(false)
-        } else {
-          let Profiledata = []
-          querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            setvalid(true)
-            Profiledata.push({ ...doc.data(), id: doc.id })
-            console.log(doc.data())
+        if (Profiledata.length > 0) {
+          Profiledata.map((item) => {
+            setProfile(item)
           })
-          if (Profiledata.length > 0) {
-            Profiledata.map((item) => {
-              setProfile(item)
-            })
-          }
         }
-      })
-    }
-  }, [email])
+      }
+    })
+  }, [])
   // console.log(userdata)
 
   let userinfo = []
@@ -337,6 +335,7 @@ export default function joinEvent({ navigation, route }) {
   // console.log(userinfo)
   console.log(Profile)
   const joinEvents = () => {
+    console.log("yup")
     const participateref = doc(db, "event", event.id, "participate", email)
 
     setDoc(participateref, {
@@ -450,7 +449,7 @@ export default function joinEvent({ navigation, route }) {
             {showScreen && (
               <TouchableOpacity
                 onPress={() => {
-                  navigation.goBack()
+                  navigation.navigate("first")
                 }}
               >
                 <AntDesign name="arrowleft" size={24} color="#1b2534" />

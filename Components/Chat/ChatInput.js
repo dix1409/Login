@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 
-import { StyleSheet, View, Text } from "react-native"
+import { StyleSheet, View, Text, Image, Dimensions } from "react-native"
 
 import { useFonts } from "expo-font"
 import { auth } from "../Event/Firestore"
-
+const { height, width } = Dimensions.get("window")
 export default function ChatInput({ item }) {
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Regular.ttf"),
@@ -15,7 +15,9 @@ export default function ChatInput({ item }) {
     setemail(emails)
   })
   //console.log(item)
+
   const isMymsg = item.user === email ? true : false
+
   return (
     <View style={styles.container}>
       <View
@@ -23,8 +25,8 @@ export default function ChatInput({ item }) {
           styles.msgContainer,
           {
             backgroundColor: !isMymsg ? "black" : "#D0FF6C",
-            marginLeft: isMymsg ? "40%" : 0,
-            marginRight: !isMymsg ? "40%" : 0,
+            marginLeft: isMymsg ? "auto" : 0,
+            marginRight: !isMymsg ? "auto" : 0,
           },
         ]}
       >
@@ -47,6 +49,7 @@ export default function ChatInput({ item }) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    flexDirection: "row",
   },
   msgContainer: {
     borderRadius: 20,
@@ -63,6 +66,8 @@ const styles = StyleSheet.create({
     fontWeight: "100",
     fontSize: 17,
     fontFamily: "OpanSans",
+    flex: 1,
+    width: width * 0.4,
   },
   time: {
     alignSelf: "flex-end",

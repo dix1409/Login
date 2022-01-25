@@ -286,7 +286,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                       <TouchableOpacity onPress={takePhotoFromCamera}>
                         <LinearGradient
                           style={styles.panelButton}
-                          colors={["#A9CBFF", "#5398F3"]}
+                          colors={["#D0FF6C", "#D0FF6C"]}
                         >
                           <Text style={styles.panelButtonTitle}>
                             Take Photo
@@ -296,7 +296,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                       <TouchableOpacity onPress={choosePhotoFromLibrary}>
                         <LinearGradient
                           style={styles.panelButton}
-                          colors={["#A9CBFF", "#5398F3"]}
+                          colors={["#D0FF6C", "#D0FF6C"]}
                         >
                           <Text style={styles.panelButtonTitle}>
                             Choose From Library
@@ -310,7 +310,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                         }}
                       >
                         <LinearGradient
-                          colors={["#A9CBFF", "#5398F3"]}
+                          colors={["#D0FF6C", "#D0FF6C"]}
                           style={styles.panelButton}
                         >
                           <Text style={styles.panelButtonTitle}>Cancel</Text>

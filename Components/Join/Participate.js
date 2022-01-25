@@ -83,7 +83,7 @@ export default function Participate({ navigation, route }) {
                 }}
               />
             </View>
-            <Text style={styles.name}>{item.username}</Text>
+            <Text style={styles.name}>{item.Profile.firstname}</Text>
           </View>
         )}
       />

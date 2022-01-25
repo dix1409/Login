@@ -19,7 +19,11 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Feather from "react-native-vector-icons/Feather"
 
-import { AntDesign } from "@expo/vector-icons"
+import {
+  AntDesign,
+  EvilIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { auth, db, store } from "../Components/Event/Firestore"
 import { doc, setDoc } from "firebase/firestore"
@@ -41,7 +45,8 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [visible, setVisible] = useState(false)
   const [error, setError] = useState("")
   const [load, setload] = useState(false)
-
+  const [age, setage] = useState("")
+  const [gender, setgender] = useState("")
   const toggleBottomNavigationView = () => {
     //Toggling the visibility state of the bottom sheet
     setVisible(!visible)
@@ -138,6 +143,8 @@ const EditProfileScreen = ({ navigation, route }) => {
       country: country,
       city: city,
       image: url,
+      age: age,
+      gender: gender,
     }).catch((err) => {
       console.log(err)
     })
@@ -167,6 +174,7 @@ const EditProfileScreen = ({ navigation, route }) => {
       console.log(e)
     }
   }
+
   return (
     <SafeAreaView style={styles.container}>
       {!load && (
@@ -282,7 +290,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                       <TouchableOpacity onPress={takePhotoFromCamera}>
                         <LinearGradient
                           style={styles.panelButton}
-                          colors={["#A9CBFF", "#5398F3"]}
+                          colors={["#D0FF6C", "#D0FF6C"]}
                         >
                           <Text style={styles.panelButtonTitle}>
                             Take Photo
@@ -292,7 +300,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                       <TouchableOpacity onPress={choosePhotoFromLibrary}>
                         <LinearGradient
                           style={styles.panelButton}
-                          colors={["#A9CBFF", "#5398F3"]}
+                          colors={["#D0FF6C", "#D0FF6C"]}
                         >
                           <Text style={styles.panelButtonTitle}>
                             Choose From Library
@@ -306,7 +314,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                         }}
                       >
                         <LinearGradient
-                          colors={["#A9CBFF", "#5398F3"]}
+                          colors={["#D0FF6C", "#D0FF6C"]}
                           style={styles.panelButton}
                         >
                           <Text style={styles.panelButtonTitle}>Cancel</Text>
@@ -361,7 +369,41 @@ const EditProfileScreen = ({ navigation, route }) => {
                     onChangeText={(text) => setphone(text)}
                   />
                 </View>
-
+                <View style={styles.action}>
+                  <EvilIcons name="user" color={colors.text} size={28} />
+                  <TextInput
+                    placeholder="age"
+                    placeholderTextColor="#666666"
+                    keyboardType="number-pad"
+                    autoCorrect={false}
+                    style={[
+                      styles.textInput,
+                      {
+                        color: colors.text,
+                      },
+                    ]}
+                    onChangeText={(text) => setage(text)}
+                  />
+                </View>
+                <View style={styles.action}>
+                  <MaterialCommunityIcons
+                    name="gender-male-female"
+                    size={24}
+                    color="black"
+                  />
+                  <TextInput
+                    placeholder="Gender"
+                    placeholderTextColor="#666666"
+                    autoCorrect={false}
+                    style={[
+                      styles.textInput,
+                      {
+                        color: colors.text,
+                      },
+                    ]}
+                    onChangeText={(text) => setgender(text)}
+                  />
+                </View>
                 <View style={styles.action}>
                   <FontAwesome name="globe" color={colors.text} size={20} />
                   <TextInput
@@ -412,7 +454,9 @@ const EditProfileScreen = ({ navigation, route }) => {
                     navigation.navigate("Home")
                   }}
                 >
-                  <Text style={styles.panelButtonTitle}>skip</Text>
+                  <Text style={[styles.panelButtonTitle, { color: "white" }]}>
+                    skip
+                  </Text>
                 </TouchableOpacity>
               </View>
             </KeyboardAvoidingView>
@@ -493,7 +537,7 @@ const styles = StyleSheet.create({
   panelButtonTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   action: {
     flexDirection: "row",

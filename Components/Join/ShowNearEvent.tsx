@@ -46,9 +46,14 @@ export default function ShowNearEvent({ navigation, route }) {
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
+  const time = new Date().getTime()
   useEffect(() => {
-    // const ref = query(EventRef, orderBy("date", "desc"))
-    onSnapshot(EventRef, (querySnapshot) => {
+    const ref = query(
+      EventRef,
+      where("expiredAt", ">=", JSON.stringify(time)),
+      orderBy("expiredAt", "desc")
+    )
+    onSnapshot(ref, (querySnapshot) => {
       let events = []
       querySnapshot.forEach((doc) => {
         events.push({ ...doc.data(), id: doc.id })
@@ -56,88 +61,6 @@ export default function ShowNearEvent({ navigation, route }) {
       setevent([...events])
     })
   }, [])
-  // useEffect(() => {
-  //   if (latitude === 0) {
-  //     askPermission()
-  //   }
-  // }, [])
-  // useEffect(() => {
-  //   if (latitude !== 0) {
-  //     //console.log("")
-  //     GetDATA()
-  //   }
-  // }, [latitude, longitude])
-  // // console.log()
-  // const askPermission = async () => {
-  //   let { status } = await Location.requestForegroundPermissionsAsync()
-  //   if (status === "granted") {
-  //     let { coords } = await Location.getCurrentPositionAsync()
-  //     console.log(coords)
-  //     if (coords) {
-  //       let { latitude, longitude } = coords
-  //       setlatitude(latitude)
-  //       setlongitude(longitude)
-  //       console.log(latitude, longitude)
-  //     }
-  //   }
-  // }
-  // function GetDATA() {
-  //   let lat = latitude
-  //   let lng = longitude
-  //   const center = [lat, lng]
-  //   const radiusInM = 20000
-  //   const bounds = geofire.geohashQueryBounds(center, radiusInM)
-  //   const promises = []
-  //   const eventref = collection(db, "data")
-
-  //   for (const b of bounds) {
-  //     const q = query(eventref, orderBy("geoHash"), startAt(b[0]), endAt(b[1]))
-
-  //     promises.push(getDocs(q))
-  //   }
-  //   // Collect all the query results together into a single list
-  //   Promise.all(promises)
-  //     .then((snapshots) => {
-  //       const matchingDocs = []
-  //       // console.log(snapshots)
-  //       for (const snap of snapshots) {
-  //         for (const doc of snap.docs) {
-  //           const lat = doc.get("latitude")
-  //           const lng = doc.get("longitude")
-  //           let lat1 = parseFloat(lat)
-  //           let lng1 = parseFloat(lng)
-  //           // We have to filter out a few false positives due to GeoHash
-  //           // accuracy, but most will match
-  //           const distanceInKm = geofire.distanceBetween([lat1, lng1], center)
-  //           const distanceInM = distanceInKm * 1000
-  //           if (distanceInM <= radiusInM) {
-  //             matchingDocs.push({
-  //               ...doc.data(),
-  //               distance: distanceInKm,
-  //               id: doc.id,
-  //             })
-  //           }
-  //         }
-  //       }
-  //       // sort matchingDocs by distance
-  //       matchingDocs.sort((a, b) => {
-  //         return a.distance - b.distance
-  //       })
-
-  //       return matchingDocs
-  //     })
-  //     .then((matchingDocs) => {
-  //       const stores = matchingDocs
-
-  //       const FilterStores = stores
-
-  //       setevent(FilterStores)
-  //       console.log(FilterStores)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }
 
   useEffect(() => {
     if (event.length == 0) {

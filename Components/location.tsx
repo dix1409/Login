@@ -21,7 +21,7 @@ import MapView, {
 } from "react-native-maps"
 import { SafeAreaView } from "react-native-safe-area-context"
 import * as geofire from "geofire-common"
-
+import { BottomSheet } from "react-native-btr"
 import {
   orderBy,
   collection,
@@ -32,16 +32,17 @@ import {
   onSnapshot,
 } from "firebase/firestore"
 import { db, auth } from "./Event/Firestore"
-import { AntDesign } from "@expo/vector-icons"
+import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons"
 export default function location({ navigation }) {
   const [loading, setloading] = useState(true)
   const [region, setregion] = useState([])
   const [latitude, setlatitude] = useState<number>(0)
   const [longitude, setlongitude] = useState<number>(0)
-
+  const [visible, setVisible] = useState(false)
   const [event, setevent] = useState([])
   const [emails, setemails] = useState("")
-
+  const [eventshow, seteventshow] = useState({})
+  const [promise, setpromise] = useState([])
   useEffect(() => {
     if (latitude === 0 && longitude === 0) askPermission()
   }, [])
@@ -50,11 +51,16 @@ export default function location({ navigation }) {
 
     GetDATA()
   }, [latitude, longitude])
+  const toggleBottomNavigationView = () => {
+    //Toggling the visibility state of the bottom sheet
+    setVisible(!visible)
+  }
   // console.log()
   const askPermission = async () => {
     setloading(true)
     let { status } = await Location.requestForegroundPermissionsAsync()
     if (status === "granted") {
+      console.log(status)
       let { coords } = await Location.getCurrentPositionAsync()
       console.log(coords)
       if (coords) {
@@ -81,6 +87,15 @@ export default function location({ navigation }) {
       const q = query(eventref, orderBy("geoHash"), startAt(b[0]), endAt(b[1]))
 
       promises.push(getDocs(q))
+      // let promise = []
+      // onSnapshot(q, (querySnapshot) => {
+      //   querySnapshot.forEach((doc) => {
+      //     console.log(doc.data())
+      //     promises.push({ ...doc.data(), id: doc.id })
+      //   })
+      //   setpromise([...promises])
+      //   console.log(promise)
+      // })
     }
     // Collect all the query results together into a single list
     Promise.all(promises)
@@ -127,6 +142,7 @@ export default function location({ navigation }) {
   }
 
   if (!longitude || !latitude) {
+    console.log(longitude)
     return (
       <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
         <ActivityIndicator color="red" size="large" />
@@ -175,12 +191,10 @@ export default function location({ navigation }) {
                 >
                   <Callout
                     tooltip
-                    onPress={() =>
-                      navigation.navigate("Explore", {
-                        screen: "second",
-                        params: { item: event },
-                      })
-                    }
+                    onPress={() => {
+                      toggleBottomNavigationView()
+                      seteventshow(event)
+                    }}
                   >
                     <View style={{ alignItems: "center" }}>
                       <View
@@ -238,6 +252,87 @@ export default function location({ navigation }) {
             })}
         </MapView>
       )}
+      <BottomSheet
+        visible={visible}
+        //setting the visibility state of the bottom shee
+        onBackButtonPress={toggleBottomNavigationView}
+        //Toggling the visibility state on the click of the back botton
+        onBackdropPress={toggleBottomNavigationView}
+      >
+        <View
+          style={{
+            backgroundColor: "#fff",
+            width: "100%",
+            height: 300,
+            borderTopStartRadius: 30,
+            borderTopEndRadius: 30,
+          }}
+        >
+          <View
+            style={{
+              alignItems: "center",
+              marginTop: 10,
+              height: 40,
+              borderBottomWidth: 1,
+              borderBottomColor: "#777",
+              marginHorizontal: 20,
+            }}
+          >
+            <Text style={{ fontSize: 24 }}>{eventshow.eventTitle}</Text>
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <Text
+              style={{
+                fontSize: 20,
+                color: "#080d17",
+                fontFamily: "OpanSans",
+                marginVertical: 15,
+              }}
+            >
+              Event Name: {eventshow.name}
+            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <AntDesign name="clockcircle" size={18} color="#1b2534" />
+              <Text style={{ marginHorizontal: 10 }}>{eventshow.hour}</Text>
+              <FontAwesome name="calendar-times-o" size={18} color="#1b2534" />
+              <Text style={{ marginLeft: 10 }}>{eventshow.date}</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginVertical: 20 }}>
+              <Ionicons name="location-sharp" size={24} color="#1b2534" />
+              <Text style={{ maxWidth: "90%", marginLeft: 7 }}>
+                {eventshow.location}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              height: 50,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                marginTop: 20,
+                width: "70%",
+                backgroundColor: "#5CFE89",
+                height: "100%",
+                justifyContent: "center",
+                borderRadius: 10,
+              }}
+              onPress={() =>
+                navigation.navigate("Explore", {
+                  screen: "second",
+                  params: { item: eventshow },
+                })
+              }
+            >
+              <Text>Go To Details</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </BottomSheet>
     </SafeAreaView>
   )
 }

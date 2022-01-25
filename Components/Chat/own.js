@@ -29,7 +29,7 @@ export default function Chatting({ navigation }) {
       const userchatref = collection(db, `user/${email}/Ownevent`)
 
       onSnapshot(userchatref, (querySnapshot) => {
-        if (querySnapshot.exists) {
+        if (querySnapshot.empty) {
           setshow(false)
         } else {
           let eventTitle = []

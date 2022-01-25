@@ -117,7 +117,7 @@ const EditProfileScreen = ({ navigation, route }) => {
     // Get the download URL
     getDownloadURL(starsRef)
       .then((url) => {
-        // Insert url into an <img> tag to "download"
+        //Insert url into an <img> tag to "download"
         seturl(url)
         console.log(url)
       })
@@ -346,6 +346,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                   value={phone}
                 />
               </View>
+
               <View style={styles.action}>
                 <EvilIcons name="user" color={colors.text} size={28} />
                 <TextInput
@@ -359,8 +360,8 @@ const EditProfileScreen = ({ navigation, route }) => {
                       color: colors.text,
                     },
                   ]}
-                  onChangeText={(text) => setage(Number(text))}
-                  value={age.toString()}
+                  onChangeText={(text) => setage(text)}
+                  value={age}
                 />
               </View>
               <View style={styles.action}>
@@ -379,10 +380,11 @@ const EditProfileScreen = ({ navigation, route }) => {
                       color: colors.text,
                     },
                   ]}
-                  // onChangeText={(text) => setgender(text)}
+                  onChangeText={(text) => setgender(text)}
                   value={gender}
                 />
               </View>
+
               <View style={styles.action}>
                 <FontAwesome name="globe" color={colors.text} size={20} />
                 <TextInput

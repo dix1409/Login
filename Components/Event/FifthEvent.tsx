@@ -121,6 +121,7 @@ export default function FifthEvent({ route, navigation }) {
           //image: image.image,
           owner: image,
           hour: hour,
+          expiredAt: new Date(date).getTime().toString(),
         })
 
         // own event
@@ -144,6 +145,7 @@ export default function FifthEvent({ route, navigation }) {
           geoHash: CalculateGeoHash(latitude, longitude),
           //image: image.image,
           hour: hour,
+          expiredAt: new Date(date).getTime().toString(),
         }).then(() => {
           setvisible(true)
         })

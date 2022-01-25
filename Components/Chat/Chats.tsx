@@ -74,7 +74,7 @@ export default function Chats({ navigation, route }) {
       let userdata = Object.assign({}, ...user)
       if (userdata.firstname) {
         console.log("name: ", userdata.firstname)
-        // setusername(userdata.firstname)
+        setusername(userdata.firstname)
       }
     })
     const ChatRef = collection(db, `event/${event_id}/messsage`)
@@ -96,7 +96,7 @@ export default function Chats({ navigation, route }) {
     } else {
       setdisable(false)
     }
-  }, [keyboard.keyboardShown])
+  }, [msg])
 
   const msgDel = collection(db, "event", event_id, "messsage")
 

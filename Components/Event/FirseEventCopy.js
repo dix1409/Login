@@ -29,7 +29,10 @@ export default function FirseEventCopy({ navigation }) {
         <View style={{ marginTop: 20 }}>
           <ImageBackground
             style={{ width: "100%", height: 200 }}
-            source={require("../../Photo/second.jpg")}
+            source={{
+              uri:
+                "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fsecond-min.jpg?alt=media&token=5770d852-efae-46f0-b95b-aed94976bdd8",
+            }}
             resizeMode="cover"
           >
             <View style={{ flexDirection: "row", marginHorizontal: 15 }}>

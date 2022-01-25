@@ -36,65 +36,51 @@ const { height } = Dimensions.get("screen")
 export default function ShowEvent({ navigation, route }) {
   const [event, setevent] = useState([])
   const [show, setshow] = useState(true)
-  const [load, setload] = useState(true)
-  const title = route.params.title
+  const email = route.params.email
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
-  const email = route.params.email
   const time = new Date().getTime()
+
   useEffect(() => {
-    console.log(title)
     console.log(email)
-    const ref = query(
-      EventRef,
-      where("eventTitle", "==", title),
-
-      limit(15),
-      where("expiredAt", ">=", JSON.stringify(time)),
-      orderBy("expiredAt", "desc")
-    )
-
-    onSnapshot(ref, (querySnapshot) => {
-      let events = []
-      querySnapshot.forEach((doc) => {
-        events.push({ ...doc.data(), id: doc.id })
+    if (email) {
+      console.log(email)
+      const userchatref = collection(db, `user/${email}/Ownevent`)
+      const ownref = query(
+        userchatref,
+        where("expiredAt", ">", JSON.stringify(time)),
+        orderBy("expiredAt", "desc")
+      )
+      onSnapshot(ownref, (querySnapshot) => {
+        if (querySnapshot.empty) {
+          setshow(false)
+        } else {
+          let eventTitle = []
+          querySnapshot.forEach((doc) => {
+            console.log(doc.data())
+            eventTitle.push({ ...doc.data(), id: doc.id })
+          })
+          setevent([...eventTitle])
+          setshow(true)
+        }
       })
-      setevent([...events])
-    })
-
-    console.log(event)
+    }
   }, [])
 
-  useEffect(() => {
-    if (event.length == 0) {
-      setshow(false)
-    } else {
-      setshow(true)
-    }
-  }, [event])
+  //   useEffect(() => {
+  //     if (event.length == 0) {
+  //       setshow(false)
+  //     } else {
+  //       setshow(true)
+  //     }
+  //   }, [event])
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={{ height: "100%", width: "100%" }}>
         {show &&
           event.map((data) => (
             <View style={styles.box} key={data.id}>
-              {/* <View
-                style={{
-                  height: "100%",
-                  marginRight: 20,
-                  justifyContent: "center",
-                }}
-              >
-                <Image
-                  style={styles.image}
-                  source={{
-                    uri: data.owner.image
-                      ? data.owner.image
-                      : "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fuser.png?alt=media&token=ff0f0135-7005-41c4-b448-02a08d428789",
-                  }}
-                />
-              </View> */}
               <View
                 style={{
                   justifyContent: "center",
@@ -120,21 +106,6 @@ export default function ShowEvent({ navigation, route }) {
                   </Text>
                   <Text>{data.time}</Text>
                 </View>
-                {/* <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <MaterialIcons
-                  name="monetization-on"
-                  size={15}
-                  color="black"
-                  style={{ marginRight: 10 }}
-                />
-                <Text style={{ fontFamily: "OpanSans" }}>{data.prize} Rs.</Text>
-              </View> */}
               </View>
               <View
                 style={{
@@ -145,7 +116,7 @@ export default function ShowEvent({ navigation, route }) {
               >
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate("second", { item: data, email: email })
+                    navigation.navigate("delete", { event: data, email: email })
                   }
                 >
                   <View

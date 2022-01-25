@@ -14,6 +14,7 @@ import {
   ScrollView,
   SafeAreaView,
   ActivityIndicator,
+  Dimensions,
 } from "react-native"
 
 import { LinearGradient } from "expo-linear-gradient"
@@ -28,7 +29,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { doc, setDoc } from "firebase/firestore"
 import { db, auth } from "../Components/Event/Firestore"
-
+const { height, width } = Dimensions.get("window")
 const RegisterScreen = ({ navigation }) => {
   const [secureTextEntry, setsecurePassword] = useState(true)
   //const [confirm, setconfirm] = useState(true)
@@ -43,7 +44,7 @@ const RegisterScreen = ({ navigation }) => {
 
   const handleSignUp = () => {
     setIsLoading(true)
-    if (password.trim().length < 6) {
+    if (password.trim().length < 6 || email === "") {
       setIsLoading(false)
       setError("Please enter password more then 6 characters")
       // navigation.navigate("Register")
@@ -61,7 +62,9 @@ const RegisterScreen = ({ navigation }) => {
           })
 
           setIsLoading(false),
-            navigation.navigate("Profile"),
+            navigation.navigate("Profile", {
+              email: email,
+            }),
             setDoc(doc(db, "user", email), {
               userEmail: email,
               userPassword: password,
@@ -89,14 +92,38 @@ const RegisterScreen = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#FF6347" barStyle="light-content" />
       <ScrollView showsVerticalScrollIndicator={false} ref={scrollRef}>
-        <View style={styles.header}>
-          <Text style={styles.text_header}>Register Now!</Text>
-        </View>
-        <View style={styles.footer}>
-          <View style={styles.errorMessage}>
-            {!!error && <Text style={styles.error}>{error}</Text>}
+        <View
+          style={{
+            justifyContent: "center",
+            marginBottom: 30,
+          }}
+        >
+          <View
+            style={{
+              alignContent: "center",
+              justifyContent: "center",
+              width: 150,
+              height: 150,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <Image
+              source={require("../Photo/logo2.png")}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
           </View>
-          {/* <Text style={styles.text_footer}>Username</Text>
+          <View style={styles.header}>
+            <Text style={styles.text_header}>Welcome to Sportana</Text>
+          </View>
+          <View style={styles.footer}>
+            <View style={styles.errorMessage}>
+              {!!error && <Text style={styles.error}>{error}</Text>}
+            </View>
+            {/* <Text style={styles.text_footer}>Username</Text>
           <View style={styles.action}>
             <FontAwesome name="user-o" color="#05375a" size={20} />
             <TextInput
@@ -111,91 +138,92 @@ const RegisterScreen = ({ navigation }) => {
               </Animatable.View>
             ) : null}
           </View> */}
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                marginTop: 35,
-              },
-            ]}
-          >
-            Email Address
-          </Text>
-          <View style={styles.action}>
-            <Feather name="lock" color="#05375a" size={20} />
-            <TextInput
-              placeholder="Your Email Address"
-              style={styles.textInput}
-              autoCapitalize="none"
-              onChangeText={(val) => setEmail(val)}
-            />
-          </View>
-
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                marginTop: 35,
-              },
-            ]}
-          >
-            Password
-          </Text>
-          <View style={styles.action}>
-            <Feather name="lock" color="#05375a" size={20} />
-            <TextInput
-              placeholder="Your Password"
-              secureTextEntry={secureTextEntry}
-              style={styles.textInput}
-              autoCapitalize="none"
-              onChangeText={(val) => setPassword(val)}
-            />
-            <TouchableOpacity onPress={updateSecureTextEntry}>
-              {secureTextEntry ? (
-                <Feather name="eye-off" color="grey" size={20} />
-              ) : (
-                <Feather name="eye" color="grey" size={20} />
-              )}
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.textPrivate}>
-            <Text style={styles.color_textPrivate}>
-              By signing up you agree to our
-            </Text>
-            <Text style={[styles.color_textPrivate, { fontWeight: "bold" }]}>
-              {" "}
-              Terms of service
-            </Text>
-            <Text style={styles.color_textPrivate}> and</Text>
-            <Text style={[styles.color_textPrivate, { fontWeight: "bold" }]}>
-              {" "}
-              Privacy policy
-            </Text>
-          </View>
-          <View style={styles.button}>
-            <TouchableOpacity style={styles.signIn} onPress={handleSignUp}>
-              <Text
-                style={[
-                  styles.textSign,
-                  {
-                    color: "#fff",
-                  },
-                ]}
-              >
-                Register
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={{ marginTop: 10 }}
+            <Text
+              style={[
+                styles.text_footer,
+                {
+                  marginTop: 35,
+                },
+              ]}
             >
-              <Text style={{ color: "black" }}>
-                Already have an account?
-                <Text style={{ color: "#2F80ED" }}>Log In</Text>
+              Email Address
+            </Text>
+            <View style={styles.action}>
+              <Feather name="lock" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Your Email Address"
+                style={styles.textInput}
+                autoCapitalize="none"
+                onChangeText={(val) => setEmail(val)}
+              />
+            </View>
+
+            <Text
+              style={[
+                styles.text_footer,
+                {
+                  marginTop: 35,
+                },
+              ]}
+            >
+              Password
+            </Text>
+            <View style={styles.action}>
+              <Feather name="lock" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Your Password"
+                secureTextEntry={secureTextEntry}
+                style={styles.textInput}
+                autoCapitalize="none"
+                onChangeText={(val) => setPassword(val)}
+              />
+              <TouchableOpacity onPress={updateSecureTextEntry}>
+                {secureTextEntry ? (
+                  <Feather name="eye-off" color="grey" size={20} />
+                ) : (
+                  <Feather name="eye" color="grey" size={20} />
+                )}
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.textPrivate}>
+              <Text style={styles.color_textPrivate}>
+                By signing up you agree to our
               </Text>
-            </TouchableOpacity>
+              <Text style={[styles.color_textPrivate, { fontWeight: "bold" }]}>
+                {" "}
+                Terms of service
+              </Text>
+              <Text style={styles.color_textPrivate}> and</Text>
+              <Text style={[styles.color_textPrivate, { fontWeight: "bold" }]}>
+                {" "}
+                Privacy policy
+              </Text>
+            </View>
+            <View style={styles.button}>
+              <TouchableOpacity style={styles.signIn} onPress={handleSignUp}>
+                <Text
+                  style={[
+                    styles.textSign,
+                    {
+                      color: "#fff",
+                    },
+                  ]}
+                >
+                  Register
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={{ marginTop: 10 }}
+              >
+                <Text style={{ color: "black" }}>
+                  Already have an account?
+                  <Text style={{ color: "#2F80ED" }}>Log In</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -212,9 +240,10 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     justifyContent: "flex-end",
-    paddingHorizontal: 20,
+    alignItems: "center",
+    // paddingHorizontal: 20,
     // paddingBottom: 50,
-    marginTop: 30,
+    // marginTop: 30,
   },
   footer: {
     flex: Platform.OS === "ios" ? 3 : 5,
@@ -222,7 +251,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
-    paddingVertical: 30,
+
+    marginBottom: 40,
   },
   text_header: {
     color: "#000",

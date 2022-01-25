@@ -77,7 +77,7 @@ export default function ForgatPassword({ navigation }) {
                   >
                     <Image
                       source={require("../Photo/OIP-removebg-preview.png")}
-                      style={{ width: 30, heigh: 30 }}
+                      style={{ width: 30, height: 30 }}
                     />
                   </View>
                   <View style={{ alignItems: "center" }}>

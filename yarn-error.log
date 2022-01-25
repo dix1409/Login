@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files (x86)\nodejs\node.exe C:\Users\Dell\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add geofire-comm
+  C:\Program Files (x86)\nodejs\node.exe C:\Users\Dell\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js remove react-native-fast-image
 
 PATH: 
-  C:\Program Files\Common Files\Oracle\Java\javapath;C:\python\Scripts\;C:\python\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\nodejs\;C:\Program Files\Java\jdk-16.0.1\bin;C:\Android;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\python\Scripts\;C:\python\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\nodejs\;C:\Users\Dell\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin;C:\Program Files\Azure Data Studio\bin;C:\Users\Dell\AppData\Roaming\npm;C:\Users\Dell\AppData\Roaming\npm\
+  C:\Program Files\Common Files\Oracle\Java\javapath;C:\python\Scripts\;C:\python\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\nodejs\;C:\Program Files\Java\jdk-16.0.1\bin;C:\Android;C:\Program Files\Git\cmd;%JAVA_HOME%\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\python\Scripts\;C:\python\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\nodejs\;C:\Users\Dell\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin;C:\Program Files\Azure Data Studio\bin;C:\Users\Dell\AppData\Roaming\npm;C:\Users\Dell\AppData\Roaming\npm\
 
 Yarn version: 
   1.22.10
@@ -14,17 +14,7 @@ Platform:
   win32 ia32
 
 Trace: 
-  Error: https://registry.yarnpkg.com/geofire-comm: Not found
-      at Request.params.callback [as _callback] (C:\Users\Dell\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66988:18)
-      at Request.self.callback (C:\Users\Dell\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140662:22)
-      at Request.emit (events.js:376:20)
-      at Request.<anonymous> (C:\Users\Dell\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141634:10)
-      at Request.emit (events.js:376:20)
-      at IncomingMessage.<anonymous> (C:\Users\Dell\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141556:12)
-      at Object.onceWrapper (events.js:482:28)
-      at IncomingMessage.emit (events.js:388:22)
-      at endReadableNT (internal/streams/readable.js:1336:12)
-      at processTicksAndRejections (internal/process/task_queues.js:82:21)
+  Error: ENOENT: no such file or directory, copyfile 'C:\Users\Dell\AppData\Local\Yarn\Cache\v6\npm-fs-extra-9.0.0-integrity\node_modules\fs-extra\lib\copy\copy.js' -> 'D:\Login\node_modules\@expo\config-plugins\node_modules\fs-extra\lib\copy\copy.js'
 
 npm manifest: 
   {
@@ -41,10 +31,13 @@ npm manifest:
     "dependencies": {
       "@expo/vector-icons": "^12.0.5",
       "@gorhom/bottom-sheet": "^4.1.5",
-      "@react-native-async-storage/async-storage": "^1.15.14",
+      "@react-native-async-storage/async-storage": "^1.15.15",
       "@react-native-community/datetimepicker": "4.0.0",
+      "@react-native-community/hooks": "^2.8.1",
       "@react-native-firebase/app": "^14.1.0",
       "@react-native-firebase/firestore": "^14.1.0",
+      "@react-native-masked-view/masked-view": "^0.2.6",
+      "@react-native-picker/picker": "^2.2.1",
       "@react-navigation/bottom-tabs": "^6.0.9",
       "@react-navigation/material-top-tabs": "^6.0.6",
       "@react-navigation/native": "^6.0.6",
@@ -55,12 +48,16 @@ npm manifest:
       "expo-location": "^14.0.1",
       "expo-status-bar": "~1.2.0",
       "firebase": "^9.6.2",
+      "first-input-delay": "^0.1.3",
       "geofire": "^5.2.0",
+      "geofire-common": "^5.2.0",
       "idb": "^7.0.0",
+      "lottie-react-native": "5.0.1",
       "react": "17.0.1",
       "react-dom": "17.0.1",
       "react-native": "0.64.3",
       "react-native-animatable": "^1.3.3",
+      "react-native-app-intro-slider": "^4.0.4",
       "react-native-btr": "^2.1.2",
       "react-native-datepicker": "^1.7.2",
       "react-native-dotenv": "^3.3.1",
@@ -73,14 +70,16 @@ npm manifest:
       "react-native-icons": "^0.7.1",
       "react-native-image-crop-picker": "^0.37.2",
       "react-native-keyboard-spacer": "^0.4.1",
-      "react-native-linear-gradient": "^2.5.6",
       "react-native-maps": "0.29.4",
+      "react-native-modal-datetime-picker": "^13.0.1",
       "react-native-modalbox": "1.7.1",
       "react-native-pager-view": "^5.4.9",
       "react-native-paper": "^4.11.1",
       "react-native-places-input": "^1.1.7",
       "react-native-reanimated": "^2.3.1",
+      "react-native-responsive-fontsize": "^0.5.1",
       "react-native-safe-area-context": "^3.3.2",
+      "react-native-skeleton-placeholder": "^5.0.0",
       "react-native-tab-view": "^3.1.1",
       "react-native-vector-icons": "^9.0.0",
       "react-native-web": "0.17.1",
@@ -1834,10 +1833,10 @@ Lockfile:
     resolved "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
     integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
   
-  "@react-native-async-storage/async-storage@^1.15.14":
-    version "1.15.14"
-    resolved "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-1.15.14.tgz"
-    integrity sha512-eJF2horabXazwszCyyXDe4w7sBSWlB0WPA8akKXuN2n7WXKHYeQJPN41lS9OahrhSZuZwqftNFE9VWgPXA8wyA==
+  "@react-native-async-storage/async-storage@^1.15.15":
+    version "1.15.15"
+    resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.15.15.tgz#33f930aaebc602199a3294a9b1eafff7b56df409"
+    integrity sha512-Ss2FqWP9HC5AhCyP6ydRERSwWb8QMTLknETB8cp2+tbEUhu7Q/S5+e0QIrF0D2Z/YZTUvQ2MP7uXzt9FLG9OYQ==
     dependencies:
       merge-options "^3.0.4"
   
@@ -1972,6 +1971,11 @@ Lockfile:
     dependencies:
       invariant "^2.2.4"
   
+  "@react-native-community/hooks@^2.8.1":
+    version "2.8.1"
+    resolved "https://registry.yarnpkg.com/@react-native-community/hooks/-/hooks-2.8.1.tgz#6e785431db49318048fdd14b601998437b6cc200"
+    integrity sha512-DCmCIC0Gn9m6K0Mlg2MwNmTxMEpBu5lTLsI6b/XUAv/vLGa6o+X7RhCai4FWeqkjCU36+ZOwaLzDo4NBWMXaoQ==
+  
   "@react-native-firebase/app@^14.1.0":
     version "14.1.0"
     resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-14.1.0.tgz"
@@ -1985,6 +1989,16 @@ Lockfile:
     version "14.1.0"
     resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-14.1.0.tgz"
     integrity sha512-IMtdKCuAxnuEhIoRT+hLuhc4TZa3/y4ytrn66/glOZY3OyswTUHtGqktn4gTTm3hrAP1KEG9FvBOqIdmNxQHSQ==
+  
+  "@react-native-masked-view/masked-view@^0.2.6":
+    version "0.2.6"
+    resolved "https://registry.yarnpkg.com/@react-native-masked-view/masked-view/-/masked-view-0.2.6.tgz#b26c52d5db3ad0926b13deea79c69620966a9221"
+    integrity sha512-303CxmetUmgiX9NSUxatZkNh9qTYYdiM8xkGf9I3Uj20U3eGY3M78ljeNQ4UVCJA+FNGS5nC1dtS9GjIqvB4dg==
+  
+  "@react-native-picker/picker@^2.2.1":
+    version "2.2.1"
+    resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-2.2.1.tgz#32b9f540d8e88a73d8856f73cca88251cecb9614"
+    integrity sha512-EC7yv22QLHlTfnbC1ez9IUdXTOh1W31x96Oir0PfskSGFFJMWWdLTg4VrcE2DsGLzbfjjkBk123c173vf2a5MQ==
   
   "@react-native/assets@1.0.0":
     version "1.0.0"
@@ -3034,6 +3048,11 @@ Lockfile:
     resolved "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz"
     integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
   
+  dedent@^0.6.0:
+    version "0.6.0"
+    resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.6.0.tgz#0e6da8f0ce52838ef5cec5c8f9396b0c1b64a3cb"
+    integrity sha1-Dm2o8M5Sg471zsXI+TlrDBtko8s=
+  
   deepmerge@^3.2.0:
     version "3.3.0"
     resolved "https://registry.npmjs.org/deepmerge/-/deepmerge-3.3.0.tgz"
@@ -3558,6 +3577,11 @@ Lockfile:
       "@firebase/storage-compat" "0.1.9"
       "@firebase/util" "1.4.3"
   
+  first-input-delay@^0.1.3:
+    version "0.1.3"
+    resolved "https://registry.yarnpkg.com/first-input-delay/-/first-input-delay-0.1.3.tgz#5506fb95a9537ba9706096b9c159bfd3f38f6f62"
+    integrity sha512-hZ1mI+BWYIBr8jlp2bDPnRvnmSICBxpZRwdc0nhiQn2uyMxSKZEBbkO8V0/s26AMeX8p/AD4g09+liRrhXvKKQ==
+  
   flow-parser@0.*:
     version "0.168.0"
     resolved "https://registry.npmjs.org/flow-parser/-/flow-parser-0.168.0.tgz"
@@ -3660,7 +3684,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"
     integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
   
-  geofire-common@5.2.0:
+  geofire-common@5.2.0, geofire-common@^5.2.0:
     version "5.2.0"
     resolved "https://registry.yarnpkg.com/geofire-common/-/geofire-common-5.2.0.tgz#27c78115ef547bdf97ad676d18d24b6f28a19a87"
     integrity sha512-b3RCXxzdc/ZAoNag/F8n4myWYiBPI1eeQ/gtjLvBKKeILNnYb6Qw0GL/AVfYUKk3Z19Pw+xVBSlYcjqy5OHVzg==
@@ -3908,7 +3932,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/interpret/-/interpret-1.4.0.tgz"
     integrity sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==
   
-  invariant@^2.2.4:
+  invariant@^2.2.2, invariant@^2.2.4:
     version "2.2.4"
     resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
     integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -4048,7 +4072,7 @@ Lockfile:
   
   is-plain-obj@^2.1.0:
     version "2.1.0"
-    resolved "https://registry.npmjs.org/is-plain-obj/-/is-plain-obj-2.1.0.tgz"
+    resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-2.1.0.tgz#45e42e37fccf1f40da8e5f76ee21515840c09287"
     integrity sha512-YWnfyRwxL/+SsrWYfOpUtz5b3YD+nyfkHvjbcanzk8zgyO4ASD67uVMRt8k5bM4lLMDnXfriRhOpemw+NfT1eA==
   
   is-plain-object@^2.0.3, is-plain-object@^2.0.4:
@@ -4479,6 +4503,15 @@ Lockfile:
     dependencies:
       js-tokens "^3.0.0 || ^4.0.0"
   
+  lottie-react-native@5.0.1:
+    version "5.0.1"
+    resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-5.0.1.tgz#218a9e9cf0e25b2d30360958b00b85a4068a76b8"
+    integrity sha512-V+ODPqiHOSRzEWg8VsfrJBicgc2k0ZPlCjk3J7ULUkh94smL1nrsF/n4OGukj4MLZwonpv+frVK7pPh5U7t3rQ==
+    dependencies:
+      invariant "^2.2.2"
+      prop-types "^15.5.10"
+      react-native-safe-modules "^1.0.3"
+  
   lru-cache@^6.0.0:
     version "6.0.0"
     resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-6.0.0.tgz"
@@ -4522,7 +4555,7 @@ Lockfile:
   
   merge-options@^3.0.4:
     version "3.0.4"
-    resolved "https://registry.npmjs.org/merge-options/-/merge-options-3.0.4.tgz"
+    resolved "https://registry.yarnpkg.com/merge-options/-/merge-options-3.0.4.tgz#84709c2aa2a4b24c1981f66c179fe5565cc6dbb7"
     integrity sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ==
     dependencies:
       is-plain-obj "^2.1.0"
@@ -5471,6 +5504,11 @@ Lockfile:
     dependencies:
       prop-types "^15.7.2"
   
+  react-native-app-intro-slider@^4.0.4:
+    version "4.0.4"
+    resolved "https://registry.yarnpkg.com/react-native-app-intro-slider/-/react-native-app-intro-slider-4.0.4.tgz#fa5cda7057db62c448ac975ffd2ba0cff94cc8d8"
+    integrity sha512-Zkjaol6X3BbZkHUpVDj2LjdidpS6rCgKi0fx80xgGKa0pHxBRd4swWTv2bHnnvu5k1/HXwYk0mY2TbK+2jHl5w==
+  
   react-native-btr@^2.1.2:
     version "2.1.2"
     resolved "https://registry.npmjs.org/react-native-btr/-/react-native-btr-2.1.2.tgz"
@@ -5516,6 +5554,11 @@ Lockfile:
       opencollective-postinstall "^2.0.3"
       react-native-ratings "8.0.4"
       react-native-size-matters "^0.3.1"
+  
+  react-native-fast-image@^8.5.11:
+    version "8.5.11"
+    resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.5.11.tgz#e3dc969d0e4e8df026646bf18194465aa55cbc2b"
+    integrity sha512-cNW4bIJg3nvKaheG8vGMfqCt5LMWX9MS5+wMudgKIHbGO51spRr4sgnlhVgwHLcZ5aeNOVJ8CPRxDIWKRq/0QA==
   
   react-native-firebase@^5.6.0:
     version "5.6.0"
@@ -5575,17 +5618,19 @@ Lockfile:
     resolved "https://registry.npmjs.org/react-native-keyboard-spacer/-/react-native-keyboard-spacer-0.4.1.tgz"
     integrity sha1-RvGKMgQyCYol6p+on1FD3SVNMy0=
   
-  react-native-linear-gradient@^2.5.6:
-    version "2.5.6"
-    resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz"
-    integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
-  
   react-native-maps@0.29.4:
     version "0.29.4"
     resolved "https://registry.npmjs.org/react-native-maps/-/react-native-maps-0.29.4.tgz"
     integrity sha512-Td2KE8+KODcHOxfB1GBNnzFo4/89rlLiC7yTvqQZh0tGVrEzIcgSleUZRrjtq/WvSWSR4rql4AS+0VsBgDkYrw==
     dependencies:
       "@types/geojson" "^7946.0.7"
+  
+  react-native-modal-datetime-picker@^13.0.1:
+    version "13.0.1"
+    resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-13.0.1.tgz#c645c4dff121027f10d4717a1d19551c96fb8b11"
+    integrity sha512-uPgonEKa/nIotmboEEriTCVfWLgrtuR+fybqSw6XcPc/+ve7Q6p55cbUGKtne3+sFcelk+QHcb0aPu56+VbsJA==
+    dependencies:
+      prop-types "^15.7.2"
   
   react-native-modal@^11.7.0:
     version "11.10.0"
@@ -5660,6 +5705,13 @@ Lockfile:
       normalize-svg-path "^1.0.1"
       parse-svg-path "^0.1.2"
   
+  react-native-responsive-fontsize@^0.5.1:
+    version "0.5.1"
+    resolved "https://registry.yarnpkg.com/react-native-responsive-fontsize/-/react-native-responsive-fontsize-0.5.1.tgz#c39fa2212ecced2bac879211a7b25106534f72d2"
+    integrity sha512-G77iPzrf3BHxMxVm6G3Mw3vPImIdq+jLLXhYoOjWei6i9J3/jzUNUhNdRWvp49Csb5prhbVBLPM+pYZz+b3ESQ==
+    dependencies:
+      react-native-iphone-x-helper "^1.3.1"
+  
   react-native-safe-area-context@^3.3.2:
     version "3.3.2"
     resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-3.3.2.tgz"
@@ -5671,6 +5723,13 @@ Lockfile:
     integrity sha512-WII/ulhpVyL/qbYb7vydq7dJAfZRBcEhg4/UWt6F6nAKpLa3gAceMOxBxI914ppwSP/TdUsandFy6lkJQE0z4A==
     dependencies:
       hoist-non-react-statics "^2.3.1"
+  
+  react-native-safe-modules@^1.0.3:
+    version "1.0.3"
+    resolved "https://registry.yarnpkg.com/react-native-safe-modules/-/react-native-safe-modules-1.0.3.tgz#f5f29bb9d09d17581193843d4173ad3054f74890"
+    integrity sha512-DUxti4Z+AgJ/ZsO5U7p3uSCUBko8JT8GvFlCeOXk9bMd+4qjpoDvMYpfbixXKgL88M+HwmU/KI1YFN6gsQZyBA==
+    dependencies:
+      dedent "^0.6.0"
   
   react-native-screens@^3.4.0:
     version "3.10.1"
@@ -5684,6 +5743,11 @@ Lockfile:
     version "0.3.1"
     resolved "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz"
     integrity sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw==
+  
+  react-native-skeleton-placeholder@^5.0.0:
+    version "5.0.0"
+    resolved "https://registry.yarnpkg.com/react-native-skeleton-placeholder/-/react-native-skeleton-placeholder-5.0.0.tgz#899fca447c2f0b81f98566e350e792157a3c9df9"
+    integrity sha512-7sdG+Y2ENEVcxFC9XlpCgHy59XKkxaUyVqDwuAb66hvl7lwFr25uA5kHJ+JuDJ84ptVil5UEowW/2avwhsfoYg==
   
   react-native-tab-view@^3.1.1:
     version "3.1.1"
