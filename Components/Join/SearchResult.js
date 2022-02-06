@@ -41,8 +41,7 @@ export default function SearchResult({ navigation, route }) {
       })
       setserchResult([...Search])
     })
-  }, [])
-  // console.log(serchResult)
+  }, [value])
 
   return (
     <View style={styles.container}>
@@ -84,7 +83,7 @@ export default function SearchResult({ navigation, route }) {
           onPress={() => navigation.goBack()}
           style={{
             justifyContent: "center",
-            backgroundColor: "#55BCF6",
+            backgroundColor: "#D0FF6C",
             alignItems: "center",
             width: 60,
             height: 30,
@@ -136,7 +135,7 @@ export default function SearchResult({ navigation, route }) {
   )
 }
 const styles = StyleSheet.create({
-  container: { flex: 1, marginHorizontal: 15 },
+  container: { flex: 1, backgroundColor: "white", marginTop: 15 },
   titleContainer: {
     width: "100%",
     marginVertical: 20,

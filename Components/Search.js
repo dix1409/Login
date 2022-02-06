@@ -1,14 +1,5 @@
 import React from "react"
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  Button,
-} from "react-native"
-import { NavigationContainer } from "@react-navigation/native"
+
 import { createStackNavigator } from "@react-navigation/stack"
 import Event from "./Join/eventcopy"
 import JoinEvents from "./Join/joinEvent"
@@ -18,10 +9,14 @@ import ShowEvent from "./Join/ShowEvent"
 import ShowNearEvent from "./Join/ShowNearEvent"
 import ownEvent from "./Join/Ownevent"
 import deleteevent from "./Join/deleteevent"
+import OwnerDetail from "./Join/OwnerDetail"
+import EditEvent from "./Join/EditEvent"
+import NearByEvent from "./Join/NearByEvent"
+import SecondEdit from "./Join/SecondEdit"
+import location from "./Join/location"
 const JoinEvent = createStackNavigator()
 const Eventnavigation = () => {
   return (
-    // <NavigationContainer independent={true}>
     <JoinEvent.Navigator
       screenOptions={{
         headerShown: false,
@@ -55,6 +50,39 @@ const Eventnavigation = () => {
           },
         }}
       />
+      <JoinEvent.Screen
+        name="Location"
+        component={location}
+        options={{
+          headerShown: true,
+          headerTitle: "Event Location",
+          headerTitleStyle: {
+            color: "black",
+          },
+        }}
+      />
+      <JoinEvent.Screen
+        name="EditEvent"
+        component={EditEvent}
+        options={{
+          headerShown: true,
+          headerTitle: "Edit",
+          headerTitleStyle: {
+            color: "black",
+          },
+        }}
+      />
+      <JoinEvent.Screen
+        name="SecondEdit"
+        component={SecondEdit}
+        options={{
+          headerShown: true,
+          headerTitle: "Edit",
+          headerTitleStyle: {
+            color: "black",
+          },
+        }}
+      />
 
       <JoinEvent.Screen
         name="Near"
@@ -81,27 +109,32 @@ const Eventnavigation = () => {
           headerTintColor: "black",
         })}
       />
-      {/* <JoinEvent.Screen name="test" component={test} /> */}
+      <JoinEvent.Screen
+        name="OwnerDetail"
+        component={OwnerDetail}
+        options={{
+          headerShown: true,
+          headerTitle: "Organizer Details",
+          headerTitleStyle: {
+            color: "black",
+          },
+        }}
+      />
+      <JoinEvent.Screen
+        name="Near By"
+        component={NearByEvent}
+        options={{
+          headerShown: true,
+          headerTitle: "Events",
+          headerTitleStyle: {
+            color: "black",
+          },
+        }}
+      />
     </JoinEvent.Navigator>
-    // </NavigationContainer>
   )
 }
 
 export default function Plus(props) {
-  return (
-    // <NavigationContainer independent={true}>
-    <Eventnavigation />
-    // </NavigationContainer>
-  )
+  return <Eventnavigation />
 }
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    flex: 1,
-    backgroundColor: "#ecf0f1",
-    padding: 8,
-  },
-  text: {
-    fontSize: 20,
-  },
-})

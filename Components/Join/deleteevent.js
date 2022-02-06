@@ -277,7 +277,7 @@ export default function joinEvent({ navigation, route }) {
   const [show, setshow] = useState(false)
   const [load, setload] = useState(false)
   const event = route.params.event
-  console.log(event)
+  //console.log(event)
 
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
@@ -556,6 +556,21 @@ export default function joinEvent({ navigation, route }) {
               >
                 <Text style={{ color: "black", fontFamily: "OpanSans" }}>
                   View Participants
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: "100%", alignItems: "center" }}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("EditEvent", {
+                    event: event,
+                    email: email,
+                  })
+                }
+                style={[styles.btnContainer, { backgroundColor: "#D0FF6C" }]}
+              >
+                <Text style={{ color: "black", fontFamily: "OpanSans" }}>
+                  Edit Event
                 </Text>
               </TouchableOpacity>
             </View>

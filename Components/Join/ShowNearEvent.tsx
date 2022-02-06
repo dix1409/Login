@@ -21,7 +21,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons"
 import { useFonts } from "expo-font"
-import LottieView from "lottie-react-native"
+
 import * as Location from "expo-location"
 import {
   query,
@@ -55,6 +55,7 @@ export default function ShowNearEvent({ navigation, route }) {
     )
     onSnapshot(ref, (querySnapshot) => {
       let events = []
+      console.log(querySnapshot.size)
       querySnapshot.forEach((doc) => {
         events.push({ ...doc.data(), id: doc.id })
       })
@@ -76,7 +77,7 @@ export default function ShowNearEvent({ navigation, route }) {
   }, [event])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView>
         {show &&
           !load &&
@@ -176,7 +177,7 @@ export default function ShowNearEvent({ navigation, route }) {
         )}
         {load && <ActivityIndicator color="red" />}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 const styles = StyleSheet.create({

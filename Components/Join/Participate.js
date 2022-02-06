@@ -79,7 +79,11 @@ export default function Participate({ navigation, route }) {
               <Image
                 style={styles.image}
                 source={{
-                  uri: item.Profile.image,
+                  uri:
+                    item.Profile.image.substr(0, 4) === "file" ||
+                    item.Profile.image === ""
+                      ? "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643641747/Image/user_sd5pkt.png"
+                      : item.Profile.image,
                 }}
               />
             </View>

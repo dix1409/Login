@@ -17,7 +17,7 @@ import {
   TextInput,
   Dimensions,
 } from "react-native"
-import ExpoFastImage from "expo-fast-image"
+// import ExpoFastImage from "expo-fast-image"
 
 import { useFonts } from "expo-font"
 import { useTheme } from "react-native-paper"
@@ -128,12 +128,12 @@ export default function First({ navigation }) {
     {
       Id: "1",
       Image:
-        "https://s3-alpha-sig.figma.com/img/88da/0084/7c64f9051a63e64f154c2af8114843eb?Expires=1643587200&Signature=dPfmKxNmhQ7-HAcJ6ucsg1LUlZcrLU5MkgvFrkBU82FlVf5q6o~0r6rR7iTzPid2aqAWBpJQ6oFKTCRecvgD7z~xsUp9OoGoJN8941ecpUebqIsgBvD4esUWFksJkWc0goQ7qtWWoV7lgXV-8vO-D-zMZGDWWWrbv3vFVGw3wx1CyOJu6hLnbAFNzKX5FYsvmHp6UbAMZ9Vfq6leRR7mA9Xj9N76h22vIsNvBx1UYUGuPVM-jYHtfBhFxuynYRPyGOQwnbbDSJwlngemlrV8-lWbvl5wJOXzLXbGpJ9dYqkxAbwbBzzdOSsn1tGI-thyTFWvzPe3Cxs00qxqw4LK4w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA",
+        "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643452859/Image/7c64f9051a63e64f154c2af8114843eb_l027qf.jpg",
     },
     {
       Id: "2",
       Image:
-        "https://s3-alpha-sig.figma.com/img/4fe2/1ae0/4692db84f94c28d13fd19558a8dac349?Expires=1643587200&Signature=SL4nYM6Kp3keq4pzLOLo0~VQiD71CMxJMgp8D59fBE7CeBEg~d88qqFPulMM7lSpSjLhBfACazbTTENY1dX577B0MLtrgs8aBG2e7dsT~S0~V3vIVdsnvNlm0IGiK-ri1tExHYtmvlG2GNZv89b2t~QoawR25xNiYqrESWFoiArP1ybmrVunFvkMtHXwlCpGW5cfG3m63oc7ADLJ0UnID1iWzFaxr0KOdHgmu1awJ6f3bqZgBFdCBQxTUNkZB~nTRq3VA8Wi4iHN1NA-FufFpszMrTrmzM-91M-5xBI4sExgmt5olQVmUazwxl7utwEcyMdTnIvCsW1T7ci5mEwbQA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA",
+        "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643452924/Image/4692db84f94c28d13fd19558a8dac349_hqcwsl.jpg",
     },
   ]
 
@@ -141,27 +141,27 @@ export default function First({ navigation }) {
     {
       Id: "1",
       Image:
-        "https://s3-alpha-sig.figma.com/img/a910/f353/d08f29c9b246b861e7ddc850d638214c?Expires=1643587200&Signature=F1dhB2wNYTsmOKaH7joq2-kg8y2dxB96Sn9LG2EGd0f7NzSPNXxLsDpwvYWnS-NvLKzFvLpcBZPQMcx-QWX~j0JUZresZLUQBQ3pD8TA6GAiH3eIJcutp0DHTlMxEG6S5H8XYqyEBTm6a2feR7x7IDopY6D2zWQK0pZSFrJU7aX-Xr2U1hbQnxdKqUnJQ6CUJWrzOUvuqUOJDyzY4rGrx1Uf8PqXpAPxLBB6o2onfzcM7cKU2kmW2qinuHjeNgTZ3pYh8IeWWr1lgxTBHegKlt~8h7cWyCdO~aB4ziUpaIZP7b93ffm1EZ3LWVMzSDVKycitVf6kg81eLmet5HpxxA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA",
+        "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643453022/Image/d08f29c9b246b861e7ddc850d638214c_htx8h4.jpg",
       titie: "Football",
     },
 
     {
       Id: "2",
       Image:
-        "https://s3-alpha-sig.figma.com/img/ed89/4a82/c252d93c6b5146d4e209410255e07c7c?Expires=1643587200&Signature=hOw4Xs0x-TDyUVRPkhGQm8ko3d5iC4jprw0OhfSiKFoSSXMbouBZLuqhFil8NSs5S8Zs~EfKHES7J8tVuh8tjb79CAmtsl9SlRKAbmSZxLw1vCQK0zQNx63UxqIey4OGBakMPBEbgTpjtgG3Rvm9gKAXGn4VjND4hFl39ftw0D5q3Yow--~AmIsmKV7Ab0krgdQKOE6M1Z~vUH6s31Pb6lTKDSu4ijSBMre7ieyqQ0EhJ5LDhEqoscMmDchLJgpxdysJpdzXSoPbBrQ9TVjJDw~eSQkRPX7c9kNClmU5BO3~PSHhGRl~rVcIJmtumfz4LvVXXhAZEGU5vzSBhpvXRw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA",
+        "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643453059/Image/c252d93c6b5146d4e209410255e07c7c_deoo0u.jpg",
       titie: "Volleyball",
     },
 
     {
       Id: "3",
       Image:
-        "https://s3-alpha-sig.figma.com/img/21cf/fc75/b9516a8c7ff95c265a5ad3c5aa300893?Expires=1643587200&Signature=A3yYxRBsS7xClO7e1Ldxd3WaWtaD6TuEjCJEd2IBpymJWNaa2d~QnsyEO7Y~EXrcWvs66QOQDM2irI2B6SdBsP2Dwcolq9pzNsS89CC4t3HBGMLGBz~MIwYk9TwydGxBhUM4BHlWuOA0YyTgGaA1ZyjgbE46VvaLs6pYt2rDa8nAzz3I944knHRwfrGc5mn2qqPoOpraNFTYuZr4-eHDznCpDwX6FetMRLsOrfJSnQZWVlCACkU3bpksT7WB~lImnTrSCXSPUTkh8sbPSQIlzwSFpjy~wxR7fSjRXyaw7NS1vKXLB91Q671JgUhkZYsuKGJDEuV27jfEv1oQ~aJirw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA",
+        "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643453098/Image/b9516a8c7ff95c265a5ad3c5aa300893_bfcnnh.png",
       titie: "Basketball",
     },
     {
       Id: "4",
       Image:
-        "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fcricket-img.jpg?alt=media&token=5d9e73da-c8b7-45d3-b5e7-b4796a0176f2",
+        "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643453129/Image/Image_2Fcricket-img_v5hwxj.jpg",
       titie: "Cricket",
     },
   ]
@@ -178,7 +178,7 @@ export default function First({ navigation }) {
               justifyContent: "center",
             }}
             source={{
-              uri: "https://s3-alpha-sig.figma.com/img/1cab/62b7/e4b0ebe5c116c3900693d3188458816f?Expires=1643587200&Signature=ARIFGDWxF6OZHDQx9n-UbUMbz1dlGkwbi1kv6UldTOy8eLhiMjwHjAlD2UTGjQUWHmkq8GqZsgsGyHJ2LfIgRZd2FHos8voifuC5jodsEgQe7kHuRe4HHNtA9J-T~oEBmBsdRs-ASlyJgU4WwDPQuY-zCrobQMZTXpM-5MD448fJwVLT4Rut4JRmS3twhrIhkFL1NJbOGdkgWKmAXgCCSs2tDfbFI8qDaDazjAoJDH3HNPCJuJDwZjZDObi4ABGKVV54ldRFZivMsdxBDFPlrKxjiND5bdVLsnKzdHOev65aM0EEadi5F8XycZICgiOuVdzWWcSyOenFICtJ1JW2TA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA",
+              uri: "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643435347/Image/first_ou3pse.png",
             }}
           >
             <View
@@ -190,7 +190,7 @@ export default function First({ navigation }) {
               }}
             >
               <Text style={{ fontSize: 24, color: "#f7f7f7" }}>
-                Good morning {username.length > 0 ? username : ""}! {"\n"}Today
+                Good morning {username.length > 0 ? username : ""} {"\n"}Today
                 is a good day {"\n"}to try something new
               </Text>
               <TouchableOpacity
@@ -244,15 +244,48 @@ export default function First({ navigation }) {
               style={{ height: 182, width: width }}
               onPress={() => navigation.navigate("ownEvent", { email: email })}
             >
-              <ExpoFastImage
+              <Image
                 source={{
-                  uri: "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fvolleyball-on-beach-2021-08-29-00-01-49-utc.jpg?alt=media&token=0510dd13-4acd-4ab8-b47f-c9b0bde1a7fc",
+                  uri: "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643641385/Image/Image_2Fvolleyball-on-beach-2021-08-29-00-01-49-utc_g2szy5-min_jzjkdn.jpg",
                 }}
                 style={{ width: "100%", height: "100%" }}
               />
             </TouchableOpacity>
           </View>
         )}
+
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            marginVertical: 15,
+            marginHorizontal: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              marginVertical: 10,
+              textAlign: "center",
+              fontFamily: "OpanSans",
+              fontWeight: "bold",
+            }}
+          >
+            NearBy Event{" "}
+          </Text>
+          <TouchableOpacity
+            style={{ height: 182, width: width }}
+            onPress={() => navigation.navigate("Near By", { email: email })}
+          >
+            <Image
+              source={{
+                uri: "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643641385/Image/Image_2Fvolleyball-on-beach-2021-08-29-00-01-49-utc_g2szy5-min_jzjkdn.jpg",
+              }}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </TouchableOpacity>
+        </View>
+
         <View
           style={{
             flex: 1,
@@ -299,7 +332,7 @@ export default function First({ navigation }) {
                     marginHorizontal: 10,
                   }}
                 >
-                  <ExpoFastImage
+                  <Image
                     source={{
                       uri: item.Image,
                     }}

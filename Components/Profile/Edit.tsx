@@ -152,7 +152,7 @@ const EditProfileScreen = ({ navigation, route }) => {
       phone: phone,
       country: country,
       city: city,
-      image: url ? url : image,
+      image: url.length > 0 ? url : image,
       gender: gender,
       age: age,
     })
@@ -330,7 +330,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                 />
               </View>
               <View style={styles.action}>
-                <Feather name="phone" color={colors.text} size={20} />
+                <FontAwesome name="phone" size={20} color="black" />
                 <TextInput
                   placeholder="Phone"
                   placeholderTextColor="#666666"

@@ -354,7 +354,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                   />
                 </View>
                 <View style={styles.action}>
-                  <Feather name="phone" color={colors.text} size={20} />
+                  <FontAwesome name="phone" size={20} color="black" />
                   <TextInput
                     placeholder="Phone"
                     placeholderTextColor="#666666"
@@ -370,7 +370,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                   />
                 </View>
                 <View style={styles.action}>
-                  <EvilIcons name="user" color={colors.text} size={28} />
+                  <FontAwesome name="user-circle" size={20} color="black" />
                   <TextInput
                     placeholder="age"
                     placeholderTextColor="#666666"
@@ -386,11 +386,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                   />
                 </View>
                 <View style={styles.action}>
-                  <MaterialCommunityIcons
-                    name="gender-male-female"
-                    size={24}
-                    color="black"
-                  />
+                  <FontAwesome name="transgender" size={20} color="black" />
                   <TextInput
                     placeholder="Gender"
                     placeholderTextColor="#666666"
@@ -421,11 +417,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                   />
                 </View>
                 <View style={styles.action}>
-                  <Icon
-                    name="map-marker-outline"
-                    color={colors.text}
-                    size={20}
-                  />
+                  <FontAwesome name="map-marker" size={20} color="black" />
                   <TextInput
                     placeholder="City"
                     placeholderTextColor="#666666"

@@ -284,7 +284,7 @@ export default function joinEvent({ navigation, route }) {
   const [Profile, setProfile] = useState({})
   const [valid, setvalid] = useState(false)
   const event = route.params.item
-
+  // console.log(event)
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
@@ -298,7 +298,7 @@ export default function joinEvent({ navigation, route }) {
       let user = []
 
       user.push(querySnapshot.data())
-      console.log(user)
+      // console.log(user)
       setuserdata([...user])
     })
     const profileref = collection(db, `user/${email}/profile`)
@@ -386,7 +386,7 @@ export default function joinEvent({ navigation, route }) {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container}>
-        <StatusBar backgroundColor="#0e1626" barStyle="light-content" />
+        <StatusBar backgroundColor="#fff" barStyle="light-content" />
         <View
           style={{
             height: size,
@@ -449,7 +449,7 @@ export default function joinEvent({ navigation, route }) {
             {showScreen && (
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("first")
+                  navigation.goBack()
                 }}
               >
                 <AntDesign name="arrowleft" size={24} color="#1b2534" />
@@ -560,8 +560,11 @@ export default function joinEvent({ navigation, route }) {
           <Text
             style={{ fontSize: 20, color: "#080d17", fontFamily: "OpanSans" }}
           >
-            {event.name}
+            Sport Name: {event.eventTitle}
+            {"\n\n"}
+            {event.name.toLowerCase()}
           </Text>
+
           <View style={styles.BoxContainer}>
             <AntDesign name="clockcircle" size={18} color="#1b2534" />
             <Text style={[{ marginRight: 20 }, styles.textStyle]}>
@@ -642,6 +645,19 @@ export default function joinEvent({ navigation, route }) {
               </TouchableOpacity>
             </View>
           )}
+
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("OwnerDetail", { detail: event.owner })
+              }}
+              style={[styles.btnContainer, { backgroundColor: "#D0FF6C" }]}
+            >
+              <Text style={{ color: "black", fontFamily: "OpanSans" }}>
+                Organizer Details
+              </Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </ScrollView>
     </View>
@@ -650,7 +666,7 @@ export default function joinEvent({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffff",
+    backgroundColor: "white",
   },
   BoxContainer: {
     marginVertical: 15,

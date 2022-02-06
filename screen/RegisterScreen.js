@@ -56,10 +56,6 @@ const RegisterScreen = ({ navigation }) => {
       createUserWithEmailAndPassword(auth, email.trim(), password.trim())
         .then((user) => {
           // console.log("yes"),
-          scrollRef.current?.scrollTo({
-            y: 0,
-            animated: true,
-          })
 
           setIsLoading(false),
             navigation.navigate("Profile", {

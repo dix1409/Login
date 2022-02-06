@@ -63,7 +63,7 @@ const EditProfileScreen = ({ navigation, route }) => {
     if (status.granted) {
       console.log("hello")
       let photo = await ImagePicker.launchCameraAsync({
-        aspect: [4, 3],
+        aspect: [1, 1],
         quality: 1,
         base64: true,
       })
@@ -122,7 +122,7 @@ const EditProfileScreen = ({ navigation, route }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       base64: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
       quality: 1,
     })
 
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
   commandButton: {
     padding: 15,
     borderRadius: 10,
-    backgroundColor: "#FF6347",
+    backgroundColor: "red",
     alignItems: "center",
     marginTop: 10,
     marginHorizontal: 20,
@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
   panelButtonTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   action: {
     flexDirection: "row",

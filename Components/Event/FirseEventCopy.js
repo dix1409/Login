@@ -30,8 +30,7 @@ export default function FirseEventCopy({ navigation }) {
           <ImageBackground
             style={{ width: "100%", height: 200 }}
             source={{
-              uri:
-                "https://firebasestorage.googleapis.com/v0/b/e-tuts.appspot.com/o/Image%2Fsecond-min.jpg?alt=media&token=5770d852-efae-46f0-b95b-aed94976bdd8",
+              uri: "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643435530/Image/second_akixhn.jpg",
             }}
             resizeMode="cover"
           >

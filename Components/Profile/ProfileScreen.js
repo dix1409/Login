@@ -30,6 +30,7 @@ export default function ProfileScreen({ navigation, route }) {
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
+  console.log("image")
   const [email, setemail] = useState("")
   useEffect(() => {
     const emails = auth.currentUser.email ? auth.currentUser.email : "unknown"

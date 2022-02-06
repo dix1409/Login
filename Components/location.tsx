@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react"
 import {
-  ImageBackground,
   StyleSheet,
   View,
-  Image,
   Text,
   Dimensions,
   ActivityIndicator,
-  TextInput,
   TouchableOpacity,
-  ViewPropTypes,
-  Button,
 } from "react-native"
 import * as Location from "expo-location"
 import MapView, {
@@ -29,22 +24,21 @@ import {
   startAt,
   endAt,
   getDocs,
-  onSnapshot,
 } from "firebase/firestore"
-import { db, auth } from "./Event/Firestore"
+import { db } from "./Event/Firestore"
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons"
 export default function location({ navigation }) {
   const [loading, setloading] = useState(true)
-  const [region, setregion] = useState([])
+
   const [latitude, setlatitude] = useState<number>(0)
   const [longitude, setlongitude] = useState<number>(0)
   const [visible, setVisible] = useState(false)
   const [event, setevent] = useState([])
-  const [emails, setemails] = useState("")
+
   const [eventshow, seteventshow] = useState({})
-  const [promise, setpromise] = useState([])
+
   useEffect(() => {
-    if (latitude === 0 && longitude === 0) askPermission()
+    askPermission()
   }, [])
   useEffect(() => {
     //console.log("")
@@ -56,6 +50,7 @@ export default function location({ navigation }) {
     setVisible(!visible)
   }
   // console.log()
+
   const askPermission = async () => {
     setloading(true)
     let { status } = await Location.requestForegroundPermissionsAsync()
@@ -87,17 +82,7 @@ export default function location({ navigation }) {
       const q = query(eventref, orderBy("geoHash"), startAt(b[0]), endAt(b[1]))
 
       promises.push(getDocs(q))
-      // let promise = []
-      // onSnapshot(q, (querySnapshot) => {
-      //   querySnapshot.forEach((doc) => {
-      //     console.log(doc.data())
-      //     promises.push({ ...doc.data(), id: doc.id })
-      //   })
-      //   setpromise([...promises])
-      //   console.log(promise)
-      // })
     }
-    // Collect all the query results together into a single list
     Promise.all(promises)
       .then((snapshots) => {
         const matchingDocs = []
@@ -134,7 +119,7 @@ export default function location({ navigation }) {
         const FilterStores = stores
 
         setevent(FilterStores)
-        console.log(FilterStores)
+        setloading(false)
       })
       .catch((err) => {
         console.log(err)
@@ -321,12 +306,13 @@ export default function location({ navigation }) {
                 justifyContent: "center",
                 borderRadius: 10,
               }}
-              onPress={() =>
+              onPress={() => {
                 navigation.navigate("Explore", {
                   screen: "second",
                   params: { item: eventshow },
-                })
-              }
+                }),
+                  toggleBottomNavigationView()
+              }}
             >
               <Text>Go To Details</Text>
             </TouchableOpacity>

@@ -31,9 +31,11 @@ export default function SecondEvent({ navigation, route }) {
   const [minute, setminute] = useState("")
   const [timeshow, settimeshow] = useState(false)
   const [marginBottom, setMarginBottom] = useState(0)
+
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
+  const location = route.params.location || "Set Location"
   const keyboard = useKeyboard()
   const [sportname] = useState([
     "Hockey",
@@ -46,6 +48,9 @@ export default function SecondEvent({ navigation, route }) {
     "Running",
   ])
   const name = route.params.name
+  const latitude = route.params.latitude || 0
+  const longitude = route.params.longitude || 0
+  const geoHash = route.params.geoHash || ""
   useEffect(() => {
     if (name) {
       setTitle(name)
@@ -125,7 +130,7 @@ export default function SecondEvent({ navigation, route }) {
                 {!!error && <Text style={styles.error}>{error}</Text>}
               </View>
 
-              <View style={{ marginTop: 32 }}>
+              <View style={styles.view}>
                 <Text style={styles.inputTitle}>Sport Name</Text>
                 {/* <Picker
                   style={{ marginVertical: 10 }}
@@ -144,7 +149,7 @@ export default function SecondEvent({ navigation, route }) {
                   placeholder="Type a Sport Name"
                 />
               </View>
-              <View style={{ marginTop: 32 }}>
+              <View style={styles.view}>
                 <Text style={styles.inputTitle}>Event Name</Text>
 
                 <TextInput
@@ -153,7 +158,7 @@ export default function SecondEvent({ navigation, route }) {
                   onChangeText={(Name) => setName(Name)}
                 />
               </View>
-              <View style={{ marginTop: 32 }}>
+              <View style={styles.view}>
                 <Text style={styles.inputTitle}>Event Date</Text>
                 {show && (
                   <DatePicker
@@ -169,16 +174,16 @@ export default function SecondEvent({ navigation, route }) {
                   <TouchableOpacity onPress={shown}>
                     <View style={styles.input}>
                       {Dates ? (
-                        <Text style={{ marginTop: 15 }}>{Dates}</Text>
+                        <Text style={styles.text}>{Dates}</Text>
                       ) : (
-                        <Text style={{ marginTop: 15 }}> select a date</Text>
+                        <Text style={styles.text}> select a date</Text>
                       )}
                       {/* <Text>{JSON.stringify(Date)}</Text> */}
                     </View>
                   </TouchableOpacity>
                 )}
               </View>
-              <View style={{ marginTop: 32 }}>
+              <View style={styles.view}>
                 <Text style={styles.inputTitle}>Event Time</Text>
 
                 {/* <DatePicker
@@ -202,11 +207,11 @@ export default function SecondEvent({ navigation, route }) {
                   <TouchableOpacity onPress={shownTime}>
                     <View style={styles.input}>
                       {minute && hour ? (
-                        <Text style={{ marginTop: 15 }}>
+                        <Text style={styles.text}>
                           {hour}:{minute}
                         </Text>
                       ) : (
-                        <Text style={{ marginTop: 15 }}> set time</Text>
+                        <Text style={styles.text}> set time</Text>
                       )}
                       {/* <Text>{JSON.stringify(Date)}</Text> */}
                     </View>
@@ -217,6 +222,17 @@ export default function SecondEvent({ navigation, route }) {
                   placeholder="Type an Event Time"
                   onChangeText={(time) => sethour(time)}
                 /> */}
+              </View>
+              <View style={styles.view}>
+                <Text style={styles.inputTitle}>Event Location</Text>
+                <TouchableOpacity
+                  style={styles.input}
+                  onPress={() => {
+                    navigation.navigate("Location")
+                  }}
+                >
+                  <Text style={styles.text}>{location}</Text>
+                </TouchableOpacity>
               </View>
               <View
                 style={{
@@ -237,13 +253,18 @@ export default function SecondEvent({ navigation, route }) {
                     marginTop: 35,
                   }}
                   onPress={() => {
-                    navigation.navigate("Third", {
-                      eventTitle: eventTitle.trim(),
-                      Name: Name.trim(),
-                      date: Dates.trim(),
-
-                      hour: `${hour}:${minute}`,
-                    })
+                    Check()
+                      ? navigation.navigate("Third", {
+                          eventTitle: eventTitle.trim(),
+                          Name: Name.trim(),
+                          date: Dates.trim(),
+                          latitude: latitude,
+                          longitude: longitude,
+                          geoHash: geoHash,
+                          location: location.trim(),
+                          hour: `${hour}:${minute}`,
+                        })
+                      : seterror("Please Fill all Details")
                   }}
                 >
                   <Text style={{ color: "black", fontFamily: "OpanSans" }}>
@@ -307,5 +328,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
     textAlign: "center",
+  },
+  view: {
+    marginTop: 32,
+  },
+  text: {
+    marginTop: 15,
   },
 })

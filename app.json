@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Login",
-    "slug": "Login",
+    "name": "Sportana",
+    "slug": "Sportana",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,9 +20,8 @@
       "supportsTablet": true,
       "config": {
         "googleMapsApiKey": "AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA"
-        }
-      ,
-      "googleServicesFile":"./GoogleService-Info.plist",
+      },
+      "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "test.com"
     },
     "android": {
@@ -31,31 +30,27 @@
         "backgroundColor": "#FFFFFF"
       },
       "googleServicesFile": "./google-services.json",
-     
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "package": "test.com",
       "config": {
-        "googleMaps":{
-        "apiKey": "AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA"
+        "googleMaps": {
+          "apiKey": "AIzaSyCcN6s8ippd7mIFFE6tMcY8nFMffg83BuA"
         }
       }
-
     },
-  
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
-    "expo-image-picker",
-    {
-      "photosPermission": "The app accesses your photos to let you share them with your friends."
-    }
-   
-  
-  ],
-  "@react-native-firebase/app"
- 
-
-    ]}
-    
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
+  }
 }
