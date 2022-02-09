@@ -12,6 +12,7 @@ export default function chat({ navigation }) {
       screenOptions={{
         headerShown: true,
       }}
+      initialRouteName="Chats"
     >
       <Stack.Screen
         name="chatting"

@@ -14,6 +14,8 @@ import EditEvent from "./Join/EditEvent"
 import NearByEvent from "./Join/NearByEvent"
 import SecondEdit from "./Join/SecondEdit"
 import location from "./Join/location"
+import join from "./Join/join"
+import joindetails from "./Join/joindetails"
 const JoinEvent = createStackNavigator()
 const Eventnavigation = () => {
   return (
@@ -21,6 +23,7 @@ const Eventnavigation = () => {
       screenOptions={{
         headerShown: false,
       }}
+      initialRouteName="first"
     >
       <JoinEvent.Screen
         name="first"
@@ -45,6 +48,17 @@ const Eventnavigation = () => {
         options={{
           headerShown: true,
           headerTitle: "Your Event",
+          headerTitleStyle: {
+            color: "black",
+          },
+        }}
+      />
+      <JoinEvent.Screen
+        name="join"
+        component={join}
+        options={{
+          headerShown: true,
+          headerTitle: "joined Event",
           headerTitleStyle: {
             color: "black",
           },
@@ -94,6 +108,7 @@ const Eventnavigation = () => {
       />
       <JoinEvent.Screen name="third" component={Participate} />
       <JoinEvent.Screen name="fourth" component={SearchResult} />
+      <JoinEvent.Screen name="joindetails" component={joindetails} />
       <JoinEvent.Screen
         name="fifth"
         component={ShowEvent}

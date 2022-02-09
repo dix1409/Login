@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   StyleSheet,
   View,
@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   Platform,
+  ActivityIndicator,
 } from "react-native"
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import {
@@ -18,6 +19,8 @@ import {
 } from "@expo/vector-icons"
 
 import { useFonts } from "expo-font"
+import { deleteDoc, doc, collection, onSnapshot } from "firebase/firestore"
+import { db } from "../Event/Firestore"
 
 const { height } = Dimensions.get("window")
 const Mapstyle = [
@@ -258,104 +261,129 @@ export default function joinEvent({ navigation, route }) {
   const [size, setsize] = useState(height * 0.5)
   const [showScreen, setshowScreen] = useState(true)
   const [showsize, setshowsize] = useState(false)
-  const event = route.params.item
-
+  const [event, setevent] = useState({})
+  const [load, setload] = useState(true)
+  const events = route.params.item
+  const email = route.params.email
+  console.log(email)
+  useEffect(() => {
+    const eventref = doc(db, "data", events.id)
+    onSnapshot(eventref, (doc) => {
+      setevent({ ...doc.data() })
+    })
+  }, [])
+  useEffect(() => {
+    if (Object.keys(event).length > 0) {
+      setload(false)
+    }
+  }, [event])
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
-
-  console.log(event)
+  const LeaveEvent = async () => {
+    await deleteDoc(doc(db, "event", events.id, "participate", email)).then(
+      async () => {
+        await deleteDoc(doc(db, "user", email, "joinEvent", events.id)).then(
+          () => {
+            console.log("you successfully leave this event....")
+          }
+        )
+      }
+    )
+  }
+  //console.log(event)
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.container}>
-        <StatusBar backgroundColor="#0e1626" barStyle="light-content" />
-        <View
-          style={{
-            height: size,
-            //borderWidth: 1,
-            overflow: "hidden",
-            borderBottomLeftRadius: 30,
-            borderBottomRightRadius: 30,
-            shadowColor: "#ccc",
-            shadowOffset: { width: 0, height: 3 },
-            shadowOpacity: 0.5,
-            shadowRadius: 5,
-            elevation: 30,
-          }}
-        >
-          <MapView
-            style={{
-              flex: 1,
-              borderRadius: 20,
-              height: "100%",
-              overflow: "hidden",
-            }}
-            customMapStyle={Mapstyle}
-            provider={PROVIDER_GOOGLE}
-            loadingEnabled={true}
-            loadingIndicatorColor="#666666"
-            loadingBackgroundColor="#eeeeee"
-            moveOnMarkerPress={false}
-            showsCompass={true}
-            showsPointsOfInterest={false}
-            region={{
-              latitude: event.latitude,
-              longitude: event.longtitude || event.longitude,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.1,
-            }}
-          >
-            <View style={{ borderRadius: 20 }}></View>
-            <Marker
-              coordinate={{
-                latitude: event.latitude,
-                longitude: event.longtitude || event.longitude,
-              }}
-              title={event.name}
-            ></Marker>
-          </MapView>
-
+      {!load && (
+        <ScrollView style={styles.container}>
+          <StatusBar backgroundColor="#0e1626" barStyle="light-content" />
           <View
             style={{
-              position: "absolute",
-              marginTop: Platform.OS === "ios" ? 40 : 30,
-              backgroundColor: "#fff",
-              width: 50,
-              height: 50,
-              borderRadius: 50,
-              alignItems: "center",
-              justifyContent: "center",
-              marginLeft: 5,
+              height: size,
+              //borderWidth: 1,
+              overflow: "hidden",
+              borderBottomLeftRadius: 30,
+              borderBottomRightRadius: 30,
+              shadowColor: "#ccc",
+              shadowOffset: { width: 0, height: 3 },
+              shadowOpacity: 0.5,
+              shadowRadius: 5,
+              elevation: 30,
             }}
           >
-            {showScreen && (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.goBack()
+            <MapView
+              style={{
+                flex: 1,
+                borderRadius: 20,
+                height: "100%",
+                overflow: "hidden",
+              }}
+              customMapStyle={Mapstyle}
+              provider={PROVIDER_GOOGLE}
+              loadingEnabled={true}
+              loadingIndicatorColor="#666666"
+              loadingBackgroundColor="#eeeeee"
+              moveOnMarkerPress={false}
+              showsCompass={true}
+              showsPointsOfInterest={false}
+              region={{
+                latitude: event.latitude,
+                longitude: event.longtitude || event.longitude,
+                latitudeDelta: 0.1,
+                longitudeDelta: 0.1,
+              }}
+            >
+              <View style={{ borderRadius: 20 }}></View>
+              <Marker
+                coordinate={{
+                  latitude: event.latitude,
+                  longitude: event.longtitude || event.longitude,
                 }}
-              >
-                <AntDesign name="arrowleft" size={24} color="#1b2534" />
-              </TouchableOpacity>
-            )}
-            {showsize && (
-              <TouchableOpacity
-                onPress={() => {
-                  setsize(height * 0.5)
-                  setshowScreen(true)
-                  setshowsize(false)
-                }}
-                style={{
-                  flex: 1,
+                title={event.name}
+              ></Marker>
+            </MapView>
 
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <AntDesign name="arrowleft" size={24} color="#1b2534" />
-              </TouchableOpacity>
-            )}
-          </View>
-          {/* <Modal transparent visible={visible}>
+            <View
+              style={{
+                position: "absolute",
+                marginTop: Platform.OS === "ios" ? 40 : 30,
+                backgroundColor: "#fff",
+                width: 50,
+                height: 50,
+                borderRadius: 50,
+                alignItems: "center",
+                justifyContent: "center",
+                marginLeft: 5,
+              }}
+            >
+              {showScreen && (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("chatting")
+                  }}
+                >
+                  <AntDesign name="arrowleft" size={24} color="#1b2534" />
+                </TouchableOpacity>
+              )}
+              {showsize && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setsize(height * 0.5)
+                    setshowScreen(true)
+                    setshowsize(false)
+                  }}
+                  style={{
+                    flex: 1,
+
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <AntDesign name="arrowleft" size={24} color="#1b2534" />
+                </TouchableOpacity>
+              )}
+            </View>
+            {/* <Modal transparent visible={visible}>
             <View
               style={{
                 flex: 1,
@@ -410,100 +438,121 @@ export default function joinEvent({ navigation, route }) {
               </View>
             </View>
           </Modal> */}
-        </View>
-        <View style={{ width: "100%", alignItems: "center" }}>
-          <View style={[styles.btnContainer, { backgroundColor: "black" }]}>
-            <TouchableOpacity
-              onPress={() => {
-                setsize(height)
-                setshowScreen(false)
-                setshowsize(true)
-              }}
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                width: "100%",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: "white", fontFamily: "OpanSans" }}>
-                View Full
-              </Text>
-            </TouchableOpacity>
           </View>
-        </View>
-        <ScrollView
-          style={{
-            flex: 1,
-            marginVertical: 10,
-            marginHorizontal: 10,
-          }}
-        >
-          <Text
-            style={{ fontSize: 20, color: "#080d17", fontFamily: "OpanSans" }}
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <View style={[styles.btnContainer, { backgroundColor: "black" }]}>
+              <TouchableOpacity
+                onPress={() => {
+                  setsize(height)
+                  setshowScreen(false)
+                  setshowsize(true)
+                }}
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: "white", fontFamily: "OpanSans" }}>
+                  View Full
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <ScrollView
+            style={{
+              flex: 1,
+              marginVertical: 10,
+              marginHorizontal: 10,
+            }}
           >
-            {event.name}
-          </Text>
-          <View style={styles.BoxContainer}>
-            <AntDesign name="clockcircle" size={18} color="#1b2534" />
-            <Text style={[{ marginRight: 20 }, styles.textStyle]}>
-              {event.hour}
+            <Text
+              style={{ fontSize: 20, color: "#080d17", fontFamily: "OpanSans" }}
+            >
+              {event.name}
             </Text>
-            <FontAwesome name="calendar-times-o" size={18} color="#1b2534" />
-            <Text style={styles.textStyle}>
-              {event.date.split("").reverse().join("")}
-            </Text>
-          </View>
-          <View style={styles.BoxContainer}>
-            <Ionicons name="location-sharp" size={24} color="#1b2534" />
-            <Text style={styles.textStyle}>
-              {event.Location || event.location}
-            </Text>
-          </View>
-          <View style={styles.BoxContainer}>
-            <FontAwesome5 name="money-bill" size={24} color="#1b2534" />
-            {event.fees.length > 0 && (
-              <Text style={styles.textStyle}>
-                Enternance Fee: {event.mode}: {event.fees}
+            <View style={styles.BoxContainer}>
+              <AntDesign name="clockcircle" size={18} color="#1b2534" />
+              <Text style={[{ marginRight: 20 }, styles.textStyle]}>
+                {event.hour.slice(0, 5)}
               </Text>
-            )}
-            {event.fees.length === 0 && (
-              <Text style={styles.textStyle}>Enternance Free 😍😍</Text>
-            )}
-          </View>
-          {/* <View style={styles.BoxContainer}>
+              <FontAwesome name="calendar-times-o" size={18} color="#1b2534" />
+              <Text style={styles.textStyle}>
+                {event.date.split("-").reverse().join("-")}
+              </Text>
+            </View>
+            <View style={styles.BoxContainer}>
+              <Ionicons name="location-sharp" size={24} color="#1b2534" />
+              <Text style={styles.textStyle}>
+                {event.Location || event.location}
+              </Text>
+            </View>
+            <View style={styles.BoxContainer}>
+              <FontAwesome5 name="money-bill" size={24} color="#1b2534" />
+              {event.fees.length > 0 && (
+                <Text style={styles.textStyle}>
+                  Enternance Fee: {event.mode}: {event.fees}
+                </Text>
+              )}
+              {event.fees.length === 0 && (
+                <Text style={styles.textStyle}>Enternance Free 😍😍</Text>
+              )}
+            </View>
+            {/* <View style={styles.BoxContainer}>
             <FontAwesome5 name="money-bill-wave" size={24} color="black" />
             <Text style={{ marginHorizontal: 10, color: "#c4c6ca" }}>
               Winning Prize:{event.prize}
             </Text>
           </View> */}
-          <View style={styles.BoxContainer}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <AntDesign name="infocirlce" size={24} color="black" />
-              <Text style={styles.textStyle}>Additional Comment</Text>
+            <View style={styles.BoxContainer}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <AntDesign name="infocirlce" size={24} color="black" />
+                <Text style={styles.textStyle}>Additional Comment</Text>
+              </View>
             </View>
-          </View>
-          <View style={styles.BoxContainer}>
-            <Text style={styles.textStyle}>{event.comment}</Text>
-          </View>
+            <View style={styles.BoxContainer}>
+              <Text style={styles.textStyle}>{event.comment}</Text>
+            </View>
 
-          <View style={{ width: "100%", alignItems: "center" }}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("Explore", {
-                  screen: "third",
-                  params: { id: event.id },
-                })
-              }}
-              style={styles.btnContainer}
-            >
-              <Text style={{ color: "black", fontFamily: "OpanSans" }}>
-                View participation's
-              </Text>
-            </TouchableOpacity>
-          </View>
+            <View style={{ width: "100%", alignItems: "center" }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Explore", {
+                    screen: "third",
+                    params: { id: event.id },
+                  })
+                }}
+                style={styles.btnContainer}
+              >
+                <Text style={{ color: "black", fontFamily: "OpanSans" }}>
+                  View participation's
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={LeaveEvent}
+                style={styles.btnContainer}
+              >
+                <Text style={{ color: "black", fontFamily: "OpanSans" }}>
+                  Leave Event
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </ScrollView>
-      </ScrollView>
+      )}
+      {load && (
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <ActivityIndicator color="#D0FF6C" size="large" />
+        </View>
+      )}
     </View>
   )
 }

@@ -24,7 +24,13 @@ import { useTheme } from "react-native-paper"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { MaterialIcons } from "@expo/vector-icons"
-import { collection, onSnapshot } from "firebase/firestore"
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore"
 import { auth, db } from "../Event/Firestore"
 
 const { height, width } = Dimensions.get("window")
@@ -36,6 +42,9 @@ export default function First({ navigation }) {
   const [show, setshow] = useState(false)
   const [email, setemail] = useState("")
   const [username, setusername] = useState("")
+  const [event, setevent] = useState([])
+  const [join, setjoin] = useState(false)
+
   // const getData = () => {
   //   Inforef.get().then((querySnapshot) => {
   //     console.log("Total users: ", querySnapshot.size);
@@ -55,6 +64,7 @@ export default function First({ navigation }) {
       }
     }
   })
+  const time = new Date().getTime()
 
   useEffect(() => {
     if (email) {
@@ -84,8 +94,34 @@ export default function First({ navigation }) {
           setshow(true)
         }
       })
+      const userjoinref = collection(db, `user/${email}/joinEvent`)
+      onSnapshot(userjoinref, (querySnapshot) => {
+        if (querySnapshot.empty) {
+          console.log("yess..")
+          setjoin(false)
+        } else {
+          let eventTitle = []
+          querySnapshot.forEach((doc) => {
+            console.log(doc.data())
+            eventTitle.push(doc.data())
+          })
+          setevent([...eventTitle])
+          const checkRef = query(userjoinref, where("expiredAt", "<=", time))
+          onSnapshot(checkRef, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data())
+            })
+          })
+        }
+      })
     }
   }, [email])
+  useEffect(() => {
+    console.log("nope..")
+    if (event.length > 0) {
+      setjoin(true)
+    }
+  }, [event])
   //console.log(dataCricket)
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -220,6 +256,7 @@ export default function First({ navigation }) {
             </View>
           </ImageBackground>
         </View>
+
         {show && (
           <View
             style={{
@@ -243,6 +280,41 @@ export default function First({ navigation }) {
             <TouchableOpacity
               style={{ height: 182, width: width }}
               onPress={() => navigation.navigate("ownEvent", { email: email })}
+            >
+              <Image
+                source={{
+                  uri: "https://res.cloudinary.com/dz7xfhqxk/image/upload/v1643641385/Image/Image_2Fvolleyball-on-beach-2021-08-29-00-01-49-utc_g2szy5-min_jzjkdn.jpg",
+                }}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
+        {join && (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              marginVertical: 15,
+              marginHorizontal: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                marginVertical: 10,
+                textAlign: "center",
+                fontFamily: "OpanSans",
+                fontWeight: "bold",
+              }}
+            >
+              join Event
+            </Text>
+            <TouchableOpacity
+              style={{ height: 182, width: width }}
+              onPress={() =>
+                navigation.navigate("join", { event: event, email: email })
+              }
             >
               <Image
                 source={{

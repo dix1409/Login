@@ -30,7 +30,7 @@ import { useFonts } from "expo-font"
 
 import { db, auth } from "../Event/Firestore"
 
-import { doc, collection, deleteDoc } from "firebase/firestore"
+import { doc, collection, deleteDoc, setDoc } from "firebase/firestore"
 
 const { height, width } = Dimensions.get("window")
 const Mapstyle = [
@@ -292,6 +292,12 @@ export default function joinEvent({ navigation, route }) {
     await deleteDoc(doc(db, "data", event.id)).then(async () => {
       await deleteDoc(doc(db, "user", email, "Ownevent", event.id)).then(() => {
         console.log("yess but why")
+        const time = new Date().getTime()
+        const msgRef = doc(db, "event", event.id)
+        setDoc(msgRef, {
+          isDeleted: "true",
+        })
+
         navigation.goBack()
         setload(false)
         setshow(false)

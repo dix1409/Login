@@ -47,12 +47,8 @@ export default function ShowEvent({ navigation, route }) {
     if (email) {
       console.log(email)
       const userchatref = collection(db, `user/${email}/Ownevent`)
-      const ownref = query(
-        userchatref,
-        where("expiredAt", ">", JSON.stringify(time)),
-        orderBy("expiredAt", "desc")
-      )
-      onSnapshot(ownref, (querySnapshot) => {
+
+      onSnapshot(userchatref, (querySnapshot) => {
         if (querySnapshot.empty) {
           setshow(false)
         } else {

@@ -24,6 +24,7 @@ import { auth, db } from "../Event/Firestore"
 import {
   collection,
   doc,
+  getDocs,
   onSnapshot,
   setDoc,
   updateDoc,
@@ -45,6 +46,7 @@ export default function ThirdScreen({ route, navigation }) {
   const [Comment, setComment] = useState(event?.comment)
   const [image, setimage] = useState(event?.owner)
   const [marginBottom, setMarginBottom] = useState(0)
+  const [joinparticipate, setjoinparticipate] = useState([])
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
@@ -63,10 +65,23 @@ export default function ThirdScreen({ route, navigation }) {
   const geoHash = route.params.geoHash || ""
   const location = route.params.location
   const [visible, setvisible] = useState(false)
-
+  console.log(hour.slice(0, 5))
   const ShowModal = () => {
     setvisible(!visible)
   }
+  const data = []
+  useEffect(async () => {
+    const profile = collection(db, "event", event.id, "participate")
+    const docs = await getDocs(profile)
+
+    docs.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      // console.log(doc.id)
+      data.push(doc.id)
+    })
+    setjoinparticipate([...data])
+  }, [])
+  console.log(joinparticipate)
 
   const UpdateApp = async () => {
     setloading(true)
@@ -106,21 +121,49 @@ export default function ThirdScreen({ route, navigation }) {
         participate: participate,
         comment: Comment,
         date: date.trim(),
-        hours: hour,
+        hours: hour.slice(0, 5),
         count: participateCount,
         fees: fees.trim(),
         latitude: latitude,
         longitude: longitude,
         geoHash: CalculateGeoHash(latitude, longitude),
         //image: image.image,
-        hour: hour,
+        hour: hour.slice(0, 5),
         expiredAt: new Date(date).getTime().toString(),
       }).then(() => {
         setloading(false)
         setvisible(false)
         setshow(true)
+        editjoin()
       })
     })
+  }
+  const editjoin = () => {
+    if (joinparticipate.length > 0) {
+      joinparticipate.forEach((docs) => {
+        console.log("yup...")
+        const participareref = doc(db, "user", docs, "joinEvent", event.id)
+        updateDoc(participareref, {
+          name: Name,
+          location: location.trim(),
+          mode: mode,
+          eventTitle: eventTitle,
+          skill: skill,
+          participate: participate,
+          comment: Comment,
+          date: date.trim(),
+          hours: hour.slice(0, 5),
+          count: participateCount,
+          fees: fees.trim(),
+          latitude: latitude,
+          longitude: longitude,
+          geoHash: CalculateGeoHash(latitude, longitude),
+          //image: image.image,
+          hour: hour.slice(0, 5),
+          expiredAt: new Date(date).getTime().toString(),
+        })
+      })
+    }
   }
 
   const check = () => {

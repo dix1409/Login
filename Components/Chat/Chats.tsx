@@ -6,9 +6,12 @@ import {
   TextInput,
   FlatList,
   Platform,
+  Modal,
+  Dimensions,
+  ActivityIndicator,
 } from "react-native"
 
-import { MaterialIcons } from "@expo/vector-icons"
+import { AntDesign, Entypo, Feather, MaterialIcons } from "@expo/vector-icons"
 
 import { useKeyboard } from "@react-native-community/hooks"
 import style from "./style"
@@ -20,18 +23,21 @@ import {
   Timestamp,
   collection,
   addDoc,
+  deleteDoc,
 } from "firebase/firestore"
 import { db } from "../Event/Firestore"
 
 import ChatInput from "./ChatInput"
-
+const { height } = Dimensions.get("window")
 export default function Chats({ navigation, route }) {
   const [disable, setdisable] = useState(true)
   const [username, setusername] = useState("")
   const [msg, setmsg] = useState<string>("")
   const [Allmsg, setAllmsg] = useState([])
   const [marginBottom, setMarginBottom] = useState(0)
-
+  const [isDelete, setisdelete] = useState(false)
+  const [show, setshow] = useState(false)
+  const [load, setload] = useState(false)
   const event_id = route.params.user
   console.log(event_id)
 
@@ -46,10 +52,21 @@ export default function Chats({ navigation, route }) {
           onPress={() =>
             navigation.navigate("join", {
               item: eventdetails,
+              email: email,
             })
           }
+          style={{ marginRight: 20 }}
         >
-          <Text style={{ color: "white" }}>Go Details</Text>
+          <Text
+            style={{
+              color: "black",
+              fontFamily: "OpanSans",
+              fontWeight: "bold",
+              fontSize: 17,
+            }}
+          >
+            Go Details
+          </Text>
         </TouchableOpacity>
       ),
     })
@@ -88,7 +105,22 @@ export default function Chats({ navigation, route }) {
       })
       setAllmsg([...massage])
     })
+    onSnapshot(doc(db, "event", event_id), (doc) => {
+      // console.log("Current data: ", doc.data())
+      if (doc.data()?.isDeleted) {
+        setisdelete(true)
+      } else {
+        setisdelete(false)
+      }
+    })
   }, [])
+  useEffect(() => {
+    if (isDelete) {
+      //  console.log("yopp")
+      setshow(true)
+    }
+  }, [isDelete])
+  useEffect(() => {}, [])
   //console.log(username)
   useEffect(() => {
     if (msg == null || msg == "") {
@@ -109,7 +141,18 @@ export default function Chats({ navigation, route }) {
       name: username,
     })
   }
+  const RemoveEvent = async () => {
+    setload(true)
+    const joinRef = doc(db, "user", email, "joinEvent", event_id)
 
+    const participateRef = doc(db, "event", event_id, "participate", email)
+    await deleteDoc(joinRef).then(async () => {
+      await deleteDoc(participateRef).then(() => {
+        setload(false)
+        navigation.navigate("chatting")
+      })
+    })
+  }
   return (
     <View
       style={{
@@ -124,6 +167,84 @@ export default function Chats({ navigation, route }) {
         inverted
         showsVerticalScrollIndicator={false}
       />
+
+      <Modal transparent visible={show}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "#fff",
+              paddingVertical: 30,
+              paddingHorizontal: 20,
+            }}
+          >
+            <View style={{ alignItems: "center" }}>
+              <View
+                style={{
+                  width: "100%",
+
+                  alignItems: "flex-end",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    RemoveEvent()
+                  }}
+                >
+                  <Entypo name="cross" size={50} color="black" />
+                </TouchableOpacity>
+              </View>
+              <Text
+                style={{
+                  alignItems: "center",
+                  marginVertical: 10,
+                  fontSize: 20,
+                }}
+              >
+                Host Deleted This Event
+              </Text>
+              <View
+                style={{
+                  alignItems: "center",
+                }}
+              >
+                <Feather name="alert-circle" size={150} color="#75C375" />
+              </View>
+
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#D0FF6C",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 30,
+                  marginVertical: 10,
+                  width: "80%",
+                  height: height * 0.07,
+                }}
+                onPress={RemoveEvent}
+              >
+                <Text
+                  style={{
+                    fontSize: 15,
+
+                    color: "black",
+                  }}
+                >
+                  OK
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <View style={style.container}>
         <View style={style.mainContainer}>
@@ -153,6 +274,18 @@ export default function Chats({ navigation, route }) {
           </View>
         </TouchableOpacity>
       </View>
+      {load && (
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <ActivityIndicator color="#D0FF6C" size="large" />
+        </View>
+      )}
     </View>
   )
 }

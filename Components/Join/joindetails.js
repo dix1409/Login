@@ -1,45 +1,25 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import {
-  ImageBackground,
   StyleSheet,
   View,
-  Image,
   Text,
   TouchableOpacity,
-  Alert,
   Dimensions,
   StatusBar,
   ScrollView,
   Platform,
-  Modal,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
 } from "react-native"
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import {
   AntDesign,
   FontAwesome,
-  EvilIcons,
   FontAwesome5,
   Ionicons,
-  Entypo,
 } from "@expo/vector-icons"
-import { SafeAreaView } from "react-native-safe-area-context"
+
 import { useFonts } from "expo-font"
 
-import { db, auth } from "../Event/Firestore"
-import { Pressable } from "react-native"
-import {
-  query,
-  collection,
-  onSnapshot,
-  orderBy,
-  where,
-  addDoc,
-  getDocs,
-} from "firebase/firestore"
-import { doc, setDoc } from "firebase/firestore"
-const { height, width } = Dimensions.get("window")
+const { height } = Dimensions.get("window")
 const Mapstyle = [
   {
     elementType: "geometry",
@@ -274,126 +254,21 @@ const Mapstyle = [
   },
 ]
 
-import { uid } from "uid"
-export default function joinEvent({ navigation, route }) {
-  const [userdata, setuserdata] = useState([])
-  const [visible, setvisible] = useState(false)
-  const [join, setjoin] = useState(false)
+export default function joindetails({ navigation, route }) {
   const [size, setsize] = useState(height * 0.5)
   const [showScreen, setshowScreen] = useState(true)
   const [showsize, setshowsize] = useState(false)
-  const [Profile, setProfile] = useState({})
-  const [valid, setvalid] = useState(false)
-  const [load, setload] = useState(false)
   const event = route.params.item
-  // console.log(event)
+  //console.log(event)
   const [loaded] = useFonts({
     OpanSans: require("../../static/OpenSans/OpenSans-Medium.ttf"),
   })
-  const email = auth.currentUser.email
-  useEffect(() => {
-    console.log("yes")
-    const ref = doc(db, "user", email)
-    console.log("tes 1")
 
-    onSnapshot(ref, (querySnapshot) => {
-      let user = []
-
-      user.push(querySnapshot.data())
-      // console.log(user)
-      setuserdata([...user])
-    })
-    const profileref = collection(db, `user/${email}/profile`)
-
-    onSnapshot(profileref, (querySnapshot) => {
-      console.log("yup..")
-      if (querySnapshot.empty) {
-        setvalid(false)
-        console.log("nope")
-      } else {
-        let Profiledata = []
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          setvalid(true)
-          console.log("no...")
-          console.log(doc.data())
-          Profiledata.push({ ...doc.data(), id: doc.id })
-        })
-        if (Profiledata.length > 0) {
-          Profiledata.map((item) => {
-            setProfile(item)
-          })
-        }
-      }
-    })
-  }, [])
-  // console.log(userdata)
-
-  let userinfo = []
-  userdata.forEach((data) => {
-    userinfo = data
-  })
-
-  // console.log(userinfo)
-  //console.log(Profile)
-  const joinEvents = () => {
-    setload(true)
-    console.log("yup")
-    const participateref = doc(db, "event", event.id, "participate", email)
-
-    setDoc(participateref, {
-      userEmail: userinfo.userEmail,
-      userPassword: userinfo.userPassword,
-      Profile: Profile,
-    })
-    const userrefs = doc(db, "user", email, "joinEvent", event.id)
-
-    setDoc(userrefs, {
-      name: event.name,
-      Location: event.location,
-      mode: event.mode,
-      eventTitle: event.eventTitle,
-      skill: event.skill,
-      participate: event.participate,
-      comment: event.comment,
-      date: event.date,
-      count: event.count,
-      hour: event.hour,
-
-      fees: event.fees,
-      id: event.id,
-      latitude: event.latitude,
-      longtitude: event.longitude,
-      expiredAt: event.expiredAt,
-    }).then(() => {
-      setvisible(true)
-      setload(false)
-    })
-    console.log("hello")
-  }
-  const checkJoin = () => {
-    if (email) {
-      const userref = doc(db, "user", email, "joinEvent", event.id)
-      // const ref = query(userref, where("id", "==", event.id))
-
-      onSnapshot(userref, (querySnapshot) => {
-        // console.log(querySnapshot)
-        if (querySnapshot.exists()) {
-          setjoin(true)
-          console.log("is THis Use is", join)
-        }
-      })
-    }
-  }
-  const alertevent = () => {
-    Alert.alert("Please Set Your Profile")
-  }
-  checkJoin()
-  //console.log(event)
+  console.log(event)
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container}>
-        <StatusBar backgroundColor="#fff" barStyle="light-content" />
+        <StatusBar backgroundColor="#0e1626" barStyle="light-content" />
         <View
           style={{
             height: size,
@@ -424,8 +299,8 @@ export default function joinEvent({ navigation, route }) {
             showsCompass={true}
             showsPointsOfInterest={false}
             region={{
-              latitude: parseFloat(event.latitude),
-              longitude: parseFloat(event.longitude),
+              latitude: event.latitude,
+              longitude: event.longtitude || event.longitude,
               latitudeDelta: 0.1,
               longitudeDelta: 0.1,
             }}
@@ -433,8 +308,8 @@ export default function joinEvent({ navigation, route }) {
             <View style={{ borderRadius: 20 }}></View>
             <Marker
               coordinate={{
-                latitude: parseFloat(event.latitude),
-                longitude: parseFloat(event.longitude),
+                latitude: event.latitude,
+                longitude: event.longtitude || event.longitude,
               }}
               title={event.name}
             ></Marker>
@@ -480,7 +355,7 @@ export default function joinEvent({ navigation, route }) {
               </TouchableOpacity>
             )}
           </View>
-          <Modal transparent visible={visible}>
+          {/* <Modal transparent visible={visible}>
             <View
               style={{
                 flex: 1,
@@ -529,15 +404,15 @@ export default function joinEvent({ navigation, route }) {
                       fontSize: 20,
                     }}
                   >
-                    You Joined Successfully!
+                    You Joined Successfully!.
                   </Text>
                 </View>
               </View>
             </View>
-          </Modal>
+          </Modal> */}
         </View>
         <View style={{ width: "100%", alignItems: "center" }}>
-          <View style={styles.btnContainer}>
+          <View style={[styles.btnContainer, { backgroundColor: "black" }]}>
             <TouchableOpacity
               onPress={() => {
                 setsize(height)
@@ -551,7 +426,7 @@ export default function joinEvent({ navigation, route }) {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "#ffff", fontFamily: "OpanSans" }}>
+              <Text style={{ color: "white", fontFamily: "OpanSans" }}>
                 View Full
               </Text>
             </TouchableOpacity>
@@ -567,22 +442,23 @@ export default function joinEvent({ navigation, route }) {
           <Text
             style={{ fontSize: 20, color: "#080d17", fontFamily: "OpanSans" }}
           >
-            Sport Name: {event.eventTitle}
-            {"\n\n"}
-            {event.name.toLowerCase()}
+            {event.name}
           </Text>
-
           <View style={styles.BoxContainer}>
             <AntDesign name="clockcircle" size={18} color="#1b2534" />
             <Text style={[{ marginRight: 20 }, styles.textStyle]}>
               {event.hour}
             </Text>
             <FontAwesome name="calendar-times-o" size={18} color="#1b2534" />
-            <Text style={styles.textStyle}>{event.date}</Text>
+            <Text style={styles.textStyle}>
+              {event.date.split("-").reverse().join("-")}
+            </Text>
           </View>
           <View style={styles.BoxContainer}>
             <Ionicons name="location-sharp" size={24} color="#1b2534" />
-            <Text style={styles.textStyle}>{event.location}</Text>
+            <Text style={styles.textStyle}>
+              {event.Location || event.location}
+            </Text>
           </View>
           <View style={styles.BoxContainer}>
             <FontAwesome5 name="money-bill" size={24} color="#1b2534" />
@@ -592,7 +468,7 @@ export default function joinEvent({ navigation, route }) {
               </Text>
             )}
             {event.fees.length === 0 && (
-              <Text style={styles.textStyle}>Entrance: Free </Text>
+              <Text style={styles.textStyle}>Enternance Free 😍😍</Text>
             )}
           </View>
           {/* <View style={styles.BoxContainer}>
@@ -601,13 +477,6 @@ export default function joinEvent({ navigation, route }) {
               Winning Prize:{event.prize}
             </Text>
           </View> */}
-
-          <View style={styles.BoxContainer}>
-            <FontAwesome name="users" size={24} color="black" />
-            <Text style={styles.textStyle}>
-              Participation: {event.participate}
-            </Text>
-          </View>
           <View style={styles.BoxContainer}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <AntDesign name="infocirlce" size={24} color="black" />
@@ -617,78 +486,28 @@ export default function joinEvent({ navigation, route }) {
           <View style={styles.BoxContainer}>
             <Text style={styles.textStyle}>{event.comment}</Text>
           </View>
-          {!join && (
-            <View
-              style={{
-                justifyContent: "flex-end",
-                alignItems: "center",
-                overflow: "hidden",
-                flex: 1,
-                width: "100%",
-              }}
-            >
-              <TouchableOpacity
-                style={[styles.btnContainer, { backgroundColor: "#D0FF6C" }]}
-                onPress={valid ? joinEvents : alertevent}
-                disabled={join}
-              >
-                <Text style={{ color: "black", fontFamily: "OpanSans" }}>
-                  Join
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          {join && (
-            <View style={{ width: "100%", alignItems: "center" }}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("third", { id: event.id })
-                }}
-                style={[styles.btnContainer, { backgroundColor: "#D0FF6C" }]}
-              >
-                <Text style={{ color: "black", fontFamily: "OpanSans" }}>
-                  View Participants
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
 
           <View style={{ width: "100%", alignItems: "center" }}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("OwnerDetail", { detail: event.owner })
+                navigation.navigate("third", { id: event.id })
               }}
-              style={[styles.btnContainer, { backgroundColor: "#D0FF6C" }]}
+              style={styles.btnContainer}
             >
               <Text style={{ color: "black", fontFamily: "OpanSans" }}>
-                Organizer Details
+                View participation's
               </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
       </ScrollView>
-      {load && (
-        <View
-          style={
-            (styles.container,
-            {
-              width: "100%",
-              height: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            })
-          }
-        >
-          <ActivityIndicator color="#D0FF6C" size="large" />
-        </View>
-      )}
     </View>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#ffff",
   },
   BoxContainer: {
     marginVertical: 15,
@@ -702,7 +521,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpanSans",
   },
   btnContainer: {
-    backgroundColor: "#000",
+    backgroundColor: "#D0FF6C",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 30,
